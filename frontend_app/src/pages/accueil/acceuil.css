@@ -1,0 +1,86 @@
+
+.containerbox{
+    display: flex;
+     align-items: center;
+   
+     justify-content: center;
+     flex-wrap: wrap;
+     padding:0.5rem 0;
+     padding-left: 0.4rem;
+ } 
+
+ .divRecherche input , select{
+    margin-left: 15px;
+    width: 200px;
+ }
+ .divInfo{
+    padding: auto;
+    margin: auto;
+    width: 90%;
+ }
+ .containerbox h2{
+    font-size: 30px;
+    padding-bottom: 15px;
+ }
+
+
+    .lebelText{
+        display: flex;
+        margin-bottom: 3px;
+
+    }
+     p{
+        font-size: 25px;
+        margin-left: 70px;
+        flex: 2;
+
+    }
+  
+    .lebelZonText{
+        margin-right: 15px;
+        width: 230px;
+    }
+    .colStagaire{
+        flex: 1;
+    }
+    .blocClient{
+        display: flex;
+    }
+    .blocClient input{
+        width: 70px;
+        margin-left: 4px;
+    }
+    .form-group{
+        display: flex;
+    }
+
+
+    .rowStagaire{
+        display: flex;
+    }
+
+    .inpLabel{
+width: 250px;
+padding-left: -10px;
+
+    }
+.textLabel{ 
+    flex: 2;
+    font-weight: 500;
+    font-size: 27px;
+    margin-left: 14px;
+}
+.Container h4{
+    margin-bottom: 10px;
+    font-size:20px;
+
+}
+.Container {
+    margin: 10px;
+}
+
+
+
+.Container h2{
+    margin-top: 10px;
+}

@@ -1,0 +1,100 @@
+
+.tabledecore table {
+    border: medium solid #231ab4;
+    margin: 10px;
+    width: 98%;
+    border-collapse: collapse;
+ 
+  }
+  .tabledecore table td input{
+    width: 100%;
+    margin-left: 0%;
+    border:none;
+  } 
+  .tabledecore   th {
+    border: thin solid #231ab4;
+    font-weight: 600;
+    text-align: center;
+font-size: 24px;
+    background-color: #D0E3FA;
+    }
+    .tabledecore    td {
+    font-family: sans-serif;
+    border: thin solid #231ab4;
+    text-align: center;
+    }
+    .tabledecore   td a{
+      color: black;
+    } 
+    .tabledecore   tr:hover {
+      background-color: papayawhip;
+    } 
+    
+    caption {
+    font-family: sans-serif;
+    }
+
+    .Newbuton{
+        background-color: #D0E3FA;
+        border-radius: 20px;
+        color:#231ab4;
+font-weight: 500;
+        border-color: #D0E3FA;
+margin:10px ;
+padding:10px ;
+text-align: center;
+font-size: 24px;
+
+    }
+    h1{
+        color:#231ab4;
+        text-align: center;
+        
+        font-family:Verdana, Geneva, Tahoma, sans-serif;
+        font-weight: 600;
+        font-size: 50px;
+    }
+  .modelDiv{
+    display: flex;
+  }
+  .modelRight{
+flex: 1;
+margin: 15px;
+  }
+  .modelLeft{
+    flex: 1;
+    margin: 15px;
+
+  }
+  label {
+    font-size:24px;
+    margin-bottom: 5px;
+
+  }
+  input {
+    font-size:24px;
+    width: 350px;
+    margin-bottom: 20px;
+
+    height: 30px;
+  }
+  select{
+    font-size:24px;
+    width: 310px;
+    margin-bottom: 20px;
+
+    height: 30px;
+  }
+
+  .buttonEnregistre{
+    margin: auto;
+    width: 150px;
+    height: 50px;
+    font-size: 24px;
+    font-weight: 500;
+    border-radius: 20px;
+    border-color: #D0E3FA;
+    color:#231ab4;
+
+    background-color: #D0E3FA;
+  }
