@@ -44,7 +44,7 @@ exports.getutilisateurByUsername = async (req, res) => {
  
 exports.Login = async(req, res) => {
     if(req.body.password && req.body.email){
-      let user=await utilisateur.findOne(req.body).select('-password')
+      let user=await utilisateur.findOne({password:req.body.password,email:req.body.email})
       if(user){
           res.send(user)
       }else{

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import {BASE_URL} from "../../helper"
+
 import './authentification.css'
 import {  useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
@@ -24,7 +26,7 @@ function Login() {
         },
       };
       const     res = await axios.post(
-        "/utilisateur/login",  
+      BASE_URL+ "/utilisateur/login",  
         {
           email:email,
           password:password,

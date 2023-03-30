@@ -3,7 +3,8 @@ import { Delete ,Add} from '@material-ui/icons'
 
 import './location.css'
 import axios from 'axios';
- 
+import {BASE_URL} from "../../helper"
+
   
 export default function Modellocation(props ) {
   const { idforma, setOpenPopup } = props;
@@ -34,7 +35,7 @@ export default function Modellocation(props ) {
       if(idforma){
         const getItemsList = async () => {
           try{
-            const res = await axios.get("/location/"+idforma)
+            const res = await axios.get(BASE_URL+"/location/"+idforma)
             setraisonSociale(res.data.raisonSociale);
             setNom(res.data.nom);
             setPrenom(res.data.prenom);
@@ -93,7 +94,7 @@ if (RecentTelephone!==Telephone){
               "Content-type": "application/json",
             },
           };
-          const res = await axios.put("/location/"+idforma, {
+          const res = await axios.put(BASE_URL+"/location/"+idforma, {
             raisonSociale: raisonSociale,
             observation:observation,
             nom: Nom,
@@ -121,7 +122,7 @@ if (RecentTelephone!==Telephone){
               "Content-type": "application/json",
             },
           };
-          const res = await axios.post('/location/register', {
+          const res = await axios.post(BASE_URL+"/location/register", {
             raisonSociale: raisonSociale,
             nom: Nom,
             observation:observation,

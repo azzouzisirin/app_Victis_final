@@ -4,6 +4,7 @@ import Popup from "../../components/Popup";
 import { Delete , Update,Check} from '@material-ui/icons'
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router";
+import {BASE_URL} from "../../helper"
 
 import Sidebar from '../../components/navBar/Sidebar';
 import axios from 'axios';
@@ -34,7 +35,7 @@ useEffect(() => {
       if (!user) history.push("/");
  
   const fetchData = async () => {
-    const res = await axios.get(`/prospect/search?q=${query}`);
+    const res = await axios.get(`${BASE_URL}/prospect/search?q=${query}`);
     setData(res.data);
   };
   if (query.length === 0 || query.length > 0) fetchData();
@@ -43,7 +44,7 @@ useEffect(() => {
 
 const deleteItem = async (id) => {
   try{
-    const res = await axios.delete(`/prospect/${id}`)
+    const res = await axios.delete(`${BASE_URL}/prospect/${id}`)
     const newListItems = data.filter(item=> item._id !== id);
     setData(newListItems);
   }catch(err){
@@ -52,8 +53,8 @@ const deleteItem = async (id) => {
 }
 const checkItem = async (id) => {
   try{
-    const res = await axios.get(`/prospect/checkprocpect/${id}`)
-    const res2 = await axios.get(`/prospect/search`);
+    const res = await axios.get(`${BASE_URL}/prospect/checkprocpect/${id}`)
+    const res2 = await axios.get(`${BASE_URL}/prospect/search`);
     setData(res2.data);
   }catch(err){ 
     console.log(err);

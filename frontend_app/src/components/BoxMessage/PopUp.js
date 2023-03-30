@@ -1,6 +1,6 @@
 import React, {  useEffect, useState } from "react";
 import "./popup.css";
-
+import {BASE_URL} from "../../helper"
 import toast, { Toaster } from 'react-hot-toast';
 import axios from 'axios';
   
@@ -55,7 +55,7 @@ const SendEmail = async (e) => {
     toast.success('email envoye !')
 
   if(type=="sendConvention"){
-      const res = await axios.post(`/session/send/pdf/Convention`,{
+      const res = await axios.post(`${BASE_URL}/session/send/pdf/Convention`,{
       
         subject:object,
         EmailUser:user.email,
@@ -76,7 +76,7 @@ const SendEmail = async (e) => {
   }
   if(type=="sendOffreAddConvention"){
 
-    const res = await axios.post(`/session/send/pdf/OffreplusConvention`,{
+    const res = await axios.post(`${BASE_URL}/session/send/pdf/OffreplusConvention`,{
       
       subject:object,
       EmailUser:user.email,
@@ -96,7 +96,7 @@ const SendEmail = async (e) => {
 
   }
   if(type=="sendOffre"){ 
-    const res = await axios.post(`/session/send/pdf/offre`,{
+    const res = await axios.post(`${BASE_URL}/session/send/pdf/offre`,{
     
     
       subject:object,
@@ -121,7 +121,7 @@ const SendEmail = async (e) => {
   
   }
   if(type=="sendFormateur"){
-    const res = await axios.post(`/session/send/pdf/sendFormateur`,{
+    const res = await axios.post(`${BASE_URL}/session/send/pdf/sendFormateur`,{
     
     
       subject:object,
@@ -150,7 +150,7 @@ const SendEmail = async (e) => {
 
  
   
-    const res = await axios.post(`/session/send/pdf/sendDocument`,{
+    const res = await axios.post(`${BASE_URL}/session/send/pdf/sendDocument`,{
     
       subject:"object",
   

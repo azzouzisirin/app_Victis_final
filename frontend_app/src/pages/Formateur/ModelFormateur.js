@@ -4,7 +4,8 @@ import { Delete , Update,Add} from '@material-ui/icons'
 import './formateur.css'
 import axios from 'axios';
 
- 
+import {BASE_URL} from "../../helper"
+
 export default function ModelFormateur(props ) {
   const { idforma, setOpenPopup } = props;
   const [checktva, setchecktva] = useState(false)
@@ -39,7 +40,7 @@ export default function ModelFormateur(props ) {
       if(idforma){
         const getItemsList = async () => {
           try{
-            const res = await axios.get("/formateur/"+idforma)
+            const res = await axios.get(BASE_URL+"/formateur/"+idforma)
             setTitre(res.data.titre);
             setNom(res.data.nom); 
             setraisonSocial(res.data.raisonSociale)
@@ -91,7 +92,7 @@ export default function ModelFormateur(props ) {
 
       const fetchFormation = async () => {
       try{ 
-        const res = await axios.get("/formation/findByCateg/"+intitile)
+        const res = await axios.get(BASE_URL+"/formation/findByCateg/"+intitile)
         setDataFormationModule(res.data);
         }catch(err){
         console.log(err);
@@ -152,7 +153,7 @@ export default function ModelFormateur(props ) {
               "Content-type": "application/json",
             },
           };
-          const res = await axios.put("/formateur/"+idforma, {
+          const res = await axios.put(BASE_URL+"/formateur/"+idforma, {
             username:Nom+"_"+Prenom,
             titre: Titre,
             raisonSociale:raisonSocial,
@@ -188,7 +189,7 @@ export default function ModelFormateur(props ) {
               "Content-type": "application/json",
             },
           }; 
-          const res = await axios.post('/formateur/register', {
+          const res = await axios.post(BASE_URL+"/formateur/register", {
             titre: Titre,
             nom: Nom,
             tva:tva,
@@ -255,7 +256,7 @@ export default function ModelFormateur(props ) {
 
         const fetchData = async () => {
           try{ 
-          const res = await axios.get(`/formation`);
+          const res = await axios.get(`${BASE_URL}/formation`);
           setlistintitile(res.data)
           setintitile(res.data[0])
         }catch(err){

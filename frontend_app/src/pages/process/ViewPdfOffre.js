@@ -3,6 +3,7 @@ import React, { useState, useEffect ,useRef} from 'react'
 import { Link } from "react-router-dom";
 import toast, { Toaster } from 'react-hot-toast';
 import PopUp from '../../components/BoxMessage/PopUp'
+import {BASE_URL} from "../../helper"
 
 import axios from 'axios';
 
@@ -32,7 +33,7 @@ function ViewPdfOffre(props){
   useEffect(() => {
   
 const fetchData = async () => { 
-  const res = await axios.get(`/session/`+id);
+  const res = await axios.get(`${BASE_URL}/session/`+id);
   setnumDevis(res.data.numDevis)
   settypeFormation(res.data.typeFormation)
   setnomClient(res.data.nomClient)
@@ -49,13 +50,13 @@ fetchData();
 }, []);
   useEffect (()=>{  
     const checkoffre =async()=>{ 
-      await axios.get(`/session/getDonneOffre/${id}/${username}`)
+      await axios.get(`${BASE_URL}/session/getDonneOffre/${id}/${username}`)
       .then((res)=>{ 
-        axios.post('/session/createPdf/offre', res.data  )
+        axios.post(BASE_URL+"/session/createPdf/offre", res.data  )
      
        .then(()=>{   
      
-      axios.get(`/session/showPdf/offre`,{responseType:'blob'}).then((res2)=>{
+      axios.get(`${BASE_URL}/session/showPdf/offre`,{responseType:'blob'}).then((res2)=>{
 
 
         const pdfBlob = new Blob([res2.data],{type:'application/pdf'}) 
@@ -74,7 +75,7 @@ const EnregsteOffre= async (e) => {
 
   
     var nomDossier=numDevis+"_"+RaisonSociale+"_"+DesignationFormation+"_"+typeFormation+"_"+selectedTypeFormation
-    const create = await axios.post('/newfolder/offre',{
+    const create = await axios.post(BASE_URL+"/newfolder/offre",{
       pathDossier:user.shemaDossie,
       addpath:nomDossier
       }) 
@@ -86,7 +87,7 @@ const EnregsteOffre= async (e) => {
       }; 
 
 
-      const res = await axios.post("/session/copeFilePdf", {
+      const res = await axios.post(BASE_URL+"/session/copeFilePdf", {
         filePath:"./documents/offre.pdf",
         filecopy:user.shemaDossie+"/"+nomDossier+"/offre/Devis_"+nomDossier+".pdf"
     }  ,

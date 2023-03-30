@@ -5,7 +5,8 @@ import { Delete , Update} from '@material-ui/icons'
 import './formateur.css'
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router";
-  
+import {BASE_URL} from "../../helper"
+
 import Sidebar from '../../components/navBar/Sidebar';
 import axios from 'axios';
  
@@ -31,7 +32,7 @@ useEffect(() => {
   if (!user) history.push("/");
 
   const fetchData = async () => {
-    const res = await axios.get(`/formateur/search?q=${query}`);
+    const res = await axios.get(`${BASE_URL}/formateur/search?q=${query}`);
     setData(res.data);
   };
   if (query.length === 0 || query.length > 0) fetchData();
@@ -43,7 +44,7 @@ const newFormateur=async()=>{
 }
 const deleteItem = async (id) => {
   try{
-    const res = await axios.delete(`/formateur/${id}`)
+    const res = await axios.delete(`${BASE_URL}/formateur/${id}`)
     const newListItems = data.filter(item=> item._id !== id);
     setData(newListItems);
   }catch(err){

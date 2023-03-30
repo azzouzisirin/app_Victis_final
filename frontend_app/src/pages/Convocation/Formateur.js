@@ -2,6 +2,7 @@ import React ,{ useEffect,useState } from 'react';
 import { Link } from "react-router-dom";
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
+import {BASE_URL} from "../../helper"
 
 import PopUp from '../../components/BoxMessage/PopUp'
 
@@ -35,7 +36,7 @@ import PopUp from '../../components/BoxMessage/PopUp'
     useEffect(() => {
       const fetchData = async () => {
         try{  
-        const res = await axios.get(`/session/getDonneFormateur/${id}`);
+        const res = await axios.get(`${BASE_URL}/session/getDonneFormateur/${id}`);
         setnumSession(res.data.numSession) 
         setnomFormateur(res.data.nomFormateur) 
         setraisonClient(res.data.raisonClient) 
@@ -65,7 +66,7 @@ import PopUp from '../../components/BoxMessage/PopUp'
     useEffect(() => {
   
       const fetchData = async () => { 
-        const res = await axios.get(`/session/getDonneConvocation/`+id+'/'+username);
+        const res = await axios.get(`${BASE_URL}/session/getDonneConvocation/`+id+'/'+username);
            setnomDossier(res.data.numDevis+"_"+res.data.RaisonSociale+"_"+res.data.designiationFormation+"_"+res.data.Module+"_"+res.data.typeFormation)
   
       };
@@ -76,7 +77,7 @@ import PopUp from '../../components/BoxMessage/PopUp'
     const VoirRapportFormation=async()=>{
      
 
-        await  axios.post('/session/createPdf/RapportFormateur', 
+        await  axios.post(BASE_URL+"/session/createPdf/RapportFormateur", 
         {
           numSession: numSession,
           nomFormateur: nomFormateur,
@@ -98,7 +99,7 @@ import PopUp from '../../components/BoxMessage/PopUp'
      
        .then(()=>{    
 
-      axios.get(`/session/showPdf/RapportFormateur`,{responseType:'blob'}).then((res2)=>{
+      axios.get(`${BASE_URL}/session/showPdf/RapportFormateur`,{responseType:'blob'}).then((res2)=>{
 
 
         const pdfBlob = new Blob([res2.data],{type:'application/pdf'}) 
@@ -108,7 +109,7 @@ import PopUp from '../../components/BoxMessage/PopUp'
 const VoirContratPrestation=async()=>{
   
 
-   await axios.post('/session/createPdf/ContratFormation',   {
+   await axios.post(BASE_URL+"/session/createPdf/ContratFormation",   {
     numSession: numSession,
     nomFormateur: nomFormateur,
     raisonClient: raisonClient,
@@ -129,7 +130,7 @@ const VoirContratPrestation=async()=>{
  
    .then(()=>{    
 
-  axios.get(`/session/showPdf/ContratFormation`,{responseType:'blob'}).then((res2)=>{
+  axios.get(`${BASE_URL}/session/showPdf/ContratFormation`,{responseType:'blob'}).then((res2)=>{
 
 
     const pdfBlob = new Blob([res2.data],{type:'application/pdf'}) 
@@ -152,7 +153,7 @@ const SaveFormateur = async () => {
       "Content-type": "application/json",
     },
   }; 
-const res1=  await axios.post('/newfolder/Formateur',{
+const res1=  await axios.post(BASE_URL+"/newfolder/Formateur",{
       pathDossier:user.shemaDossie,
       addpath:nomDossier
    
@@ -161,7 +162,7 @@ const res1=  await axios.post('/newfolder/Formateur',{
 
 
 
-    const res = await axios.post("/session/copeFilePdf", {
+    const res = await axios.post(BASE_URL+"/session/copeFilePdf", {
       filePath:"./documents/RapportFormateur.pdf",
       filecopy:user.shemaDossie+"/"+nomDossier+"/Formateur/RapportFormateur_"+nomDossier+".pdf"
   }  ,
@@ -169,7 +170,7 @@ const res1=  await axios.post('/newfolder/Formateur',{
   config
 ); 
  
-const res2 = await axios.post("/session/copeFilePdf", {
+const res2 = await axios.post(BASE_URL+"/session/copeFilePdf", {
   filePath:"./documents/ContratFormation.pdf",
   filecopy:user.shemaDossie+"/"+nomDossier+"/Formateur/ContratFormation_"+nomDossier+".pdf"
 }  ,

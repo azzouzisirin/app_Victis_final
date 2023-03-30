@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import './Utilisateur.css'
 import axios from 'axios';
- 
+import {BASE_URL} from "../../helper"
+
  
 export default function ModelFormateur(props ) {
   const { idutilisateur, setOpenPopup } = props;
@@ -24,7 +25,7 @@ export default function ModelFormateur(props ) {
       if(idutilisateur){
         const getItemsList = async () => {
           try{
-            const res = await axios.get("/Utilisateur/"+idutilisateur)
+            const res = await axios.get(BASE_URL+"/Utilisateur/"+idutilisateur)
             setportable(res.data.portable);
             settitre(res.data.titre);
 
@@ -80,7 +81,7 @@ export default function ModelFormateur(props ) {
               "Content-type": "application/json",
             },
           };
-          const res = await axios.put("/utilisateur/"+idutilisateur, {
+          const res = await axios.put(BASE_URL+"/utilisateur/"+idutilisateur, {
             username:Nom+"_"+Prenom,
             portable: tel2,
             nom: Nom,
@@ -110,7 +111,7 @@ export default function ModelFormateur(props ) {
               "Content-type": "application/json",
             }, 
           };
-          const res = await axios.post('/utilisateur/register', {
+          const res = await axios.post(BASE_URL+"/utilisateur/register", {
             portable: tel2,
             nom: Nom,
             titre:titre,

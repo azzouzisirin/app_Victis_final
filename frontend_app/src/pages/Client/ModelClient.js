@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import './client.css'
 import axios from 'axios';
 import 'react-intl-tel-input/dist/main.css';
+import {BASE_URL} from "../../helper"
 
 export default function ModelClient(props ) {
  
@@ -23,7 +24,7 @@ export default function ModelClient(props ) {
       if(idclient){
         const getItemsList = async () => {
           try{
-            const res = await axios.get("/client/"+idclient)
+            const res = await axios.get(BASE_URL+"/client/"+idclient)
             setRaisonSociale(res.data.raisonSociale); 
             setNom(res.data.nom);
             settitre(res.data.titre)
@@ -84,7 +85,7 @@ export default function ModelClient(props ) {
               "Content-type": "application/json",
             },
           };
-          const res = await axios.put("/client/"+idclient, {
+          const res = await axios.put(BASE_URL+"/client/"+idclient, {
             raisonSociale: RaisonSociale,
             nom: Nom,
             titre:titre, 
@@ -111,7 +112,7 @@ export default function ModelClient(props ) {
               "Content-type": "application/json",
             },
           };
-          const res = await axios.post('/client/register', {
+          const res = await axios.post(BASE_URL+"/client/register", {
             raisonSociale: RaisonSociale,
             nom: Nom,
             prenom:  Prenom,

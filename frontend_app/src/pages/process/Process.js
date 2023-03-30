@@ -11,6 +11,7 @@ import Sidebar from '../../components/navBar/Sidebar';
 import axios from 'axios';
 import Convocation from '../Convocation/Convocation';
 import Formateur from '../Convocation/Formateur';
+import {BASE_URL} from "../../helper"
 
 import Document from '../Convocation/Document';
 
@@ -57,7 +58,7 @@ function Process(){
     useEffect(() => {
         if (!user) history.push("/");
     const fetchData = async () => { 
-      const res = await axios.get(`/session/`+id);
+      const res = await axios.get(`${BASE_URL}/session/`+id);
       setIdSession(res.data.idSession) 
       setnumSession(res.data.numSession)
       setnumDevis(res.data.numDevis)
@@ -87,7 +88,7 @@ useEffect(() => {
           "Content-type": "application/json",
         },
       };
-      const res = await axios.post('/offre/createPdf', offre  ,
+      const res = await axios.post(BASE_URL+"/offre/createPdf", offre  ,
     
     config
   );}
@@ -98,7 +99,7 @@ useEffect(() => {
 useEffect(() => {
   const fetchData = async () => {
     try{ 
-    const res = await axios.get(`/session/getDonneConvention/${id}`);
+    const res = await axios.get(`${BASE_URL}/session/getDonneConvention/${id}`);
     setCouvocation(res.data)
 
   }catch(err){

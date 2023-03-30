@@ -5,6 +5,7 @@ import { Delete , Update} from '@material-ui/icons'
 import './client.css'
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router";
+import {BASE_URL} from "../../helper"
 
 import Sidebar from '../../components/navBar/Sidebar';
 import axios from 'axios';
@@ -35,7 +36,7 @@ useEffect(() => {
       if (!user) history.push("/");
  
   const fetchData = async () => {
-    const res = await axios.get(`/client/search?q=${query}`);
+    const res = await axios.get(`${BASE_URL}/client/search?q=${query}`);
     setData(res.data);
   };
   if (query.length === 0 || query.length > 0) fetchData();
@@ -44,7 +45,7 @@ useEffect(() => {
 
 const deleteItem = async (id) => {
   try{
-    const res = await axios.delete(`/client/${id}`)
+    const res = await axios.delete(`${BASE_URL}/client/${id}`)
     const newListItems = data.filter(item=> item._id !== id);
     setData(newListItems);
   }catch(err){

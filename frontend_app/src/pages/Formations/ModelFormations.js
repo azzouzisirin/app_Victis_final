@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import './formateur.css'
 import axios from 'axios';
 
+import {BASE_URL} from "../../helper"
 
 export default function ModelFormations(props ) {
   const { idforma, setOpenPopup } = props;
@@ -19,7 +20,7 @@ export default function ModelFormations(props ) {
       if(idforma){
         const getItemsList = async () => {
           try{
-            const res = await axios.get("/formation/"+idforma)
+            const res = await axios.get(BASE_URL+"/formation/"+idforma)
             setdesignation(res.data.designation);
             setType(res.data.type);
             setDureeJour(res.data.DureeJour);
@@ -75,7 +76,7 @@ export default function ModelFormations(props ) {
               "Content-type": "application/json",
             },
           };
-          const res = await axios.put("/formation/"+idforma, {
+          const res = await axios.put(BASE_URL+"/formation/"+idforma, {
             type: Type,
             designation: designation,
             DureeJour:  DureeJour,
@@ -99,7 +100,7 @@ export default function ModelFormations(props ) {
               "Content-type": "application/json",
             },
           };
-          const res = await axios.post('/formation/register', {
+          const res = await axios.post(BASE_URL+"/formation/register", {
             type: Type,
             designation: designation,
             DureeJour:  DureeJour,

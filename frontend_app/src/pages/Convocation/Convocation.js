@@ -2,6 +2,7 @@ import React ,{ useEffect,useState } from 'react';
 import { Link } from "react-router-dom";
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
+import {BASE_URL} from "../../helper"
 
 import {  Add,Delete } from '@material-ui/icons'
 
@@ -54,7 +55,7 @@ const [DesignationFomration, setDesignationFomration] = useState("");
   useEffect(() => {
   
     const fetchData = async () => { 
-      const res = await axios.get(`/session/getDonneConvocation/`+id+'/'+username);
+      const res = await axios.get(`${BASE_URL}/session/getDonneConvocation/`+id+'/'+username);
       setNumSession(res.data.NumSession)
       setNumDevis(res.data.numDevis)
       setContact(res.data.Contact) 
@@ -91,14 +92,14 @@ const [DesignationFomration, setDesignationFomration] = useState("");
         "Content-type": "application/json",
       },
     }; 
- const res1=  await axios.post('/newfolder/Convocations',{
+ const res1=  await axios.post(BASE_URL+"/newfolder/Convocations",{
         pathDossier:user.shemaDossie,
         addpath:nomDossier
      
       },config)
 
       for(var i=0 ; i<persos.length; i++){
-      const res2=     axios.post("/session/createPdfConcocation/sendConditaure", {
+      const res2=     axios.post(BASE_URL+"/session/createPdfConcocation/sendConditaure", {
             NumSession:NumSession,
             nomStagaire:persos[i].titre+" "+persos[i].prenom+" "+persos[i].nom,
            Contact:Contact, 
@@ -121,7 +122,7 @@ const [DesignationFomration, setDesignationFomration] = useState("");
       
     
    
-        const res = await axios.put(`/offre/${id}`, {
+        const res = await axios.put(`${BASE_URL}/offre/${id}`, {
           listStagaire: persos,
           listSousResponsable:sousResponsable,
       
@@ -141,7 +142,7 @@ const [DesignationFomration, setDesignationFomration] = useState("");
   useEffect(() => {
     const fetchData = async () => {
       try{  
-      const res = await axios.get(`/offre/${id}`);
+      const res = await axios.get(`${BASE_URL}/offre/${id}`);
       settypeFormation(res.data.TypeFormation)
       setPersos(res.data.listStagaire) 
       setsousResponsable(res.data.listSousResponsable)
@@ -239,7 +240,7 @@ const [DesignationFomration, setDesignationFomration] = useState("");
   if(chekResponsable==false){
           for(var i=0 ; i<persos.length; i++){
       
-        const res = await axios.post(`/session/sendPdfConcocation/sendConditaure`,{
+        const res = await axios.post(`${BASE_URL}/session/sendPdfConcocation/sendConditaure`,{
         
           subject:object,
       
@@ -267,7 +268,7 @@ const [DesignationFomration, setDesignationFomration] = useState("");
         ccemail[i]=sousResponsable[i].email
         }
       }
-      const res = await axios.post(`/session/sendPdfConcocation/sendResponsable`,{
+      const res = await axios.post(`${BASE_URL}/session/sendPdfConcocation/sendResponsable`,{
         
         subject:object,
     

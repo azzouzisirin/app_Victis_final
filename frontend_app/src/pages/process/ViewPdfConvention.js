@@ -3,6 +3,8 @@ import React, { useState, useEffect ,useRef} from 'react'
 import { Link } from "react-router-dom";
 import toast, { Toaster } from 'react-hot-toast';
 import axios from 'axios';
+import {BASE_URL} from "../../helper"
+
 import PopUp from '../../components/BoxMessage/PopUp'
 function ViewPdfConvention(props){
   const { id} = props;
@@ -31,7 +33,7 @@ function ViewPdfConvention(props){
   useEffect(() => {
   
 const fetchData = async () => { 
-  const res = await axios.get(`/session/`+id);
+  const res = await axios.get(`${BASE_URL}/session/`+id);
   setnumSession(res.data.numSession)
   setnumDevis(res.data.numDevis)
   settypeFormation(res.data.typeFormation)
@@ -50,13 +52,13 @@ fetchData();
 
   useEffect (()=>{  
     const checkoffre =async()=>{ 
-      await axios.get(`/session/getDonneConvention/${id}`)
+      await axios.get(`${BASE_URL}/session/getDonneConvention/${id}`)
       .then((res)=>{ 
-        axios.post('/session/createPdf/Convention', res.data  )
+        axios.post(BASE_URL+"/session/createPdf/Convention", res.data  )
      
        .then(()=>{   
      
-      axios.get(`/session/showPdf/Convention`,{responseType:'blob'}).then((res2)=>{
+      axios.get(`${BASE_URL}/session/showPdf/Convention`,{responseType:'blob'}).then((res2)=>{
 
 
         const pdfBlob = new Blob([res2.data],{type:'application/pdf'}) 
@@ -75,7 +77,7 @@ const EnregsteOffre= async (e) => {
 
   
     var nomDossier=numDevis+"_"+RaisonSociale+"_"+DesignationFormation+"_"+typeFormation+"_"+selectedTypeFormation
-    const create = await axios.post('/newfolder/Convention',{
+    const create = await axios.post(BASE_URL+"/newfolder/Convention",{
       pathDossier:user.shemaDossie,
       addpath:nomDossier
       }) 
@@ -87,7 +89,7 @@ const EnregsteOffre= async (e) => {
       }; 
 
 
-      const res = await axios.post("/session/copeFilePdf", {
+      const res = await axios.post(BASE_URL+"/session/copeFilePdf", {
         filePath:"./documents/Convention.pdf", 
         filecopy:user.shemaDossie+"/"+nomDossier+"/Convention/Convention_"+nomDossier+".pdf"
     }  ,
@@ -123,7 +125,7 @@ const SendEmailConvention = async (e) => {
   }; 
 
 
-  const res = await axios.put("/session/"+id, {
+  const res = await axios.put(BASE_URL+"/session/"+id, {
     etatSession:"en-cours",
 }  ,
 
@@ -144,7 +146,7 @@ const SendEmailDevisConvention = async (e) => {
   };  
 
 
-  const res = await axios.put("/session/"+id, {
+  const res = await axios.put(BASE_URL+"/session/"+id, {
     etatSession:"en-cours",
 }  ,
 

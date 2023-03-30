@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { Delete , Update,Warning} from '@material-ui/icons'
 import { Link } from "react-router-dom";
 import { useNavigate} from 'react-router-dom';
+import {BASE_URL} from "../../helper"
 
 import Sidebar from '../../components/navBar/Sidebar';
 import axios from 'axios';
@@ -42,8 +43,8 @@ useEffect(() => {
       if (!user) history.push("/");
  
   const fetchData = async () => {
-
-    const res3 = await axios.get(`/session/search?q=${query}`);
+    setDataoffress([])
+    const res3 = await axios.get(`${BASE_URL}/session/search?q=${query}`);
     setDataoffress(res3.data); 
   };
   if (query.length === 0 || query.length > 0) fetchData();
@@ -52,7 +53,7 @@ useEffect(() => {
 
 const deleteItem = async (id) => {
   try{ 
-    const res = await axios.delete(`/session/${id}`)
+    const res = await axios.delete(`${BASE_URL}/session/${id}`)
  setQuery('')
   }catch(err){
     console.log(err); 
@@ -66,7 +67,7 @@ const addSession= async () => {
         "Content-type": "application/json",
       },
     }; 
-    const res = await axios.post('/session/register', {
+    const res = await axios.post(`${BASE_URL}/session/register`, {
       numSession: numSession,
       numDevis:NumDevis,
   

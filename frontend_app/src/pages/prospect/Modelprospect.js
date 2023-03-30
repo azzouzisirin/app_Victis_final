@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios';
+import {BASE_URL} from "../../helper"
 
 
 export default function ModelClient(props ) {
@@ -22,7 +23,7 @@ export default function ModelClient(props ) {
       if(idprospect){
         const getItemsList = async () => {
           try{
-            const res = await axios.get("/prospect/"+idprospect)
+            const res = await axios.get(BASE_URL+"/prospect/"+idprospect)
             setRaisonSociale(res.data.raisonSociale); 
             setNom(res.data.nom);
             settitre(res.data.titre)
@@ -78,7 +79,7 @@ export default function ModelClient(props ) {
               "Content-type": "application/json",
             },
           };
-          const res = await axios.put("/prospect/"+idprospect, {
+          const res = await axios.put(BASE_URL+"/prospect/"+idprospect, {
             raisonSociale: RaisonSociale,
             nom: Nom,
             titre:titre, 
@@ -105,7 +106,7 @@ export default function ModelClient(props ) {
               "Content-type": "application/json",
             },
           };
-          const res = await axios.post('/prospect/register', {
+          const res = await axios.post(BASE_URL+"/prospect/register", {
             raisonSociale: RaisonSociale,
             nom: Nom,
             prenom:  Prenom,

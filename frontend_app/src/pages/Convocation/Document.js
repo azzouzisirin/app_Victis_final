@@ -2,6 +2,7 @@ import React ,{ useEffect,useState } from 'react';
 import { Link } from "react-router-dom";
 import axios from 'axios';
 import PopUp from '../../components/BoxMessage/PopUp'
+import {BASE_URL} from "../../helper"
 
 import {  ChevronLeft,ExpandMore } from '@material-ui/icons'
 
@@ -31,10 +32,10 @@ import {  ChevronLeft,ExpandMore } from '@material-ui/icons'
        
       const fetchData = async () => {
         try{  
-        const res = await axios.get(`/offre/${id}`);
+        const res = await axios.get(`${BASE_URL}/offre/${id}`);
         setPersos(res.data.listStagaire) 
           setDateDebut(res.data.DateDebut)
-          const res1 = await axios.get(`/session/${id}`);
+          const res1 = await axios.get(`${BASE_URL}/session/${id}`);
           setnumSession(res.data.numSession)
       }catch(err){
         console.log(err);
@@ -45,7 +46,7 @@ import {  ChevronLeft,ExpandMore } from '@material-ui/icons'
     }, []);
     useEffect(()=>{
       const fetchData = async () => { 
-      const res = await axios.get(`/session/getDonneConvocation/`+id+'/'+username);
+      const res = await axios.get(`${BASE_URL}/session/getDonneConvocation/`+id+'/'+username);
    setemailFormateur(res.data.emailFormateur)
       setnomDossier(res.data.numDevis+"_"+res.data.RaisonSociale+"_"+res.data.designiationFormation+"_"+res.data.Module+"_"+res.data.typeFormation)
       }
@@ -56,13 +57,13 @@ import {  ChevronLeft,ExpandMore } from '@material-ui/icons'
 
 const VoirCertificat=async(titre,nom,prenom)=>{
   var nomStagaire=titre+" "+nom+" "+prenom
-      await axios.get(`/session/getDonneDocument/${id}/${nomStagaire}`)
+      await axios.get(`${BASE_URL}/session/getDonneDocument/${id}/${nomStagaire}`)
       .then((res)=>{   
-        axios.post('/session/createPdf/CertificatRealisation', res.data  )
+        axios.post(BASE_URL+"/session/createPdf/CertificatRealisation", res.data  )
      
        .then(()=>{   
      
-      axios.get(`/session/showPdf/CertificatRealisation`,{responseType:'blob'}).then((res2)=>{
+      axios.get(`${BASE_URL}/session/showPdf/CertificatRealisation`,{responseType:'blob'}).then((res2)=>{
 
 
         const pdfBlob = new Blob([res2.data],{type:'application/pdf'}) 
@@ -74,20 +75,20 @@ const VoirCertificat=async(titre,nom,prenom)=>{
       "Content-type": "application/json",
     },
   }; 
-  const res = await axios.post("/session/copeFilePdf", {
+  const res = await axios.post(BASE_URL+"/session/copeFilePdf", {
     filePath:"./documents/CertificatRealisation.pdf",
     filecopy:"./test/certificat_"+nomStagaire+".pdf"
 }  ) 
 } 
 const VoirFeuilleEmagement=async()=>{
 
-      await axios.get(`/session/getDonneFeuilEmagement/${id}`)
+      await axios.get(`${BASE_URL}/session/getDonneFeuilEmagement/${id}`)
       .then((res)=>{    
-        axios.post('/session/createPdf/FeuilleEmargement', res.data  )
+        axios.post(BASE_URL+"/session/createPdf/FeuilleEmargement", res.data  )
      
        .then(()=>{    
 
-      axios.get(`/session/showPdf/FeuilleEmargement`,{responseType:'blob'}).then((res2)=>{
+      axios.get(`${BASE_URL}/session/showPdf/FeuilleEmargement`,{responseType:'blob'}).then((res2)=>{
 
         const pdfBlob = new Blob([res2.data],{type:'application/pdf'}) 
       setbob(URL.createObjectURL(pdfBlob))
@@ -98,20 +99,20 @@ const VoirFeuilleEmagement=async()=>{
 const VoirFeuilleEvaluation=async(titre,nom,prenom)=>{
   var nomStagaire=titre+" "+nom+" "+prenom
  
-      await axios.get(`/session/getDonneDocument/${id}/${nomStagaire}`)
+      await axios.get(`${BASE_URL}/session/getDonneDocument/${id}/${nomStagaire}`)
       .then((res)=>{   
-        axios.post('/session/createPdf/FeuilleEvaluation', res.data  )
+        axios.post(BASE_URL+'/session/createPdf/FeuilleEvaluation', res.data  )
      
        .then(()=>{   
      
-      axios.get(`/session/showPdf/FeuilleEvaluation`,{responseType:'blob'}).then((res2)=>{
+      axios.get(`${BASE_URL}/session/showPdf/FeuilleEvaluation`,{responseType:'blob'}).then((res2)=>{
 
 
         const pdfBlob = new Blob([res2.data],{type:'application/pdf'}) 
       setbob(URL.createObjectURL(pdfBlob))
       
    })})}) 
-   const res = await axios.post("/session/copeFilePdf", {
+   const res = await axios.post(BASE_URL+"/session/copeFilePdf", {
     filePath:"./documents/FeuilleEvaluation.pdf",
     filecopy:"./test/evaluation_"+nomStagaire+".pdf"
 }  )
@@ -134,7 +135,7 @@ const EnregistreFile=async()=>{
     }; 
  
   
-  const res1=  await axios.post('/newfolder/Document',{
+  const res1=  await axios.post(BASE_URL+"/newfolder/Document",{
         pathDossier:user.shemaDossie,
         addpath:nomDossier
      
@@ -158,7 +159,7 @@ const EnregistreFile=async()=>{
       },
       data : data
     };
-    const res = await axios.post("/session/copeFilePdf", {
+    const res = await axios.post(BASE_URL+"/session/copeFilePdf", {
       filePath:"./documents/FeuilleEmargement.pdf",
       filecopy:user.shemaDossie+"/"+nomDossier+"/Document/FeuilleEmargement_"+nomDossier+".pdf"
   }  ,
@@ -173,7 +174,7 @@ const EnregistreFile=async()=>{
       console.log(error);
     });}
 
-    const res2=  await axios.get("/session/vider/dossie")
+    const res2=  await axios.get(BASE_URL+"/session/vider/dossie")
 }catch(err){
   console.log(err);
 }

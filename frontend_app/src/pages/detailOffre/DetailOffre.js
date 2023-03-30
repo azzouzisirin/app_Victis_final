@@ -3,6 +3,7 @@ import './detailOffre.css';
 import { Link } from "react-router-dom";
 import Select from 'react-select';
 import toast, { Toaster } from 'react-hot-toast';
+import {BASE_URL} from "../../helper"
 
 import { DoneAll, Add,Delete } from '@material-ui/icons'
 import { useNavigate} from 'react-router-dom';
@@ -175,7 +176,7 @@ const [diner, setdiner] = useState(10);
   useEffect(() => {
     const fetchData = async () => {
       try{  
-      const res = await axios.get(`/offre/${id}`);
+      const res = await axios.get(`${BASE_URL}/offre/${id}`);
       setRemarque(res.data.remarque) 
 
       setselectedHeure(res.data.selectedHeure)
@@ -263,7 +264,7 @@ const [diner, setdiner] = useState(10);
 if(IdClient){
   const fetchclient = async () => {
     try{ 
-      const res = await axios.get("/client/"+IdClient)
+      const res = await axios.get(BASE_URL+"/client/"+IdClient)
       setEmail(res.data.email); 
       setPortable(res.data.portable); 
       setNom(res.data.nom); 
@@ -289,7 +290,7 @@ if(IdClient){
 if(selectedOptionRaison&&selectedOptionCateg){
     const fetchclient = async () => {
     try{ 
-      const res = await axios.get("/client/findByRaisonAndNom/"+selectedOptionRaison.value+"/"+selectedOptionCateg.value)
+      const res = await axios.get(BASE_URL+"/client/findByRaisonAndNom/"+selectedOptionRaison.value+"/"+selectedOptionCateg.value)
       setEmail(res.data.email); 
       setPortable(res.data.portable); 
       setNom(res.data.nom); 
@@ -314,7 +315,7 @@ if(selectedOptionRaison&&selectedOptionCateg){
     if(selectedOptionRaisonFinanceur&&selectedOptionOpco){
         const fetchclient = async () => {
         try{ 
-          const res = await axios.get("/financeur/findByRaisonAndNom/"+selectedOptionRaisonFinanceur.value+"/"+selectedOptionOpco.value)
+          const res = await axios.get(BASE_URL+"/financeur/findByRaisonAndNom/"+selectedOptionRaisonFinanceur.value+"/"+selectedOptionOpco.value)
           setRaisonSocialeOpco(res.data.raisonSocial)
       setNomOpco(res.data.nom)
       setprenomOpco(res.data.prenom)
@@ -336,7 +337,7 @@ if(selectedOptionRaison&&selectedOptionCateg){
 
         const fetchclient = async () => {
         try{ 
-          const res = await axios.get("/formation/findByCategAndNom/"+DesignationFormation.value+"/"+typeFormation.value)
+          const res = await axios.get(BASE_URL+"/formation/findByCategAndNom/"+DesignationFormation.value+"/"+typeFormation.value)
           setIdFormation(res.data._id); 
           setDureeFormationJour(res.data.DureeJour)
           setDureeFormationHeur(res.data.DureeHeur)
@@ -385,7 +386,7 @@ if(selectedOptionRaison&&selectedOptionCateg){
 if(IdFormateur){
     const fetchFormateur = async () => {
       try{ 
-        const res = await axios.get("/formateur/"+IdFormateur)
+        const res = await axios.get(BASE_URL+"/formateur/"+IdFormateur)
         setEmailFormateur(res.data.email); 
         setTitreFormateur(res.data.titre); 
         setNomFormateur(res.data.nom); 
@@ -419,7 +420,7 @@ if(IdFormateur){
       const fetchData = async () => {
      
         try{ 
-          const res = await axios.get("/formateur/findbyusername/"+selectedOptionUserFormateur.value)
+          const res = await axios.get(BASE_URL+"/formateur/findbyusername/"+selectedOptionUserFormateur.value)
           setDataFormateur(res.data)
         }catch(err){
           console.log(err);
@@ -474,7 +475,7 @@ if(IdFormateur){
     }
      
       var nomDossier=NumDevis+"_"+RaisonSociale+"_"+nomFormation+"_"+typeformation+"_"+selectedTypeFormation
-      const create = await axios.post('/newfolder/'+nomDossier,{
+      const create = await axios.post(BASE_URL+"/newfolder/"+nomDossier,{
         pathDossier:user.shemaDossie,
         addpath:""
         })  
@@ -484,7 +485,7 @@ if(IdFormateur){
           },
         };  
 
-        const res = await axios.put('/offre/'+id, {
+        const res = await axios.put(BASE_URL+"/offre/"+id, {
           IdClient: IdClient, 
           remarque:Remarque,
 
@@ -577,7 +578,7 @@ if(IdFormateur){
 if(idOpco){
     const fetchData = async () => {
       try{ 
-      const res = await axios.get(`/financeur/`+idOpco);
+      const res = await axios.get(`${BASE_URL}/financeur/`+idOpco);
        setRaisonSocialeOpco(res.data.raisonSocial)
       setNomOpco(res.data.nom)
       setprenomOpco(res.data.prenom)
@@ -885,7 +886,7 @@ useEffect(() => {
         if(RaisonLocation){
         const fetchData = async () => {
           try{ 
-          const res = await axios.get(`/location/getByRaison/`+RaisonLocation.value);
+          const res = await axios.get(`${BASE_URL}/location/getByRaison/`+RaisonLocation.value);
           setlistBureau(res.data.frais)
           setlieuFormation(res.data.adresse_1)
 

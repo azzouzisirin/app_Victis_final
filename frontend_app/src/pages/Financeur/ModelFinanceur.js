@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import './financeur.css'
 import axios from 'axios';
+import {BASE_URL} from "../../helper"
 
  
 export default function ModelFormateur(props ) {
@@ -23,7 +24,7 @@ export default function ModelFormateur(props ) {
       if(idforma){
         const getItemsList = async () => {
           try{
-            const res = await axios.get("/financeur/"+idforma)
+            const res = await axios.get(BASE_URL+"/financeur/"+idforma)
             setPortable(res.data.portable);
             setraisonSocial(res.data.raisonSocial)
             setNom(res.data.nom);
@@ -79,7 +80,7 @@ export default function ModelFormateur(props ) {
               "Content-type": "application/json",
             },
           };
-          const res = await axios.put("/financeur/"+idforma, {
+          const res = await axios.put(BASE_URL+"/financeur/"+idforma, {
             portable: tel2,
             raisonSocial:raisonSocial,
             nom: Nom,
@@ -106,7 +107,7 @@ export default function ModelFormateur(props ) {
               "Content-type": "application/json",
             },
           };
-          const res = await axios.post('/financeur/register',
+          const res = await axios.post(BASE_URL+"/financeur/register",
            {
             portable: tel2,
             raisonSocial:raisonSocial,
