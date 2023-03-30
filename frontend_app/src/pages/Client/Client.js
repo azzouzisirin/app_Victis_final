@@ -57,7 +57,7 @@ const deleteItem = async (id) => {
      <h1> Client</h1>
    <button className="Newbuton"  onClick={() => { setOpenPopup(true); setRecordForEdit(null);setidclient()}}>
    Nouveau Client
-   </button>
+   </button> 
    <input type="text" placeholder="recherche ..." className='buttonSearch'
          onChange={(e) => setQuery(e.target.value.toLowerCase())}/>
    <div className='tabledecore'> 

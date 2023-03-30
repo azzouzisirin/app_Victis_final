@@ -151,22 +151,41 @@ exports.Register = async (req, res) => {
         });
     } 
 };
+exports.search = async (req, res) => {
+    try {
+        const { q } = req.query;
+          var Session=[]      
+          if(q){
+            Session = await session.find({$or:[{numSession:{$regex:q}},{etatSession:{$regex:q}}]})
 
-
-exports.search = async (req, res, next) => {
-    const Session = await session.find();
-    const { q } = req.query;
-  
-    const keys = ["nom", "categorie"];
+          }else{
+            Session = await session.find()
+          }
+          const countSession =  Session.length;      
+          const Offre = await offre.find();
+      
+          const sss=[]
+          var Formation={}
+          var Client={}
+          var Formateur={}
+          for(var i=0;i<countSession;i++){
+              Offre[i].IdFormation?  Formation = await formation.findById(Offre[i].IdFormation): Formation  = {}
+              Offre[i].IdClient?   Client = await client.findById(Offre[i].IdClient): Client = {}
+              Offre[i].idFormateur?    Formateur = await formateur.findById(Offre[i].idFormateur):Formateur = {}
    
-    const search = (data) => {
-      return data.filter((item) =>
-        keys.some((key) => item[key].toLowerCase().includes(q))
-      );
-    };
+              sss[i]=getsession(Session[i],Formation,Client,Formateur,Offre[i])
   
-    q ? res.json(search(Session).slice(0, 10)) : res.json(Session.slice(0, 10));
+          } 
   
+          res.json(sss );  
+  
+
+    } catch (error) {
+        res.status(400).json({
+            status: 'failed',
+            error
+        });
+    } 
    
 };
 exports.getSessionById = async (req, res) => {
@@ -658,7 +677,7 @@ exports.getDonneConvocation = async (req, res) => {
 }; 
 exports.updateSession = async (req, res) => {
     try {
-        const Session = await session.findOneAndUpdate(id=req.params.id,req.body, { new: true });
+        const Session = await session.findOneAndUpdate({id:req.params.id},req.body, { new: true });
 
         res.status(200).json({
             Session
@@ -673,7 +692,8 @@ exports.updateSession = async (req, res) => {
 
 exports.deleteSession = async (req, res) => {
     try {
-        const Session = await session.findByIdAndDelete(req.params.id);
+        const Session = await session.findOneAndDelete({id:req.params.id});
+        const Offre = await offre.findOneAndDelete({id:req.params.id});
 
         res.status(200).json({
             Session

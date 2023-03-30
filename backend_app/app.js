@@ -62,8 +62,8 @@ const storage = new GridFsStorage({
 
 const upload = multer({
   storage
-});
-
+}); 
+mongoose.set('strictQuery', true);
 app.get("/fileinfo/:filename", (req, res) => {
   const file = bucket
     .find({

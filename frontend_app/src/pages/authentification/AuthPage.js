@@ -3,18 +3,14 @@ import axios from "axios";
 import './authentification.css'
 import {  useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
-import { ToastContainer, toast } from "react-toastify";
+import toast, { Toaster } from 'react-hot-toast';
 
 function Login() {
-  const [cookies] = useCookies([]);
   const navigate = useNavigate();
-  useEffect(() => {
-    if (cookies.jwt) {
-      navigate("/");
-    }
-  }, [cookies, navigate]);
-
-  const [values, setValues] = useState({ email: "", password: "" });
+ 
+  const [email, setemail] = useState();
+ 
+  const [password, setpassword] = useState({ email: "", password: "" });
   const generateError = (error) =>
     toast.error(error, {
       position: "bottom-right",
@@ -22,29 +18,36 @@ function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const { data } = await axios.post(
+      const config = {
+        headers: { 
+          "Content-type": "application/json",
+        },
+      };
+      const     res = await axios.post(
         "/utilisateur/login",  
         {
-          ...values,
-        },
-        { withCredentials: true }
+          email:email,
+          password:password,
+        },config
       );
-      if (data) {
-        if (data.errors) {
-          const { email, password } = data.errors;
-          if (email) generateError(email);
-          else if (password) generateError(password);
-        } else {
-          localStorage.setItem("user", JSON.stringify(data));
+    if(res.data._id){
+      toast.error(res.data._id)
 
-          navigate("/accueil");
-        }
-      }
+      localStorage.setItem("user", JSON.stringify(res.data));
+
+      navigate('/accueil')
+ 
+    }else{
+      toast.error(res.data.resultat)
+
+    }
+   
     } catch (ex) {
       console.log(ex);
     }
   };
   return (
+    <div>
     <div className="Login">
      
       <form onSubmit={(e) => handleSubmit(e)}>
@@ -57,9 +60,7 @@ function Login() {
             type="email"
             name="email"
             placeholder="Email"
-            onChange={(e) =>
-              setValues({ ...values, [e.target.name]: e.target.value })
-            }
+            onChange={e => {setemail(e.target.value)} }
           />
         </div>
         <div>
@@ -69,16 +70,37 @@ function Login() {
             type="password"
             placeholder="Password"
             name="password"
-            onChange={(e) =>
-              setValues({ ...values, [e.target.name]: e.target.value })
-            }
+            onChange={e => {setpassword(e.target.value)} }
           />
         </div>
         <br/>
         <button type="submit">Login</button>
       
       </form>
-      <ToastContainer />
+  
+    </div>
+        <Toaster   position="bottom-right"  toastOptions={{
+          success: {
+            style: {
+              width: '700px',
+              height:'70px',
+              border:'green',
+              borderStyle: "solid",
+              fontSize:'25px',
+            },
+          },
+          error: {
+            style: {
+              width: '700px',
+              height:'70px',
+              border:'red',
+              borderStyle: "solid",
+              fontSize:'25px',
+      
+            },
+          }, 
+        }}
+        reverseOrder={false}/>
     </div>
   );
 }

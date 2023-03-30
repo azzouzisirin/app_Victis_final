@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { getAllclients,getclientByRaison, getclientById,getclientByUsername, updateclient, deleteclient,search,Register } = require('../controllers/clientController');
   
-router.route('/search').get(search);
+router.route('/search').get(search); 
 router.route('/:id').get(getclientById);
 router.route('/findByRaison/:raisonSociale').get(getclientByRaison); 
 router.route('/findByRaisonAndNom/:raisonSociale/:username').get(getclientByUsername);

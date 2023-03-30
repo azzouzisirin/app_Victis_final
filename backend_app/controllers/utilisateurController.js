@@ -43,29 +43,18 @@ exports.getutilisateurByUsername = async (req, res) => {
 
  
 exports.Login = async(req, res) => {
-  
-    try {
-        const Utilisateur =  await utilisateur.findOne({ email: req.body.email,password:req.body.password })
-      
-            if (Utilisateur) {
-              
-                        res.status(200).json(
-                            Utilisateur
-                        );
-                    } else {
-                        res.status(200).json({
-                            status: 'failed',
-                            error: 'Wrong email or password'
-                        });
-                    }
-               
-    } catch (error) {
-        res.status(400).json({
-            status: 'failed',
-            error
-        });
+    if(req.body.password && req.body.email){
+      let user=await utilisateur.findOne(req.body).select('-password')
+      if(user){
+          res.send(user)
+      }else{
+          res.send({resultat:"utilisateur n'est pas exist"})
+      }
+    }else{
+      res.send({resultat:"remplir tous les champs"})
     }
-};
+  
+  };
 exports.search = async (req, res, next) => {
     const utilisateurs = await utilisateur.find();
     const { q } = req.query;

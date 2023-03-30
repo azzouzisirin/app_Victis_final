@@ -43,7 +43,7 @@ useEffect(() => {
  
   const fetchData = async () => {
 
-    const res3 = await axios.get(`/session`);
+    const res3 = await axios.get(`/session/search?q=${query}`);
     setDataoffress(res3.data); 
   };
   if (query.length === 0 || query.length > 0) fetchData();
@@ -51,10 +51,9 @@ useEffect(() => {
  
 
 const deleteItem = async (id) => {
-  try{
+  try{ 
     const res = await axios.delete(`/session/${id}`)
-    const newListItems = dataSession.filter(item=> item._id !== id);
-    setDataSession(newListItems);
+ setQuery('')
   }catch(err){
     console.log(err); 
   }
@@ -84,6 +83,7 @@ const addSession= async () => {
 
   
   }
+
 
 
   function handleClick(id) {
@@ -130,28 +130,27 @@ const addSession= async () => {
     {dataoffress.map((item) => (
                
               
-               <tr key={item.id} onClick={() =>handleClick(item.id)} id="element"> 
+               <tr > 
             
-                 <td> {item.session}</td> 
-               <td>{item.nomFormation}</td>
-               <td>{item.nomClient}</td>
-               <td>{item.nomFormateur}</td>
-               <td>{item.tel}</td>
-               <td>{item.DureeJour}</td>
-               <td>{item.dateDebut}</td>
-               <td>{item.dateFin}</td>
-               <td>{item.remarque}</td>
-               <td>
+                 <td key={item.id} onClick={() =>handleClick(item.id)} > {item.session}</td> 
+               <td key={item.id} onClick={() =>handleClick(item.id)}>{item.nomFormation}</td>
+               <td key={item.id} onClick={() =>handleClick(item.id)}>{item.nomClient}</td>
+               <td key={item.id} onClick={() =>handleClick(item.id)}>{item.nomFormateur}</td>
+               <td key={item.id} onClick={() =>handleClick(item.id)}>{item.tel}</td>
+               <td key={item.id} onClick={() =>handleClick(item.id)}>{item.DureeJour}</td>
+               <td key={item.id} onClick={() =>handleClick(item.id)}>{item.dateDebut}</td>
+               <td key={item.id} onClick={() =>handleClick(item.id)}>{item.dateFin}</td>
+               <td key={item.id} onClick={() =>handleClick(item.id)}>{item.remarque}</td>
+               <td key={item.id} onClick={() =>handleClick(item.id)}>
                 {item.DifferenceDate==1? <Warning style={{fontSize:"40px",color:"red",marginRight:"10px"}}/> :null}
                {item.etatSession} 
 
                 
                 </td>
 
-                 <td>
+                 <td key={item.id} onClick={() =>deleteItem(item.id)}>
      
-                   <Link  onClick={() => deleteItem(item._id)}>   <Delete /></Link>
-                   <Link  >   <Update /></Link>
+                    <Delete />
     
     
       </td>
