@@ -1,0 +1,66 @@
+
+    caption {
+    font-family: sans-serif;
+    }
+
+    .Newbuton{
+        background-color: #D0E3FA;
+        border-radius: 20px;
+        color:#231ab4;
+font-weight: 500;
+        border-color: #D0E3FA;
+margin:10px ;
+padding:10px ;
+text-align: center;
+font-size: 24px;
+
+    }
+    h1{ 
+        color:#231ab4;
+        text-align: center;
+        
+        font-family:Verdana, Geneva, Tahoma, sans-serif;
+        font-weight: 600;
+        font-size: 50px;
+    }
+  .modelDiv{
+    display: flex;
+  }
+  .modelRight{
+flex: 1;
+margin: 15px;
+  }
+  .modelLeft{
+    flex: 1;
+    margin: 15px;
+
+  }
+ .formModel label {
+    font-size:24px;
+    font-weight: 600;
+
+  }
+  .buttonSearch {
+    float: right;
+    margin-right: 52px;
+    margin-top: 30px;
+  }
+   .formModel input{
+    font-size:24px;
+    width: 300px;
+    margin:5px 20px 10px 5px;
+    height: 30px;
+  }
+
+  .buttonEnregistre{
+    margin: auto;
+    width: 150px;
+    height: 50px;
+    font-size: 24px;
+    font-weight: 500;
+    border-radius: 20px;
+    border-color: #D0E3FA;
+    color:#231ab4;
+
+    background-color: #D0E3FA;
+  }

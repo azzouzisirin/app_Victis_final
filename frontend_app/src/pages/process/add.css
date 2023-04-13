@@ -1,0 +1,335 @@
+.ContentList{
+    position:relative;
+	width:90%;
+	margin:auto;
+	height:50px;
+}
+
+.ContentList ul{
+    display: none;
+  
+}
+.Remarque {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    margin-top: 0px;
+    top: 270px;
+    right:100px;
+    opacity: 1;
+    transition: all 0.5s ease;
+  }
+  .Remarque.active textarea{
+	font-size: 20px;
+	height: 80px;
+	width: 300px;
+
+  }
+
+  .Remarque.active {
+    background:#f7e2ba;
+    left: 77%;
+    opacity: 1;
+    transition: all 0.5s ease;
+    z-index: 1;
+  }
+#line {
+	width:98%;
+	margin:auto;
+	background: #777;
+	height:6px;
+	position:absolute;
+	top:60px;
+	z-index:1;
+	border-radius:50px;
+	transition:all ease 0.9s;
+}
+
+
+.ContentList li {
+	display:block;
+	width:20px;
+    font-size: 15px;
+	height:20px;
+	border-radius:50%;
+	border:solid 2px #aaa;
+     
+}
+.ContentList .step-inner{
+	margin-top: 25px;
+	width: 200px;
+	margin-left: -90px;
+}
+.ContentList a{
+	color: black;
+	
+
+
+
+}
+
+.GrandContentList{
+    position:relative;
+	width:90%;
+	margin:auto;
+	height:150px;
+}
+
+.GrandContentList ul{
+    display: flex;
+    list-style: none;
+    font-size: 25px;
+    padding-top: 5px;
+    color: rgb(90, 87, 87);
+    font-weight: 600;
+    justify-content: space-between;
+}
+
+#line {
+	width:98%;
+	margin:auto;
+	background: #777;
+	height:6px;
+	position:absolute;
+	top:120px;
+	z-index:1;
+	border-radius:50px;
+	transition:all ease 0.9s;
+}
+
+
+.GrandContentList li {
+	display:block;
+	width:50px;
+    font-size: 25px;
+	height:50px;
+	border-radius:50%;
+	border:solid 2px #aaa;
+     
+}
+.GrandContentList .step-inner{
+	margin-top: 55px;
+	width: 200px;
+	margin-left: -10px;
+}
+.GrandContentList a{
+	color: black;
+	
+
+
+
+}
+.GrandContentList button{
+	color: black;
+}
+.divCovocaHaut{
+	height:150px;
+	margin-left:200px;
+}
+.divCovocaHaut p{
+	line-height: 30px;
+}
+.GrandContentList li:after {
+	content:" ";
+	display:block;
+	width:20px;
+	height:20px;
+	background:#777;
+	margin:auto;
+	border-radius:50%;
+	margin-top:25px;
+	box-shadow:0 2px 13px -1px rgba(0,0,0,0.3);
+	transition:all ease 0.2s;
+     
+}
+
+.containerDivhaut{
+	display: flex;
+   
+}
+.containerPdf{
+	width: 1100px;
+  padding: 25px 50px 2px 50px;
+   
+}
+
+.containerPdf h4{
+	font-size: 20px;
+	margin-bottom: 4px;
+
+}
+.containerPdf h3{
+	font-size: 26px;
+	margin-bottom: 4px;
+
+}
+.containerPdf table td{
+	font-size: 21px;
+}
+.containerPdf h1{
+	font-size: 25px;
+
+}
+.containerPdf p{
+	font-size: 20px;
+	margin-bottom: 4px;
+
+}
+.containerPdf span {
+	font-size: 21px;
+	margin-bottom: 3px;
+
+}
+
+.containerPdf table th{
+	font-size: 22px;
+}
+
+
+
+.pdfConcension{
+	width: 1100px;
+  padding: 25px 50px 2px 50px;
+   
+}
+
+.pdfConcension h4{
+	font-size: 24px;
+	margin-bottom: 4px;
+
+}
+.pdfConcension h3{
+	font-size: 28px;
+	margin-bottom: 4px;
+
+}
+.pdfConcension table td{
+	font-size: 21px;
+}
+.pdfConcension h1{
+	font-size: 30px;
+
+}
+.pdfConcension p{ 
+	font-size: 22px;
+	line-height: 27px;
+	font-weight: 500;
+	margin-bottom: 4px;
+
+}
+.pdfConcension span {
+	font-size: 23px;
+	margin-bottom: 3px;
+
+}
+
+.pdfConcension table th{
+	font-size: 22px;
+}
+.divun{
+	width: 300px;
+	height: 180;
+	}
+	.divdeux{
+	  flex: 50%;
+	  }
+.blocUne{
+	display: flex;
+	margin-left:5px;
+}
+	.lefthaut{
+		flex: 1;
+		float:left;
+   
+		font-family: sans-serif;
+	}
+	.rigthhaut{
+		flex: 1;
+	}
+	span{
+		font-weight: 700;
+		margin-left:4px;
+		font-size: 20px;
+
+	}
+	 h5{
+		text-decoration: underline;
+		font-size: 20px;
+	}
+	th{
+		text-align: left;
+		font-size: 18px;
+		height:30px;
+	}
+	.centerDiv{
+		margin-top: 100px;
+	  
+	}
+	.divdeux{
+		display: flex;
+
+	}
+	td{
+		font-size: 18px;
+
+	}
+	.divdeux_un{
+		flex: 1;
+
+	}
+	.divdeux_deux{
+		flex: 1; 
+
+	}
+ p{
+	font-family:Arial;
+	font-size:17px;
+ }
+
+	.divpage2 p{
+		margin-top: 1px;
+		font-size:10px;
+		margin-bottom:1px;
+		margin-right:10px;
+	   
+	}
+	.divpage2 h6{
+		margin-bottom: 2px;
+		margin-top: 0px;
+		font-size:11px;
+	} 
+	.divpage2  h4{
+	 margin-bottom: 0px;
+	 font-size: 13px;
+	 margin-top: 0px;
+ }
+	.divpageun{
+		flex: 1;
+	}
+	.divpagedeux{
+		flex:1;
+	
+		
+	}
+
+	.menuPdf{
+		width: 380px;
+		height: 100%;
+		margin-right: 12%;
+		background:#f7e2ba;
+		color: #231ab4;
+	}
+	.menuPdf ul{
+		list-style: none;
+	}
+	.menuPdf ul li{
+		font-size: 23px;
+		font-family: Arial, Helvetica, sans-serif;
+        padding-left: 17px;
+		font-weight: 800;
+		line-height: 90px;
+	}
+	.menuPdf ul li:hover{
+		color:#f7e2ba;
+		background: #231ab4;
+	}
