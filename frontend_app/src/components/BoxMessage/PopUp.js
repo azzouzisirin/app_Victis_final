@@ -43,8 +43,8 @@ if(type=="sendOffreAddConvention"){
 
 }
 if(type=="sendDocument"){
-setobject('Session "Numéro de session" - Documents pédagogiques')
-settext1('Veuillez trouver ci-joint les documents pédagogiques de la session de formation "Numéro de session + intitulé de la formation".')
+setobject("Session "+numSession+" - Documents pédagogiques")
+settext1("Veuillez trouver ci-joint les documents pédagogiques de la session de formation "+numSession +" " +nomFormation+" - "+typeFormation+".")
 settext2("Veuillez au respect de la signature de la feuille d'émargement par demi journée et la signature du certificat de réalisation ainsi que la feuille d'évaluation en fin de formation.")
 
 
@@ -60,11 +60,14 @@ const SendEmail = async (e) => {
         subject:object,
         EmailUser:user.email,
         PassEmail:user.PassEmail,
+         email:email, 
+          host:user.host,
         linun:text0,
+       
         lindeux:text1 ,
         lintrois: text2,
         linquatre: text3,
-          email:email,
+         
           filename:"Convention de formation "+nomFormation+" - "+typeFormation
           
          
@@ -79,13 +82,14 @@ const SendEmail = async (e) => {
     const res = await axios.post(`${BASE_URL}/session/send/pdf/OffreplusConvention`,{
       
       subject:object,
-      EmailUser:user.email,
-      PassEmail:user.PassEmail,
+    EmailUser:user.email,
+        PassEmail:user.PassEmail,
+        email:email, 
+          host:user.host,
         linun:text0,
         lindeux:text1 ,
         lintrois: text2,
         linquatre: text3,
-          email:email,
           filenameConvention:"Convention de formation "+nomFormation+" - "+typeFormation,
           filenameOffre:"Offre de formation "+nomFormation+" - "+typeFormation,
     }) .then(response=>{
@@ -96,17 +100,19 @@ const SendEmail = async (e) => {
 
   }
   if(type=="sendOffre"){ 
+
     const res = await axios.post(`${BASE_URL}/session/send/pdf/offre`,{
     
     
       subject:object,
       EmailUser:user.email,
       PassEmail:user.PassEmail,
+      emailSend:email, 
+          host:user.host,
         linun:text0,
         lindeux:text1 ,
         lintrois: text2,
         linquatre: text3,
-          email:email,
           filenameProgramme:"Programme_"+nomFormation+"_"+  typeFormation,
           filenameOffre:"Devis "+nomFormation+" - "+typeFormation+".pdf",
         filename:filename
@@ -127,11 +133,12 @@ const SendEmail = async (e) => {
       subject:object,
       EmailUser:user.email,
       PassEmail:user.PassEmail,
+      email:email, 
+          host:user.host,
         linun:text0,
         lindeux:text1 ,
         lintrois: text2,
         linquatre: text3,
-          email:email,
           filenameConvention:"Rapport_"+nomFormation+"_"+  typeFormation,
           filenameOffre:"Contrat "+nomFormation+" - "+typeFormation+".pdf"
    
@@ -158,11 +165,11 @@ const SendEmail = async (e) => {
       lindeux:text2 ,
       numSession: numSession,
       listStagaire:persos,
-
-       pathDossie: user.shemaDossie+"/"+nomDossier+"/Document",
+      email:email, 
+          host:user.host,
+       pathDossie: user.shemaDossie+"/"+nomDossier+"/4_Documents de formation",
        EmailUser:user.email,
-      PassEmail:user.PassEmail,
-    email:email 
+      PassEmail:user.PassEmail
         
     })
 

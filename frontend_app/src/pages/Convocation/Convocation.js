@@ -260,6 +260,7 @@ const [DesignationFomration, setDesignationFomration] = useState("");
           ccemail:emailClient,
           EmailUser:user.email,
           PassEmail:user.PassEmail,
+          host:user.host,
           typeFormation:typeFormation,
           filepath:user.shemaDossie+"/"+nomDossier+"/Convocations",
           nomFile:"Convocation_"+[i],

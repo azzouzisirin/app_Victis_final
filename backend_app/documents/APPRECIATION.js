@@ -47,7 +47,7 @@ width:500px;
 <br/>
 <div class="blocUne">
 <div class="lefthaut" >
-<p>Session N°         <span style="margin-left:10px;font-weight: 800;">    ${Reference}</span> </p>
+<p>Session N°         <span style="margin-left:100px;font-weight: 800;">    ${Reference}</span> </p>
 <p>Dates de la formation <span style="margin-left:10px;font-weight: 800;"> du ${DateDebut} au ${DateFin} </span></p>
  
 </div>

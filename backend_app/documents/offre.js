@@ -1,4 +1,4 @@
-module.exports = ({ RaisonClient,prixNet,nomUtilisateur,rythme,tva,categFormation,DateFinFormation,prixTva,numbstage,lieuFormation,duree,DateDebut,typeFormation,nomClient,prixGlobal, NumDevis, numSession, adress_1Client,adress_2Client,CodePostalClient,emailClient,numClient ,portableClient,nomFormation}) => {
+module.exports = ({ RaisonClient,prixNet,codeVilleFormation,nomUtilisateur,rythme,tva,categFormation,DateFinFormation,prixTva,numbstage,lieuFormation,duree,DateDebut,typeFormation,nomClient,prixGlobal, NumDevis, numSession, adress_1Client,adress_2Client,CodePostalClient,emailClient,numClient ,portableClient,nomFormation}) => {
     const today = new Date();
 return ` 
  
@@ -154,7 +154,7 @@ return `
         <div class="divdeux" > 
    
 <div class="divdeux_un">  
-<table style="margin-top:27px;margin-left:28px;"> 
+<table style="margin-top:20px;margin-left:28px;"> 
   <tr>
    <th style="height: 45px;">Intitulé de l'action de formation :</th> 
   </tr>
@@ -176,8 +176,12 @@ return `
    </tr>
    <tr style="height: 25px;">
     <th> Lieu de la formation : </th> 
-    <td>${lieuFormation} </td>
+    <td>${lieuFormation} </td> 
    </tr>
+   <tr style="height: 25px;">
+   <th>  </th> 
+   <td>${codeVilleFormation} </td> 
+  </tr>
 </table>
 </div>
 <div  class="divdeux_deux" style="margin-left: 570px;margin-top:-245px">
@@ -198,7 +202,7 @@ return `
          </div>
        <div class="centerDiv" >
 
-<table  style="margin-left:30px ;margin-top:-60px;" >
+<table  style="margin-left:30px ;margin-top:-70px;" >
     <tr  > 
         <th style=" width: 650px; border:solid;"> Désignation        </th>
         <th style="width: 80px; border:solid;text-align: center;"> Total HT</th>
@@ -252,8 +256,8 @@ return `
     
     <p> <span style=" font-size: 15px;" >Engineering Concept Formation  </span>  </p> 
      <p style=" font-size: 15px;margin-left: 5px;"> est un organisme enregistré sous le N° 24 37 03580 37    </p>
-     <img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/logonavbar.png" width="600px" height="160px" style="margin-left: 30px;"/><br/>
-     <img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/logonavbar2.png" width="800px" height="110px" style="margin-left: 8%;"/>
+     <img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/logonavbar.png" width="600px" height="140px" style="margin-left: 30px;"/><br/>
+     <img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/logonavbar2.png" width="800px" height="100px" style="margin-left: 8%;"/>
           </div>
            <br/> 
        <h2 style="text-align: center;"> Conditions Générales de Vente : ENGINEERING CONCEPT </h2>
@@ -447,7 +451,7 @@ return `
        </div>
 
 
-<img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/logonavbar2.png" width="800px" height:"65px" style="margin-left: 9%;margin-top:100px;"/>
+<img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/logonavbar2.png" width="800px" height:"65px" style="margin-left: 9%;margin-top:70px;"/>
 
 </div>  
 </body>

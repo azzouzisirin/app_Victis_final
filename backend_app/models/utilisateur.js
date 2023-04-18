@@ -10,9 +10,13 @@ titre: {
   default:"M."
 },
     email: { 
-        type: String,
+        type: String, 
         unique: true,
     },
+    host: { 
+      type: String, 
+      unique: true,
+  },
     password: {
         type: String,
     },

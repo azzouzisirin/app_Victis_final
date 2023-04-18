@@ -2,7 +2,7 @@ const session = require('../models/Session');
 const offre = require('../models/offre');
 const opco=require("../models/Financeur")
 const pdfTemplateConvention = require("../documents/Convention")
-const pdfTemplateOffre = require("../documents/offre")
+const pdfTemplateOffre = require("../documents/offre") 
 const pdfTemplateConvocation = require("../documents/Convocation")
 const pdfTemplateFeuillEmargment = require("../documents/FeuillEmargment")
 const pdfCertificatRealisation = require("../documents/CertificatRealisation")
@@ -237,8 +237,17 @@ exports.getDonneOffre = async (req, res) => {
         const nomUtilisateur=req.params.nomUtilisateur
         Offre.IdClient?   Client = await client.findById(Offre.IdClient): Client = {}
         var ParcourCollectif=''
-        Offre.ParcourCollectif==true? ParcourCollectif="Parcours collectif":ParcourCollectif=Offre.NbStage
-        var prixtva=Offre.PrixTVA.toString()
+        if(Offre.ParcourCollectif==true){
+            ParcourCollectif="Parcours collectif"
+        } else{
+           if(Offre.NbStage==1){
+            ParcourCollectif="1 personne"
+           }else{
+            ParcourCollectif=Offre.NbStage+" personnes"
+           }
+           
+
+        }        var prixtva=Offre.PrixTVA.toString()
         prixtva.length>3 ? prixtva=prixtva.substring(0,prixtva.length-3)+" "+prixtva.substr(-3):null
         
         var prixNet=Offre.prixNet.toString()
@@ -273,6 +282,7 @@ exports.getDonneOffre = async (req, res) => {
             numbstage :ParcourCollectif,
             tva:Offre.Tva,
             prixTva:prixtva ,
+            codeVilleFormation:Offre.codeVilleFormation,
             prixNet:prixNet,
             prixGlobal:PrixTotal,
           
@@ -296,9 +306,7 @@ exports.getDonneFacturation = async (req, res) => {
         Offre.idopco? Opco=await opco.findById(Offre.idopco):Opco={}
         const nomUtilisateur=req.params.nomUtilisateur
         Offre.IdClient?   Client = await client.findById(Offre.IdClient): Client = {}
-        var ParcourCollectif=''
-        Offre.ParcourCollectif==true? ParcourCollectif="Parcours collectif":ParcourCollectif=Offre.NbStage
-        var prixtva=Offre.PrixTVA.toString()
+            var prixtva=Offre.PrixTVA.toString()
         prixtva.length>3 ? prixtva=prixtva.substring(0,prixtva.length-3)+" "+prixtva.substr(-3):null
         
         var prixNet=Offre.prixNet.toString()
@@ -414,9 +422,7 @@ exports.getDonneDocument = async (req, res) => {
         Offre.IdClient?   Client = await client.findById(Offre.IdClient): Client = {}
         Offre.idFormateur?   Formateur = await formateur.findById(Offre.idFormateur): Formateur = {}
 
-        var ParcourCollectif=''
-        Offre.ParcourCollectif==true? ParcourCollectif="Parcours collectif":ParcourCollectif=Offre.NbStage
- 
+       
         var date1=Offre.DateDebut.substring(8, 10)+"/"+Offre.DateDebut.substring(5, 7)+'/'+Offre.DateDebut.substring(0, 4)
         var date2=Offre.DateFin.substring(8, 10)+"/"+Offre.DateFin.substring(5, 7)+'/'+Offre.DateFin.substring(0, 4)
         
@@ -451,7 +457,6 @@ exports.getDonneFeuilEmagement = async (req, res) => {
         Offre.IdClient?   Client = await client.findById(Offre.IdClient): Client = {}
         Offre.idFormateur?   Formateur = await formateur.findById(Offre.idFormateur): Formateur = {}
         var varDisplay=""
-        Offre.ParcourCollectif==true? ParcourCollectif="Parcours collectif":ParcourCollectif=Offre.NbStage
         var date1=Offre.DateDebut.substring(8, 10)+"/"+Offre.DateDebut.substring(5, 7)+'/'+Offre.DateDebut.substring(0, 4)
         var date2=Offre.DateFin.substring(8, 10)+"/"+Offre.DateFin.substring(5, 7)+'/'+Offre.DateFin.substring(0, 4)
         var displaySig=["none","none","none","none","none","none","none","none","none","none"]
@@ -602,7 +607,6 @@ exports.getDonneFeuilEmagement = async (req, res) => {
         Offre.IdClient?   Client = await client.findById(Offre.IdClient): Client = {}
         Offre.idFormateur?   Formateur = await formateur.findById(Offre.idFormateur): Formateur = {}
         var varDisplay=""
-        Offre.ParcourCollectif==true? ParcourCollectif="Parcours collectif":ParcourCollectif=Offre.NbStage
         var date1=Offre.DateDebut.substring(8, 10)+"/"+Offre.DateDebut.substring(5, 7)+'/'+Offre.DateDebut.substring(0, 4)
         var date2=Offre.DateFin.substring(8, 10)+"/"+Offre.DateFin.substring(5, 7)+'/'+Offre.DateFin.substring(0, 4)
         var displaySig=["none","none","none","none","none","none","none","none","none","none"]
@@ -840,8 +844,17 @@ exports.getDonneConvention = async (req, res) => {
        var Client={}
         Offre.IdClient?   Client = await client.findById(Offre.IdClient): Client = {}
         var ParcourCollectif=''
-        Offre.ParcourCollectif==true? ParcourCollectif="Parcours collectif":ParcourCollectif=Offre.NbStage
-        var date1=Offre.DateDebut.substring(8, 10)+"/"+Offre.DateDebut.substring(5, 7)+'/'+Offre.DateDebut.substring(0, 4)
+        if(Offre.ParcourCollectif==true){
+            ParcourCollectif="Parcours collectif"
+        } else{
+           if(Offre.NbStage==1){
+            ParcourCollectif="1 personne"
+           }else{
+            ParcourCollectif=Offre.NbStage+" personnes"
+           }
+           
+
+        }        var date1=Offre.DateDebut.substring(8, 10)+"/"+Offre.DateDebut.substring(5, 7)+'/'+Offre.DateDebut.substring(0, 4)
         var date2=Offre.DateFin.substring(8, 10)+"/"+Offre.DateFin.substring(5, 7)+'/'+Offre.DateFin.substring(0, 4)
         var PrixTotal=Offre.PrixTotal.toString()
         PrixTotal.length>3 ? PrixTotal=PrixTotal.substring(0,PrixTotal.length-3)+" "+PrixTotal.substr(-3):null
@@ -909,9 +922,7 @@ exports.getDonneConvocation = async (req, res) => {
         heurDebut=Offre.HeureFormation.substring(3, 9)
         heurFin=Offre.HeureFormation.substring(12, 18)
      }
-        var ParcourCollectif=''
-        Offre.ParcourCollectif==true? ParcourCollectif="Parcours collectif":ParcourCollectif=Offre.NbStage
-      
+     
         const test={ 
             NumSession:Session.numSession,
             numDevis:Session.numDevis ,
@@ -1005,8 +1016,8 @@ if(req.params.nomPdf=="Convocation"){
 }
 if(req.params.nomPdf=="FeuillEmargment"){
     let options = {
-        width: '11.8in',
-        height: '10in'
+        width: '12in',
+        height: '8in'
      } 
      pdf.create(pdfTemplateFeuillEmargment(req.body),options).toFile('./documents/FeuillEmargment.pdf',(err)=>{
         if(err){
@@ -1133,7 +1144,7 @@ if(req.params.nomFile=="RapportFormateur"){
 }
 }  
   
-exports.sendPdf = (req,res)=>{ 
+exports.sendPdf = (req,res)=>{  
     if(req.params.typeEnvoye=="Convention"){
 
     pathToAttachment1 = path.join(process.cwd(),'documents', 'Convention.pdf')
@@ -1141,8 +1152,7 @@ exports.sendPdf = (req,res)=>{
     attachment1 = fs.readFileSync(pathToAttachment1).toString("base64")
 
     let smtpTransport = nodemailer.createTransport({
-        host:'smtp.gmail.com',
-        service:'Gmail',
+        host:req.body.host,
         port:465,
         secure:true,
         auth:{ 
@@ -1151,6 +1161,7 @@ exports.sendPdf = (req,res)=>{
         },
         tls:{rejectUnauthorized:false}
     })
+    
 
     smtpTransport.sendMail({
         from:req.body.EmailUser,
@@ -1175,7 +1186,7 @@ exports.sendPdf = (req,res)=>{
         }
        
     })
-    }
+    } 
     if(req.params.typeEnvoye=="offre"){
         var pathToAttachment=[] 
         var attachments=[]
@@ -1203,21 +1214,21 @@ exports.sendPdf = (req,res)=>{
                             path:process.env.fileInfo+req.body.filename}
                       }
 
-        let smtpTransport = nodemailer.createTransport({
-            host:'smtp.gmail.com',
-            service:'Gmail',
-            port:465,
-            secure:true,
-            auth:{
-                user:req.body.EmailUser,
-                pass:req.body.PassEmail
-            },
-            tls:{rejectUnauthorized:false}
-        })
+                      let smtpTransport = nodemailer.createTransport({
+                        host:req.body.host,
+                        port:465,
+                        secure:true,
+                        auth:{ 
+                            user:req.body.EmailUser,
+                            pass:req.body.PassEmail
+                        },
+                        tls:{rejectUnauthorized:false}
+                    })
+                    
             
         smtpTransport.sendMail({
             from:req.body.EmailUser,
-            to:req.body.email,
+            to:req.body.emailSend,
             subject:req.body.subject,
             html:req.body.linun+"<br/> "+req.body.lindeux+"<br/> "+req.body.lintrois+"<br/> "+req.body.linquatre+"<br/> Bien cordialement.",
             attachments:attachments
@@ -1244,17 +1255,16 @@ exports.sendPdf = (req,res)=>{
         attachment2 = fs.readFileSync(pathToAttachment2).toString("base64")
     
         let smtpTransport = nodemailer.createTransport({
-            host:'smtp.gmail.com',
-            service:'Gmail',
+            host:req.body.host,
             port:465,
             secure:true,
-            auth:{
+            auth:{ 
                 user:req.body.EmailUser,
                 pass:req.body.PassEmail
             },
             tls:{rejectUnauthorized:false}
         })
-    
+        
         smtpTransport.sendMail({
             from:req.body.EmailUser,
             to:req.body.email,
@@ -1294,16 +1304,16 @@ exports.sendPdf = (req,res)=>{
             attachment2 = fs.readFileSync(pathToAttachment2).toString("base64")
         
             let smtpTransport = nodemailer.createTransport({
-                host:'smtp.gmail.com',
-                service:'Gmail',
+                host:req.body.host,
                 port:465,
                 secure:true,
-                auth:{
+                auth:{ 
                     user:req.body.EmailUser,
                     pass:req.body.PassEmail
                 },
                 tls:{rejectUnauthorized:false}
             })
+            
         
             smtpTransport.sendMail({
                 from:req.body.EmailUser,
@@ -1352,11 +1362,11 @@ exports.sendPdf = (req,res)=>{
                              }
                 
                    }
-                   pathToAttachment[listStagaire.length] =  path.join(process.cwd(),'documents', 'FeuilleEmargement.pdf')
+                   pathToAttachment[listStagaire.length] =  path.join(process.cwd(),'documents', 'FeuillEmargment.pdf')
 
                    attachment[listStagaire.length] = fs.readFileSync(pathToAttachment[listStagaire.length]).toString("base64")
                    attachments[listStagaire.length]= {
-                       content:attachment[listStagaire.length],
+                       content:attachment[listStagaire.length], 
                        filename:"FeuilleEmargement",
                        contentType: 'application/pdf',
                        path:pathToAttachment[listStagaire.length]
@@ -1364,18 +1374,17 @@ exports.sendPdf = (req,res)=>{
                 
                       
                      
+                   let smtpTransport = nodemailer.createTransport({
+                    host:req.body.host,
+                    port:465,
+                    secure:true,
+                    auth:{ 
+                        user:req.body.EmailUser,
+                        pass:req.body.PassEmail
+                    },
+                    tls:{rejectUnauthorized:false}
+                })
                 
-                                let smtpTransport = nodemailer.createTransport({
-                                    host:'smtp.gmail.com',
-                                    service:'Gmail',
-                                    port:465,
-                                    secure:true,
-                                    auth:{
-                                        user:req.body.EmailUser,
-                                        pass:req.body.PassEmail
-                                    },
-                                    tls:{rejectUnauthorized:false}
-                                })
                             
                                 smtpTransport.sendMail({ 
                                     from:req.body.EmailUser,
@@ -1442,16 +1451,16 @@ exports.createPdfConvocation =  ( req,res)=>{
     
           
               let smtpTransport = nodemailer.createTransport({
-                  host:'smtp.gmail.com',
-                  service:'Gmail',
-                  port:465,
-                  secure:true,
-                  auth:{
+                host:req.body.host,
+                port:465,
+                secure:true,
+                auth:{ 
                     user:req.body.EmailUser,
                     pass:req.body.PassEmail
-                  },
-                  tls:{rejectUnauthorized:false}
-              })
+                },
+                tls:{rejectUnauthorized:false}
+            })
+            
           
               smtpTransport.sendMail({
                   from:req.body.EmailUser,
@@ -1497,16 +1506,16 @@ exports.createPdfConvocation =  ( req,res)=>{
         
             
                 let smtpTransport = nodemailer.createTransport({
-                    host:'smtp.gmail.com',
-                    service:'Gmail',
+                    host:req.body.host,
                     port:465,
                     secure:true,
-                    auth:{
+                    auth:{ 
                         user:req.body.EmailUser,
                         pass:req.body.PassEmail
                     },
                     tls:{rejectUnauthorized:false}
                 })
+                
             
                 smtpTransport.sendMail({
                     from:req.body.EmailUser,
@@ -1576,17 +1585,17 @@ exports.createPdfConvocation =  ( req,res)=>{
                         path:pathToAttachmentReglement
                     }
 
-                         let smtpTransport = nodemailer.createTransport({
-                             host:'smtp.gmail.com',
-                             service:'Gmail',
-                             port:465,
-                             secure:true,
-                             auth:{
-                                user:req.body.EmailUser,
-                                pass:req.body.PassEmail
-                             },
-                             tls:{rejectUnauthorized:false}
-                         })
+                    let smtpTransport = nodemailer.createTransport({
+                        host:req.body.host,
+                        port:465,
+                        secure:true,
+                        auth:{ 
+                            user:req.body.EmailUser,
+                            pass:req.body.PassEmail
+                        },
+                        tls:{rejectUnauthorized:false}
+                    })
+                    
                      
                          smtpTransport.sendMail({
                              from:req.body.EmailUser,
@@ -1623,18 +1632,18 @@ exports.createPdfConvocation =  ( req,res)=>{
                                  path:pathToAttachment[i]
                              }
                      
-                        }
-                             let smtpTransport = nodemailer.createTransport({
-                                 host:'smtp.gmail.com',
-                                 service:'Gmail',
-                                 port:465,
-                                 secure:true,
-                                 auth:{
-                                    user:req.body.EmailUser,
-                                     pass:req.body.PassEmail
-                                 },
-                                 tls:{rejectUnauthorized:false}
-                             })
+                        } 
+                        let smtpTransport = nodemailer.createTransport({
+                            host:req.body.host,
+                            port:465,
+                            secure:true,
+                            auth:{ 
+                                user:req.body.EmailUser,
+                                pass:req.body.PassEmail
+                            },
+                            tls:{rejectUnauthorized:false}
+                        })
+                        
                          
                              smtpTransport.sendMail({
                                  from:req.body.EmailUser,

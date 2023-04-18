@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Delete , Update,Add} from '@material-ui/icons'
+import { Delete , Update,Check} from '@material-ui/icons'
 
 import './formateur.css'
 import axios from 'axios';
@@ -12,6 +12,7 @@ export default function ModelFormateur(props ) {
   const [dataFormationModule, setDataFormationModule] = useState([]);
   const [File , setFile ]= useState();
   const [nomFile , setnomFile ]= useState();
+  const [updtouNon, setupdtouNon] = useState(0);
 
   const [checkDeplacement, setcheckDeplacement] = useState()
   const [Deplacement, setDeplacement] = useState();
@@ -21,6 +22,8 @@ export default function ModelFormateur(props ) {
   const [tva, settva] = useState("20");
   const [Visibletva, setVisibletva] = useState('hidden');
   const [VisibleDeplacement, setVisibleDeplacement] = useState('hidden');
+const [intitvalue,setintitvalue]=useState('choisir')
+const [categvalue,setcategvalue]=useState('choisir')
 
     const [Titre, setTitre] = useState('M.');
     const [Nom, setNom] = useState('');
@@ -28,7 +31,8 @@ export default function ModelFormateur(props ) {
 
     const [listintitile, setlistintitile] = useState([]);
     const [intitile, setintitile] = useState('');
- 
+    const[ indexp,setindexp]= useState();
+
     const [Prenom, setPrenom] = useState('');
     const [Telephone, setTelephone] = useState('');
     const [Taux, setTaux] = useState('');
@@ -266,7 +270,15 @@ export default function ModelFormateur(props ) {
          fetchData();
     
       }, []);
-   
+      const updateItem=({p,index})=>{
+        setNew_data({ ...new_data, intitile: p.intitile ,categ: p.categ,prix: p.prix })
+        setupdtouNon(1)
+        setintitvalue(p.intitile)
+        setcategvalue(p.categ)
+        setindexp(index)
+
+
+       }
    const changeIntitile=e=>{
     setNew_data({ ...new_data, intitile: e.target.value })
     setintitile(e.target.value)
@@ -274,17 +286,30 @@ export default function ModelFormateur(props ) {
       const addhandler = e => {
         e.preventDefault();
      
-
+        if(updtouNon==0){
         setPersos([...persos, new_data]);
         setNew_data({ intitile: "", categ: "", prix:"" });
+        }else{
+          const newState = persos.map((obj,index) => {
+             if (index === indexp) {
+               return {...obj, intitile: new_data.intitile ,categ: new_data.categ,prix: new_data.prix};
+             }
+       
+             return obj;
+           });
+       
+           setPersos(newState);
+           setNew_data({ intitile: "", categ: "", prix:"" });
+           setintitvalue("choisir")
+           setcategvalue("choisir")
+       }
       };
       const deleteItem = async (intitile) => {
         const newList = persos.filter((item) => item.intitile !== intitile);
  
         setPersos(newList);    }
     return (
-        <> 
-<form className="formModel" onSubmit={e => addFormateur(e)}>
+        < div className="formModel">  
 
     <div className='modelDiv'>
         <div className='modelRight'>
@@ -362,12 +387,15 @@ export default function ModelFormateur(props ) {
           </tr> 
         </thead>
         <tbody>
-          {persos.map(p => (
-            <tr key={p.id}>
+          {persos.map((p,index)  => (
+            <tr >
               <td>{p.intitile}</td>
               <td>{p.categ}</td>
               <td>{p.prix}</td>
-              <td> <button  onClick={() => deleteItem(p.intitile)}>   <Delete /></button></td>
+              <td> 
+              <button onClick={() => updateItem({p,index})} style={{margin:"20px" , background:"#D0E3FA",border:"none"}}><Update/></button>
+
+                <button  onClick={() => deleteItem(p.intitile)}>   <Delete /></button></td>
             </tr>
           ))}
         </tbody>
@@ -375,13 +403,13 @@ export default function ModelFormateur(props ) {
       <tr>
     <td>  <select style={{width:"100px"}}   
              onChange={changeIntitile}>   
-                 <option value="" selected>choisir</option>
+                 <option value="" selected>{intitvalue}</option>
 
             { listintitile.map((option)=>{
     return(   <option>{option} </option> )
        })}</select> </td> 
     <td>       <select   style={{width:"100px"}} onChange={e => setNew_data({ ...new_data, categ: e.target.value })}  >
-    <option value="" selected>choisir</option>
+    <option value="" selected>{categvalue}</option>
             {dataFormationModule.map((option) => ( 
               
               <option value={option.type}>{option.type}</option>
@@ -392,7 +420,7 @@ export default function ModelFormateur(props ) {
               style={{  width: "100px"}}              value={new_data.prix}
               onChange={e => setNew_data({ ...new_data, prix: e.target.value })}
             /> </td>
-            <td>      <button onClick={addhandler} style={{margin:"20px" , background:"#D0E3FA",border:"none"}}><Add/></button>
+            <td>      <button onClick={addhandler} style={{margin:"20px" , background:"#D0E3FA",border:"none"}}><Check/></button>
  </td>
 
     </tr>
@@ -401,8 +429,7 @@ export default function ModelFormateur(props ) {
 
   </div>
     </div>
-    <button type="submit" className='buttonEnregistre'>Add</button>
-    </form>
-    </>
+    <button onClick={e => addFormateur(e)} className='buttonEnregistre'>Add</button>
+    </div>
     )
 }

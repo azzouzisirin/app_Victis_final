@@ -9,6 +9,7 @@ function Paramettre(){
   const [shemaDossie, setshemaDossie] = useState('');
   const [password, setpassword] = useState('');
   const [passEmail, setpassEmail] = useState('');
+  const [host, sethost] = useState('');
 
     const userId = JSON.parse(localStorage.getItem("user"))._id;
     useEffect(()=>{ 
@@ -19,6 +20,7 @@ function Paramettre(){
             setshemaDossie(res.data.shemaDossie)
         setpassword(res.data.password)
         setpassEmail(res.data.PassEmail)
+        sethost(res.data.host)
           }catch(err){
             console.log(err);
           }
@@ -40,6 +42,7 @@ function Paramettre(){
             
               password:password,
               PassEmail:passEmail,
+              host:host,
               shemaDossie:shemaDossie,
           }  ,
           
@@ -61,15 +64,17 @@ return(
 
     <div className='modelDiv'>
         <div className='modelRight'> 
-   
+    
           <label> schéma Document :</label><br/>
-      <input type="text"  value={shemaDossie} onChange={e => {setshemaDossie(e.target.value)} }/> <br/>
+      <input type="text" title="sous forme C:/User" value={shemaDossie} onChange={e => {setshemaDossie(e.target.value)} }/> <br/>
       <label> mot de passe :</label><br/>
       <input type="text"  value={password} onChange={e => {setpassword(e.target.value)} }/> <br/>
   </div>
       <div className='modelLeft'>
+      <label>Nom d'hôte :</label><br/>
+      <input type="text" placeholder="Nom d'hôte :"  value={host} onChange={e => {sethost(e.target.value)} }/> <br/>
       <label>mot de passe Email :</label><br/>
-      <input type="text" placeholder='Mail'  value={passEmail} onChange={e => {setpassEmail(e.target.value)} }/> <br/>
+      <input type="text" placeholder='Mail'  value="{passEmail}" onChange={e => {setpassEmail(e.target.value)} }/> <br/>
 
       </div>
        

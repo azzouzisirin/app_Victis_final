@@ -14,9 +14,9 @@ exports.getAllutilisateurs = async (req, res) => {
 }; 
 exports.Register = async (req, res) => {
     try { 
-        const { email, password,PassEmail,shemaDossie, titre,nom,prenom,fonction,portable,tel,taux,adresse_1, adresse_2,codeVille} = req.body;
+        const { email, password,PassEmail,shemaDossie,host, titre,nom,prenom,fonction,portable,tel,taux,adresse_1, adresse_2,codeVille} = req.body;
         const username=nom+"_"+prenom
-        const newutilisateur = await utilisateur.create({email,PassEmail,portable,shemaDossie,fonction, password, titre,nom,prenom,tel,taux,adresse_1, adresse_2,codeVille,username});
+        const newutilisateur = await utilisateur.create({email,host,PassEmail,portable,shemaDossie,fonction, password, titre,nom,prenom,tel,taux,adresse_1, adresse_2,codeVille,username});
            
         res.status(201).json({
             newutilisateur

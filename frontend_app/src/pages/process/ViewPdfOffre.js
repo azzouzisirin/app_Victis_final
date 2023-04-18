@@ -31,8 +31,25 @@ const idSession=localStorage.getItem("idSession")
 const[NomDossie,setNomDossie]= useState("");
   const [nomClient, setnomClient] = useState()
 
+  useEffect(() => {
+  
+    const fetchData = async () => { 
+      const res = await axios.get(`${BASE_URL}/session/`+id);
+      setnumDevis(res.data.numDevis)
+      settypeFormation(res.data.typeFormation)
+      setnomClient(res.data.nomClient)
+      settitreClient(res.data.titreClient) 
+      setemail(res.data.email) 
+      setfilename(res.data.filename)
+      setRaisonSociale(res.data.RaisonSociale)
+      setDesignationFormation(res.data.designiationFormation)
+      setselectedTypeFormation(res.data.selectedTypeFormation)
+    };
+    fetchData();
+    
+    
+    }, []);
   useEffect (()=>{  
- 
     const checkoffre =async()=>{ 
       await axios.get(BASE_URL+"/session/getDonneOffre/"+id+"/"+username)
       .then((res)=>{ 

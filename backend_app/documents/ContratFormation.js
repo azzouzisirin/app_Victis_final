@@ -113,12 +113,12 @@ d’un client final de la société ENGINEERING CONCEPT (ci-après dénommé « 
 <h4>Article 1 – Objet, nature et durée de la prestation</h4>
 <p style="margin-left:40px"> En exécution du présent contrat, le prestataire s’engage à assurer l’action de formation ci-après  <br/> et prévue par le programme en annexe ci-joint, conformément aux conditions fixées <br/>
 par notre charte ci-joint et les les critères du référentiel Qualiopi.</p>
-<p style="margin-left:40px"> Intitulé de la formation : ${nomFormation} </p>
+<p style="margin-left:40px"> Intitulé de la formation :  <span style="font-weight: 700;">${nomFormation} </span></p> 
 <p style="margin-left:40px">  Type d’action de formation (au sens de l’article L6313-1 du code du travail) :<br/>
-action de formation :${TypeFormation}</p>
-<p style="margin-left:40px"> Effectifs formés :${nombStagaire} </p>
-<p style="margin-left:40px">Dates de la session : du ${DateDebut} au ${DateFin}  </p>
-<p style="margin-left:40px"> Durée de la formation : ${duree} </p>
+action de formation :  <span style="font-weight: 700;">${TypeFormation} </span></p>
+<p style="margin-left:40px"> Effectifs formés :  <span style="font-weight: 700;">${nombStagaire}</span> </p>
+<p style="margin-left:40px">Dates de la session :  <span style="font-weight: 700;">du ${DateDebut} au ${DateFin}</span>  </p>
+<p style="margin-left:40px"> Durée de la formation :  <span style="font-weight: 700;">${duree}</span> </p>
 <br/><h4> Article 2 – Organisation de l’action de formation  </h4>
 <h5> Lieu de la formation : </h5> 
 <p style="margin-left:80px;margin-top:-30px"> ${LieuFormation}<br/> ${codeVilleFormation}</p> 
@@ -153,15 +153,15 @@ Chaque contrat donne lieu à une vacation distincte <br/>
 Chaque facture comportera obligatoirement le numéro de session ENGINEERING CONCEPT
 </p>
 <div class="blocUne" style="margin-left:50px;margin-top:-10px">  
-<div class="lefthaut">
+<div class="lefthaut" style="width:300px">
 <p> Tarif journalier à la vacation HT : </p>
 <p style="margin-top:-14px"> TVA (${tva}%) :</p>
 <p style="margin-top:-14px"> Facturation totale TTC :</p>
 </div>
 <div class="rigthhaut">
-<p style="margin-left:20px"> ${prixGlobal}</p>
-<p style="margin-top:-14px;margin-left:20px"> ${prixTva}</p>
-<p style="margin-top:-14px;margin-left:20px"> ${prixNet}</p>
+<p style="padding-left:35px">   ${prixGlobal} €</p>  
+<p style="margin-top:-14px;padding-left:35px">   ${prixTva} €</p>
+<p style="margin-top:-14px;padding-left:35px">   ${prixNet} €</p>
 </div>
 </div>
 <br/>

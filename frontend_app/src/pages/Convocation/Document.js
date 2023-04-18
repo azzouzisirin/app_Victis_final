@@ -14,6 +14,8 @@ import {  ChevronLeft,ExpandMore } from '@material-ui/icons'
 
     const[isOpenCertificat ,setIsOpenCertificat] = useState(false);
     const[isOpenFeuilEmarg ,setisOpenFeuilEmarg] = useState(false);
+    const [nomFormation,setnomFormation]=useState("")
+    const [typeFormation,settypeFormation]=useState("")
 
     const[isOpenFeuilleEvaluation ,setIsOpenFeuilleEvaluation] = useState(false);
     const user = JSON.parse(localStorage.getItem("user"));
@@ -29,6 +31,7 @@ const[nomDossie,setnomDossie]=useState()
     const [bob,setbob]=useState()
     const toggleCertificat = () => setIsOpenCertificat (!isOpenCertificat);
     const toggleFeruilEmarg= () => setisOpenFeuilEmarg (!isOpenFeuilEmarg);
+    const[NomDossie,setNomDossie]= useState("");
 
     const toggleFeuilleEvaluation = () => setIsOpenFeuilleEvaluation (!isOpenFeuilleEvaluation);
     var username=user.titre+" "+user.nom+" "+user.prenom
@@ -40,10 +43,15 @@ const[nomDossie,setnomDossie]=useState()
         const res = await axios.get(`${BASE_URL}/offre/${id}`);
         setPersos(res.data.listStagaire) 
         setTypeFormation(res.data.TypeFormation)
+        setnomFormation(res.data.designiationFormation)
+        settypeFormation(res.data.typeFormation)
+
           setDateDebut(res.data.DateDebut)
           const res1 = await axios.get(`${BASE_URL}/session/${id}`);
           setnumSession(res1.data.numSession) 
           setnomDossie(res1.data.nomDossie)
+          setNomDossie(res1.data.nomDossie)
+
       }catch(err){
         console.log(err);
       }
@@ -183,11 +191,11 @@ if(TypeFormation=="En distanciel"){
      
       },config_1)
       for(var i=0;i<persos.length;i++){
-        let data = JSON.stringify({
+        let data = JSON.stringify({ 
           "CertificatFile": "./test/certificat_"+persos[i].titre+" "+persos[i].nom+ " "+persos[i].prenom+".pdf",
           "FeuilEvaluation": "./test/evaluation_"+persos[i].titre+" "+persos[i].nom+ " "+persos[i].prenom+".pdf",
           "FeuilEmargement": "./test/Feuille Emargement_"+persos[i].titre+" "+persos[i].nom+ " "+persos[i].prenom+".pdf",
-          "fileZip": "C:/Users/sarouna/Desktop/Session/2304001_procp1_catia_pefection_En distanciel/4_Documents de formation/"+persos[i].titre+" "+persos[i].nom+ " "+persos[i].prenom+".zip"
+          "fileZip": user.shemaDossie+"/"+NomDossie+"/4_Documents de formation/"+persos[i].titre+" "+persos[i].nom+ " "+persos[i].prenom+".zip"
         });
         
         let config = {
@@ -326,7 +334,7 @@ toast.success('Documents bien Enregistre !')
 
           </ul> 
         </div> 
-        { showPdf=="true"?<PopUp type="sendDocument" email={emailFormateur}  persos={persos} setshowPdf={setshowPdf} nomDossier={nomDossie} numSession={numSession}/>:null}
+        { showPdf=="true"?<PopUp type="sendDocument" email={emailFormateur} nomFormation={nomFormation} typeFormation={typeFormation} persos={persos} setshowPdf={setshowPdf} nomDossier={nomDossie} numSession={numSession}/>:null}
         <Toaster   position="bottom-right"  toastOptions={{
     success: {
       style: {

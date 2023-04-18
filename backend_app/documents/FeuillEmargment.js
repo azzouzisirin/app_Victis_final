@@ -56,8 +56,8 @@ return `
 .divtableux  {
  border-collapse: collapse;
  border-color: #2a9d8f;
- margin-left:30px;
- margin-right:30px;
+ margin-left:10px;
+ margin-right:10px;
 
 }
 .divflex{
@@ -73,8 +73,7 @@ return `
  
  
         <img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/topfeuilEngement.png" width="100%" height="110px" style="margin-top:10px"/>
-      <h1 style="text-align: center; font-weight:600;font-size: 37px;"> Formation ${nomFormation} </h1>
-      <br/>
+      <h1 style="text-align: center; font-weight:600;font-size: 37px;margin-top:-10px"> Formation ${nomFormation} </h1>
       <div class="blocUne">
       <div class="lefthaut" >
         <h4> Session N° ${numSession}  </h4>
@@ -88,16 +87,16 @@ return `
      </div>
      </div>
      <div >
-     <table class="divtableux" >
-  <tr style="height:50px">
-     <td rowspan="3" style="color:blue;width:24%;height:50px;">Stagiaire</td>
-    <th colspan="2" style="width:300px">${dateFormation[0]} </th>
-     <th colspan="2" style="width:300px">${dateFormation[1]}</th>
-     <th colspan="2" style="width:300px">${dateFormation[2]} </th>
-      <th colspan="2" style="width:300px"> ${dateFormation[3]}</th>
-      <th colspan="2" style="width:300px"> ${dateFormation[4]}</th>
+     <table class="divtableux" style=" margin-top:-25px;">
+  <tr style="height:40px">
+     <td rowspan="3" style="color:blue;width:19%;height:50px;">Stagiaire</td>
+    <th colspan="2" style="width:400px">${dateFormation[0]} </th>
+     <th colspan="2" style="width:400px">${dateFormation[1]}</th>
+     <th colspan="2" style="width:400px">${dateFormation[2]} </th>
+      <th colspan="2" style="width:400px"> ${dateFormation[3]}</th>
+      <th colspan="2" style="width:400px"> ${dateFormation[4]}</th>
   </tr>
-  <tr style="height:50px" >
+  <tr style="height:40px" >
     <td style="text-align: center;" >${titreMatin[0]}</td>
       <td >${titreApresMidi[0]}</td>
       <td style="text-align: center;">${titreMatin[1]}</td>
@@ -110,17 +109,17 @@ return `
       <td>${titreApresMidi[4]}</td>
   
   </tr>
-  <tr style="height:50px">
-      <td style="	font-size: 19px;">${dureeMatin[0]}</td>
-    <td style="	font-size: 19px;">${dureeApreMidi[0]}</td>
-    <td style="	font-size: 19px;">${dureeMatin[1]}</td>
-    <td style="	font-size: 19px;">${dureeApreMidi[1]}</td> 
-     <td style="	font-size: 19px;">${dureeMatin[2]}</td>
-    <td style="	font-size: 19px;">${dureeApreMidi[2]}</td>
-    <td style="	font-size: 19px;">${dureeMatin[3]}</td>
-    <td style="	font-size: 19px;">${dureeApreMidi[3]}</td>
-    <td style="	font-size: 19px;">${dureeMatin[4]}</td>
-    <td style="	font-size: 19px;">${dureeApreMidi[4]}</td>
+  <tr style="height:40px">
+      <td style="	font-size: 17px;">${dureeMatin[0]}</td>
+    <td style="	font-size: 17px;">${dureeApreMidi[0]}</td>
+    <td style="	font-size: 17px;">${dureeMatin[1]}</td>
+    <td style="	font-size: 17px;">${dureeApreMidi[1]}</td> 
+     <td style="	font-size: 17px;">${dureeMatin[2]}</td>
+    <td style="	font-size: 17px;">${dureeApreMidi[2]}</td>
+    <td style="	font-size: 17px;">${dureeMatin[3]}</td>
+    <td style="	font-size: 17px;">${dureeApreMidi[3]}</td>
+    <td style="	font-size: 17px;">${dureeMatin[4]}</td>
+    <td style="	font-size: 17px;">${dureeApreMidi[4]}</td>
     
   </tr>
   
@@ -206,16 +205,16 @@ return `
 <p style="margin-left:30px">Par ma signature, j’atteste avoir reçu la formation ci-dessus référencée. </p>
      
 <div >
-<table class="divtableux" >
-<tr style="height:50px">
-<td rowspan="2" style="color:blue;width:20%;height:50px;">Formateur</td>
-<th colspan="2" style="width:300px">${dateFormation[0]} </th>
-<th colspan="2" style="width:300px">${dateFormation[1]}</th>
-<th colspan="2" style="width:300px">${dateFormation[2]} </th>
- <th colspan="2" style="width:300px"> ${dateFormation[3]}</th>
- <th colspan="2" style="width:300px"> ${dateFormation[4]}</th>
+<table class="divtableux" style=" margin-top:-10px;margin-top:-5px;">
+<tr style="height:30px">
+<td rowspan="2" style="color:blue;width:19%;height:50px;">Formateur</td>
+<th colspan="2" style="width:400px">${dateFormation[0]} </th>
+<th colspan="2" style="width:400px">${dateFormation[1]}</th>
+<th colspan="2" style="width:400px">${dateFormation[2]} </th>
+ <th colspan="2" style="width:400px"> ${dateFormation[3]}</th>
+ <th colspan="2" style="width:400px"> ${dateFormation[4]}</th>
 </tr>
-<tr style="height:50px" >
+<tr style="height:30px" >
 <td style="text-align: center;" >${titreMatin[0]}</td>
 <td>${titreApresMidi[0]}</td>
 <td style="text-align: center;">${titreMatin[1]}</td>
@@ -230,19 +229,19 @@ return `
 </tr>
 
 
-<tr style="height:50px">
+<tr style="height:30px">
 <td >BDIOUI Azouz
 </td>
-<td> <img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/sig_azouz.png" height="80%" style="display:${displaySig[0]}"/> </td>
-<td> <img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/sig_azouz.png" height="80%" style="display:${displaySig[0]}"/> </td>
-<td> <img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/sig_azouz.png" height="80%" style="display:${displaySig[1]}"/> </td>
-<td> <img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/sig_azouz.png" height="80%" style="display:${displaySig[1]}" /> </td>
-<td> <img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/sig_azouz.png" height="80%" style="display:${displaySig[2]}"/> </td>
-<td> <img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/sig_azouz.png" height="80%" style="display:${displaySig[2]}"/> </td>
-<td> <img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/sig_azouz.png" height="80%" style="display:${displaySig[3]}"/> </td>
-<td> <img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/sig_azouz.png" height="80%" style="display:${displaySig[3]}"/> </td>
-<td> <img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/sig_azouz.png" height="80%" style="display:${displaySig[4]}" /> </td>
-<td> <img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/sig_azouz.png" height="80%" style="display:${displaySig[4]}" /> </td>
+<td> <img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/sig_azouz.png" height="60%" style="display:${displaySig[0]}"/> </td>
+<td> <img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/sig_azouz.png" height="60%" style="display:${displaySig[0]}"/> </td>
+<td> <img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/sig_azouz.png" height="60%" style="display:${displaySig[1]}"/> </td>
+<td> <img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/sig_azouz.png" height="60%" style="display:${displaySig[1]}" /> </td>
+<td> <img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/sig_azouz.png" height="60%" style="display:${displaySig[2]}"/> </td>
+<td> <img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/sig_azouz.png" height="60%" style="display:${displaySig[2]}"/> </td>
+<td> <img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/sig_azouz.png" height="60%" style="display:${displaySig[3]}"/> </td>
+<td> <img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/sig_azouz.png" height="60%" style="display:${displaySig[3]}"/> </td>
+<td> <img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/sig_azouz.png" height="60%" style="display:${displaySig[4]}" /> </td>
+<td> <img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/sig_azouz.png" height="60%" style="display:${displaySig[4]}" /> </td>
 
 
 </tr>
@@ -251,11 +250,11 @@ return `
 </table>
 </div>
 </div>
- <p style="margin-left:30px"> Par ma signature, j’atteste de mon intervention dans la formation ci-dessus référencée</p>
+ <p style="margin-left:30px;margin-top:1px"> Par ma signature, j’atteste de mon intervention dans la formation ci-dessus référencée</p>
 
   
 
-<img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/pied4.png" width="100%" height="120px" style="margin-top:10px"/>
+<img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/pied4.png" width="100%" height="100px" style="margin-top:-20px"/>
 
      </div>
      <div style="display:${varDisplay}">
@@ -302,16 +301,16 @@ return `
 
 </tr>
 <tr style="height:50px">
-   <td style="	font-size: 19px;">${dureeMatin[5]}</td>
- <td style="	font-size: 19px;">${dureeApreMidi[5]}</td>
- <td style="	font-size: 19px;">${dureeMatin[6]}</td>
- <td style="	font-size: 19px;">${dureeApreMidi[6]}</td> 
-  <td style="	font-size: 19px;">${dureeMatin[7]}</td>
- <td style="	font-size: 19px;">${dureeApreMidi[7]}</td>
- <td style="	font-size: 19px;">${dureeMatin[8]}</td>
- <td style="	font-size: 19px;">${dureeApreMidi[8]}</td>
- <td style="	font-size: 19px;">${dureeMatin[9]}</td>
- <td style="	font-size: 19px;">${dureeApreMidi[9]}</td>
+   <td style="	font-size: 17px;">${dureeMatin[5]}</td>
+ <td style="	font-size: 17px;">${dureeApreMidi[5]}</td>
+ <td style="	font-size: 17px;">${dureeMatin[6]}</td>
+ <td style="	font-size: 17px;">${dureeApreMidi[6]}</td> 
+  <td style="	font-size: 17px;">${dureeMatin[7]}</td>
+ <td style="	font-size: 17px;">${dureeApreMidi[7]}</td>
+ <td style="	font-size: 17px;">${dureeMatin[8]}</td>
+ <td style="	font-size: 17px;">${dureeApreMidi[8]}</td>
+ <td style="	font-size: 17px;">${dureeMatin[9]}</td>
+ <td style="	font-size: 17px;">${dureeApreMidi[9]}</td>
  
 </tr>
 
@@ -424,16 +423,16 @@ return `
 <tr style="height:50px">
 <td >BDIOUI Azouz
 </td>
-<td> <img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/sig_azouz.png" height="80%" style="display:${displaySig[5]}"/> </td>
-<td> <img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/sig_azouz.png" height="80%" style="display:${displaySig[5]}"/> </td>
-<td> <img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/sig_azouz.png" height="80%" style="display:${displaySig[6]}"/> </td>
-<td> <img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/sig_azouz.png" height="80%" style="display:${displaySig[6]}" /> </td>
-<td> <img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/sig_azouz.png" height="80%" style="display:${displaySig[7]}"/> </td>
-<td> <img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/sig_azouz.png" height="80%" style="display:${displaySig[7]}"/> </td>
-<td> <img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/sig_azouz.png" height="80%" style="display:${displaySig[8]}"/> </td>
-<td> <img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/sig_azouz.png" height="80%" style="display:${displaySig[8]}"/> </td>
-<td> <img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/sig_azouz.png" height="80%" style="display:${displaySig[9]}" /> </td>
-<td> <img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/sig_azouz.png" height="80%" style="display:${displaySig[9]}" /> </td>
+<td> <img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/sig_azouz.png" height="60%" style="display:${displaySig[5]}"/> </td>
+<td> <img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/sig_azouz.png" height="60%" style="display:${displaySig[5]}"/> </td>
+<td> <img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/sig_azouz.png" height="60%" style="display:${displaySig[6]}"/> </td>
+<td> <img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/sig_azouz.png" height="60%" style="display:${displaySig[6]}" /> </td>
+<td> <img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/sig_azouz.png" height="60%" style="display:${displaySig[7]}"/> </td>
+<td> <img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/sig_azouz.png" height="60%" style="display:${displaySig[7]}"/> </td>
+<td> <img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/sig_azouz.png" height="60%" style="display:${displaySig[8]}"/> </td>
+<td> <img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/sig_azouz.png" height="60%" style="display:${displaySig[8]}"/> </td>
+<td> <img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/sig_azouz.png" height="60%" style="display:${displaySig[9]}" /> </td>
+<td> <img src="https://raw.githubusercontent.com/azzouzisirin/application_victis/main/sig_azouz.png" height="60%" style="display:${displaySig[9]}" /> </td>
 
 
 </tr>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Delete ,Add,Update} from '@material-ui/icons'
+import { Delete ,Check,Update} from '@material-ui/icons'
 
 import './location.css'
 import axios from 'axios';
@@ -20,7 +20,8 @@ export default function Modellocation(props ) {
 
     const [raisonSociale, setraisonSociale] = useState('');
     const [Nom, setNom] = useState('');
-
+    const [updtouNon, setupdtouNon] = useState(0);
+const[ indexp,setindexp]= useState();
     const [Prenom, setPrenom] = useState('');
     const [Telephone, setTelephone] = useState('');
     const [portable, setportable] = useState('');
@@ -32,7 +33,7 @@ export default function Modellocation(props ) {
     const [CodeVille, setCodeVille] = useState('');
     
     const [new_data, setNew_data] = useState({
-      burau: "", nbPost:"",observation:"",prixHt:"",petitDej:"",totalHt:"",totalTTC:""
+      burau: " ", nbPost:" ",observation:" ",prixHt:" ",petitDej:" ",totalHt:" ",totalTTC:" "
     }); 
    useEffect(()=>{
     settotalHt(prixHt+petitdej)
@@ -181,21 +182,43 @@ setpetitdej(Number(e.target.value))
         e.preventDefault(); 
 
        
+if(updtouNon==0){
+  setfrais([...frais, new_data]);
+        setNew_data({ burau: "", nbPost:"",observation:"",prixHt:"",petitDej:"",totalHt:"",totalTTC:""});
 
+}else{
+
+   const newState = frais.map((obj,index) => {
+      if (index === indexp) {
+        return {...obj, burau: new_data.burau, nbPost:new_data.nbPost,observation:new_data.observation,prixHt:new_data.prixHt,petitDej:new_data.petitDej,totalHt:new_data.totalHt,totalTTC:new_data.totalTTC};
+      }
+
+      return obj;
+    });
+
+    setfrais(newState);
+    setNew_data({ burau: "", nbPost:"",observation:"",prixHt:"",petitDej:"",totalHt:"",totalTTC:""});
+
+}
        
 
 
-        setfrais([...frais, new_data]);
-        setNew_data({ burau: "", nbPost:"",observation:"",prixHt:"",petitDej:"",totalHt:"",totalTTC:""});
-      })
+            })
       const deleteItem = async (burau) => {
 
        const newList = frais.filter((item) => item.burau !== burau);
 
        setfrais(newList);    }
+ 
+       const updateItem=({p,index})=>{
+        setNew_data({ ...new_data, burau: p.burau ,nbPost: p.nbPost,observation: p.observation,prixHt: p.prixHt,petitDej: p.petitDej , totalHt: p.totalHt,totalTTC: p.totalTTC })
+        setupdtouNon(1)
+        setindexp(index)
+
+
+       }
     return (
-        <> 
-<form className="formModel" onSubmit={e => addlocation(e)}>
+        < div className="formModel">  
 
     <div className='modelDiv'>
         <div className='modelRight'>
@@ -253,10 +276,10 @@ setpetitdej(Number(e.target.value))
           </tr>
         </thead>
         <tbody>
-          {frais.map((p) => ( 
-            <tr key={p.id}>
+          {frais.map((p,index) => ( 
+            <tr >
            
-    <td>  <input type="text" value={p.burau} />
+    <td>  {p.burau}  
             </td>
   
             <td>
@@ -284,13 +307,13 @@ setpetitdej(Number(e.target.value))
  </td>
              
               <td> 
-              <button onClick={addhandler} style={{margin:"20px" , background:"#D0E3FA",border:"none"}}><Update/></button>
+              <button onClick={() => updateItem({p,index})} style={{margin:"20px" , background:"#D0E3FA",border:"none"}}><Update/></button>
 
                 <button  onClick={() => deleteItem(p.burau)}>   <Delete /></button>
               
               </td>
 
-            </tr>
+            </tr> 
           ))}
         </tbody>
         <tfoot>
@@ -349,7 +372,7 @@ setpetitdej(Number(e.target.value))
  </td>
                <td> 
 
-              <button onClick={addhandler} style={{margin:"20px" , background:"#D0E3FA",border:"none"}}><Add/></button>
+              <button onClick={addhandler} style={{margin:"20px" , background:"#D0E3FA",border:"none"}}><Check/></button>
 
               </td>
       </tr>
@@ -363,8 +386,7 @@ setpetitdej(Number(e.target.value))
      
  
     
-    <button type="submit" className='buttonEnregistre'>Add</button>
-    </form>
-    </>
+    <button onClick={e => addlocation(e)} className='buttonEnregistre'>Add</button>
+    </div>
     )
 }

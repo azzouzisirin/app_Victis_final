@@ -5,9 +5,10 @@ import Select from 'react-select';
 import toast, { Toaster } from 'react-hot-toast';
 import {BASE_URL} from "../../helper"
 
-import { DoneAll, Add,Delete } from '@material-ui/icons'
+import { DoneAll, Check,Delete,Update } from '@material-ui/icons'
 
 import axios from 'axios';
+import { red } from '@material-ui/core/colors';
     
 const DetailOffre = (props) => { 
 
@@ -17,6 +18,7 @@ const DetailOffre = (props) => {
 const [Email , setEmail ]= useState("");
 const [checkUn, setcheckUn] = useState(true)
 const [checkClient, setcheckClient] = useState(true)
+const [raisMixt,setraisMixt]=useState('choisir')
 
 const [checkEng, setcheckEng] = useState()
 const [ParcourCollectif, setParcourCollectif] = useState()
@@ -84,7 +86,7 @@ const [heureformation, setheureformation] = useState();
   const [TypeFinance, setTypeFinance] = useState('');
   const [DataFormateur, setDataFormateur] = useState([]);
   const [listBureau, setlistBureau] = useState([]);
-  const [new_data, setNew_data] = useState({
+  const [new_dataFinance, setnew_dataFinance] = useState({
     nom: "",
     numDossier: "",
     prix: ""
@@ -101,6 +103,8 @@ const [heureformation, setheureformation] = useState();
   const [Distance, setDistance] = useState();
   const [NomOpco, setNomOpco] = useState();
   const [idOpco, setidOpco] = useState();
+  const [updtouNon, setupdtouNon] = useState(0);
+  const[ indexp,setindexp]= useState();
 
   const [prenomOpco, setprenomOpco] = useState();
   const [telephoneOpco, settelephoneOpco] = useState();
@@ -146,8 +150,11 @@ const [Adresse_1 , setAdresse_1 ]= useState("");
 const [Adresse_2 , setAdresse_2 ]= useState("");
 const [CodeVille , setCodeVille ]= useState("");
 const [RaisonLocation, setRaisonLocation] = useState([]);
+const [RaisonLocationFinal, setRaisonLocationFinal] = useState([]);
 
 const [typeBureau, settypeBureau] = useState([]);
+const [typeBureauFinal, settypeBureauFinal] = useState([]);
+
 const [nomDossier,setnomDossier]=useState()
 const [ TitreFormateur, setTitreFormateur ]= useState("");
 const [assujtTvFormateura , setassujtTvFormateura ]= useState("");
@@ -222,7 +229,10 @@ fetchData();
       setcheckEng(res.data.checkEngin)
       setcheckAuilleur(res.data.checkLocal)
       setRaisonLocation(res.data.RasionLocation)
+      setRaisonLocationFinal(res.data.RasionLocation)
       settypeBureau(res.data.typeLocation)
+      settypeBureauFinal(res.data.typeLocation)
+
       setDistance(res.data.TranspDistance)
       setBaremKilometre(res.data.BaremKilometre)
       setHotel(res.data.hotel)
@@ -258,6 +268,12 @@ fetchData();
         setlistRaisonFinanceur(userData);
       });
   }, []); 
+
+  useEffect(()=>{
+ if(typeBureau){
+  settypeBureauFinal(typeBureau.value)
+ }
+  },[typeBureau])
   useEffect(() => {
     fetch(BASE_URL+"/formateur")
       .then((res) => res.json())
@@ -470,17 +486,8 @@ if(IdFormateur){
 
    const addOffre = async (e) => {
     e.preventDefault();
-  
-
    try{
-
-   
-
-
-   
-    
-     
-         const config = {  
+ const config = {  
           headers: { 
             "Content-type": "application/json",
           },
@@ -491,13 +498,7 @@ const res3=await  axios.put(BASE_URL+"/session/"+id,   {
   numSession:numSession,
 })
 var res2
-if(nomDossierRecent!=nomDossier){
-  res2 = await axios.post(BASE_URL+"/rename", {
-   recendfolder:nomDossierRecent,
-   newfolder:nomDossier,
-   pathDossier:user.shemaDossie,
- })
-}
+
 
         const res = await axios.put(BASE_URL+"/offre/"+id, {
           IdClient: IdClient, 
@@ -536,8 +537,8 @@ if(nomDossierRecent!=nomDossier){
           fraisRestau:fraisRestau,
           checkLocal:checkAuilleur,
           checkEngin:checkEng, 
-          RasionLocation:RaisonLocation  ,
-          typeLocation  :typeBureau,              
+          RasionLocation:RaisonLocationFinal  ,
+          typeLocation  :typeBureauFinal,              
           finance:persos, 
           CalendrieFormation:calendrieFormation,
           idFormateur:IdFormateur
@@ -863,9 +864,7 @@ useEffect(() => {
 
       }, [selectedTypeFormation,Adresse_1]);
   
-      useEffect(()=>{
-
-      },[typeBureau])
+      
     useEffect(() => {
       const a=Number(FraisDeplacementJourParJour)
      const c=Number(fraisRestau)
@@ -896,12 +895,18 @@ useEffect(() => {
       }, [TotalFrais,PrixJournal]);
       useEffect(() => {
         if(RaisonLocation){
+          setRaisonLocationFinal(RaisonLocation.value)
         const fetchData = async () => {
           try{ 
           const res = await axios.get(`${BASE_URL}/location/getByRaison/`+RaisonLocation.value);
-          setlistBureau(res.data.frais)
+          const userData = res.data.frais.map((item) => ({
+            label: item.burau,
+            value: item.burau
+          })); 
+          setlistBureau(userData)
           setlieuFormation(res.data.adresse_1)
           setcodeVilleFormation(res.data.codeVille)
+          settypeBureau(res.data.frais[0].burau)
         }catch(err){
           console.log(err);
         }
@@ -993,6 +998,7 @@ useEffect(() => {
       }; 
       const addhandlerCalendrie = e => { 
         e.preventDefault();
+        
         setcalendrieFormation([...calendrieFormation, new_dataCalendrie]);
         setnew_dataCalendrie({  date: " ", nubHeur:" " });
       };
@@ -1005,8 +1011,23 @@ useEffect(() => {
     
       const addhandler = e => {
         e.preventDefault();
-        setPersos([...persos, new_data]);
-        setNew_data({ nom: "", numDossier: "", prix:"" });
+        if(updtouNon==0){
+        setPersos([...persos, new_dataFinance]);
+        setnew_dataFinance({ nom: "", numDossier: "", prix:"" });
+      }else{
+
+        const newState = persos.map((obj,index) => {
+           if (index === indexp) {
+             return {...obj, nom: new_dataFinance.nom, numDossier:new_dataFinance.numDossier,prix:new_dataFinance.prix};
+           }
+     
+           return obj;
+         });
+     
+         setPersos(newState);
+         setnew_dataFinance({ nom: "", numDossier:"",prix:""});
+        setraisMixt("choisir")
+     }
       };
 
      const deleteItem = (nom) => {
@@ -1034,6 +1055,15 @@ useEffect(() => {
     }
 
       }, [selectedOptionRaison]);
+
+      const updateItem=({p,index})=>{
+        setnew_dataFinance({ ...new_dataFinance, nom: p.nom, numDossier: p.numDossier, prix:p.prix})
+        setupdtouNon(1)
+        setraisMixt(p.nom)
+        setindexp(index)
+
+
+       }
     const  onChangeValue=(event)=> {
         if(event.target.value=="enginnering"){
 setcheckEng(true)
@@ -1143,7 +1173,7 @@ setlieuFormation("8 rue Honoré de Balzac ")
         <label className='textLabel'  >Designation </label>
  <div  style={{marginRight:"10px",width:"230px"}}> 
         <Select  
-          
+
         defaultValue={DesignationFormation}
         placeholder={DesignationFormation}
         onChange={setDesignationFormation}
@@ -1155,7 +1185,7 @@ setlieuFormation("8 rue Honoré de Balzac ")
         <label className='textLabel'  >Module  </label>
         <div  style={{marginRight:"10px",width:"230px"}}> 
         <Select  
-          
+
           defaultValue={typeFormation}
           placeholder={typeFormation}
           onChange={settypeFormation}
@@ -1186,22 +1216,28 @@ setlieuFormation("8 rue Honoré de Balzac ")
   <div className='divflex' >
   <div style={{marginLeft:"-70px"}}>  <input type="radio" className='divchekbox'  checked={checkAuilleur} value='ailleur' /></div>
   <div className='divflexlabel'style={{width:"250px"}}>  <label  > Ailleurs</label></div> 
-  <div style={{display:visibleAuilleur}}> 
+  <div style={{display:visibleAuilleur ,display:"flex"}}> 
   <div> 
   <Select  
-      style={{width:"150px"}}
+           style={{flex:"1",marginRight:"3px",width:'100px'}}
+
          defaultValue={RaisonLocation}
+         placeholder={RaisonLocation}
          onChange={setRaisonLocation}
-         placeholder='Raison sociale'
          options={listRaisonLocation}
        />
-          </div>
-    
 
-  <div> <select style={{width:"150px"}} value={typeBureau} onChange={e => {settypeBureau(e.target.value)} }>   
-            { listBureau.map((option)=>{
-    return(   <option>{option.burau} </option> )
-       })}</select>
+   </div>
+    
+  <div> 
+  <Select  
+ style={{flex:"1",marginLeft:"3px",width:'100px'}}
+      defaultValue={typeBureau}
+      placeholder={typeBureau}
+      onChange={settypeBureau}
+      options={listBureau}
+    />
+  
        
 </div>
 </div>
@@ -1289,7 +1325,7 @@ setlieuFormation("8 rue Honoré de Balzac ")
               className="lebelZonText"
               onChange={e => setnew_dataCalendrie({ ...new_dataCalendrie, nubHeur: e.target.value })}
             /></td>
-            <td>       <button onClick={addhandlerCalendrie} style={{margin:"20px" , background:"#D0E3FA",border:"none"}}><Add/></button></td>
+            <td>       <button onClick={addhandlerCalendrie} style={{margin:"20px" , background:"#D0E3FA",border:"none"}}><Check/></button></td>
           </tr>
         </tfoot>
       </table>
@@ -1371,20 +1407,23 @@ setlieuFormation("8 rue Honoré de Balzac ")
     <table > 
         <thead>
           <tr> 
-            <th>Raison Sociale</th>
+            <th>Raison Sociale</th> 
             <th>N° Dossier</th>
             <th>prix (€)</th>
             <th> Action</th>
           </tr>
         </thead>
         <tbody>
-          {persos.map(p => (
+          {persos.map((p,index) => (
             <tr key={p.id}>
               <td>{p.nom}</td>
               <td>{p.numDossier}</td>
               <td>{p.prix}</td>
               <td> 
-              <Link  onClick={() => deleteItem(p.nom)}>   <Delete /></Link>
+              <button onClick={() => updateItem({p,index})} style={{margin:"20px" , background:"#D0E3FA",border:"none"}}><Update/></button>
+
+              <button  onClick={() => deleteItem(p.nom)}>   <Delete /></button>
+
 
 
               </td>
@@ -1395,8 +1434,8 @@ setlieuFormation("8 rue Honoré de Balzac ")
           <tr>
      <td>
                <select  style={{width:"150px"}} 
-              onChange={e => setNew_data({ ...new_data, nom: e.target.value })}>
-                                 <option value="" selected>choisir</option>
+              onChange={e => setnew_dataFinance({ ...new_dataFinance, nom: e.target.value })}>
+                                 <option value="" selected>{raisMixt}</option>
 
             {dataCategClient.map((option) => ( 
               <option value={option.value}>{option.value}</option>
@@ -1405,17 +1444,17 @@ setlieuFormation("8 rue Honoré de Balzac ")
             <td>   <input
               type="text"
               className="lebelZonText"
-              defaultValue={new_data.numDossier}
-              onChange={e => setNew_data({ ...new_data, numDossier: e.target.value })}
+              value={new_dataFinance.numDossier}
+              onChange={e => setnew_dataFinance({ ...new_dataFinance, numDossier: e.target.value })}
             /></td>
 
             <td>  <input
               type="text"
               className="lebelZonText"
-              defaultValue={new_data.prix}
-              onChange={e => setNew_data({ ...new_data, prix: e.target.value })}
+              value={new_dataFinance.prix}
+              onChange={e => setnew_dataFinance({ ...new_dataFinance, prix: e.target.value })}
             /></td>
-            <td>       <button onClick={addhandler} style={{margin:"20px" , background:"#D0E3FA",border:"none"}}><Add/></button></td>
+            <td>       <button onClick={addhandler} style={{margin:"20px" , background:"#D0E3FA",border:"none"}}><Check/></button></td>
           </tr>
         </thead>
       </table>
