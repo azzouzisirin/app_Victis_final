@@ -4,7 +4,7 @@ import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import {BASE_URL} from "../../helper"
 
-import {  Add,Delete } from '@material-ui/icons'
+import { Delete ,Check,Update} from '@material-ui/icons'
 
   
   function Convocation(props){
@@ -12,10 +12,14 @@ import {  Add,Delete } from '@material-ui/icons'
     const { id} = props;
 const [chekResponsable , setchekResponsable ]= useState(false);
 const [chekAutres, setchekAutres ]= useState(false);
+const[ indexp,setindexp]= useState();
+const[ indexpResponsable,setindexpResponsable]= useState();
 
 const [object, setobject] = useState("");
 const [text0, settext0] = useState("");
 const [Contact, setContact] = useState()
+const [updtouNon, setupdtouNon] = useState(0);
+const [updtouNonResponsable, setupdtouNonResponsable] = useState(0);
 
 const [typeFormation,settypeFormation]=useState("")
 const [nomDossier,setnomDossier]=useState("")
@@ -41,7 +45,7 @@ const [dateDebut, setdateDebut] = useState("");
 const [emailClient, setemailClient] = useState("");
 const [CodePostalClient , setCodePostalClient]=useState("")
 const [nomFormation, setnomFormation] = useState("");
-
+ 
 
   const [new_data, setNew_data] = useState({
     titre:"M.",prenom:"", nom: "", fonction: "", email:"",envoye:false
@@ -154,7 +158,7 @@ const [nomFormation, setnomFormation] = useState("");
   fetchData();
 
   }, []);
-
+ 
 
   const handleChangePersonne = (event) => { 
     if (event.target.checked) {
@@ -184,6 +188,11 @@ const [nomFormation, setnomFormation] = useState("");
 
     setPersos(newList);  
    } 
+   const deleteItemResponsable = (nom) => {
+    const newList = sousResponsable.filter((item) => item.nom !== nom);
+
+    setsousResponsable(newList);  
+   } 
    const chekemail = (nom) => {
     const newList = persos.map((obj) => {
 
@@ -196,14 +205,67 @@ const [nomFormation, setnomFormation] = useState("");
    } 
    const addhandler = e => {
     e.preventDefault();
+    if(updtouNon==0){
     setPersos([...persos, new_data]);
-    setNew_data({titre:"M.",prenom:"", nom: "", fonction: "", email:"",envoye:false });
-  };
+    setNew_data({titre:"M.",prenom:"", nom: "", fonction: "", email:"",envoye:false });}
+    else{
 
+      const newState = persos.map((obj,index) => {
+         if (index === indexp) {
+           return {...obj, titre: new_data.titre, prenom:new_data.prenom,nom:new_data.nom,fonction:new_data.fonction,email:new_data.email,envoye:new_data.envoye};
+         }
+   
+         return obj;
+       });
+   
+       setPersos(newState);
+       setNew_data({ titre: "", prenom:"",nom:"",fonction:"",email:"",envoye:""});
+       setupdtouNon(0)
+   
+   }
+          
+   
+   
+               
+  };
+  const updateItem=({p,index})=>{
+    setNew_data({...new_data,titre:p.titre,prenom:p.prenom, nom: p.nom, fonction: p.fonction, email:p.email,envoye:p.envoye });
+
+ 
+    setupdtouNon(1)
+    setindexp(index) 
+
+
+   }
+   const updateItemResponsable=({p,index})=>{
+    setNew_dataResponsable({...new_dataResponsable,titre:p.titre,prenom:p.prenom, nom: p.nom, fonction: p.fonction, email:p.email,envoye:p.envoye });
+
+ 
+    setupdtouNonResponsable(1)
+    setindexpResponsable(index) 
+
+
+   }
   const addhandlerResponsable = e => {
     e.preventDefault();
+    if(updtouNonResponsable==0){
     setsousResponsable([...sousResponsable, new_dataResponsable]);
     setNew_dataResponsable({...new_dataResponsable,titre:"M.",prenom:"", nom: "", fonction: "", email:""});
+    }else{
+
+      const newState = sousResponsable.map((obj,index) => {
+         if (index === indexp) {
+           return {...obj, titre: new_dataResponsable.titre, prenom:new_dataResponsable.prenom,nom:new_dataResponsable.nom,fonction:new_dataResponsable.fonction,email:new_dataResponsable.email,envoye:new_dataResponsable.envoye};
+         }
+   
+         return obj;
+       });
+   
+       setsousResponsable(newState);
+       setNew_dataResponsable({ titre: "", prenom:"",nom:"",fonction:"",email:"",envoye:""});
+       setupdtouNonResponsable(0)
+   
+   }
   };
   useEffect(()=>{
     if(typeFormation=="En intra-entreprise"){
@@ -235,7 +297,7 @@ const [nomFormation, setnomFormation] = useState("");
  
   if(chekResponsable==false){
           for(var i=0 ; i<persos.length; i++){
-      
+
         const res = await axios.post(`${BASE_URL}/session/sendPdfConcocation/sendConditaure`,{
         
           subject:"Convocation Formation "+nomFormation  +"- Perfectionnement_"+persos[i].titre+" "+ persos[i].nom+" " +persos[i].prenom,
@@ -252,7 +314,6 @@ const [nomFormation, setnomFormation] = useState("");
           typeFormation:typeFormation,
           filepath:user.shemaDossie+"/"+nomDossier+"/3_Convocations",
           nomFile:"Convocation Formation "+nomFormation+" - "+persos[i].titre+" "+persos[i].prenom+" "+persos[i].nom,
-            
            
         })
    
@@ -265,9 +326,10 @@ const [nomFormation, setnomFormation] = useState("");
         ccemail[i]=sousResponsable[i].email
         }
       }
+    
       const res = await axios.post(`${BASE_URL}/session/sendPdfConcocation/sendResponsable`,{
         
-        subject:object,
+        subject:"les Convocations",
     
         linun:text0,
         lindeux:text1 , 
@@ -275,13 +337,15 @@ const [nomFormation, setnomFormation] = useState("");
         linquatre: text3,
         EmailUser:user.email,
         PassEmail:user.PassEmail,
+        host:user.host,
+        
         ccemail:ccemail,
         email:emailClient,
-        listStagaire:persos.length,
+        listStagaire:persos,
         nomDossie: nomDossier,
         typeFormation:typeFormation,
+        nomFormation:nomFormation,
         pathDossier:user.shemaDossie,
-        nomFile:"Convocation Formation "+nomFormation+" - "+persos[i].titre+" "+persos[i].prenom+" "+persos[i].nom+".pdf",
           
          
       })
@@ -307,7 +371,7 @@ const [nomFormation, setnomFormation] = useState("");
           </tr>
         </thead>
         <tbody> 
-          {persos.map((p) => (
+          {persos.map((p,index) => (
             <tr >
               <td>{p.titre}</td>
               <td>{p.prenom}</td>
@@ -322,6 +386,7 @@ const [nomFormation, setnomFormation] = useState("");
             /></td>
 
               <td> 
+              <button onClick={() => updateItem({p,index})} style={{margin:"20px" , background:"#D0E3FA",border:"none"}}><Update/></button>
 
               <Link  onClick={() => deleteItem(p.nom)}>   <Delete /></Link>
 
@@ -344,33 +409,38 @@ const [nomFormation, setnomFormation] = useState("");
             <td>   <input
               type="text"
               className="lebelZonText"
+              value={new_data.prenom}
               onChange={e => setNew_data({ ...new_data, prenom: e.target.value })}
             /></td>
 
    <td>   <input
               type="text"
               className="lebelZonText"
+              value={new_data.nom}
               onChange={e => setNew_data({ ...new_data, nom: e.target.value })}
             /></td>
                <td>   <input
               type="text"
               className="lebelZonText"
+              value={new_data.fonction}
               onChange={e => setNew_data({ ...new_data, fonction: e.target.value })}
             /></td>
                <td>   <input
               type="text"
               className="lebelZonText"
+              value={new_data.email}
               onChange={e => setNew_data({ ...new_data, email: e.target.value })}
             /></td>
                <td>   <input
               type="checkbox"
+              checked={new_data.envoye}
               className="lebelZonText"
               onChange={handleChangePersonne}
           
              
             /></td>
            
-            <td>       <button onClick={addhandler} style={{margin:"20px" , background:"#D0E3FA",border:"none"}}><Add/></button></td>
+            <td>       <button onClick={addhandler} style={{margin:"20px" , background:"#D0E3FA",border:"none"}}><Check/></button></td>
           </tr>
         </thead>
       </table>
@@ -393,7 +463,7 @@ const [nomFormation, setnomFormation] = useState("");
           </tr>
         </thead>
         <tbody> 
-          {sousResponsable.map((p) => (
+          {sousResponsable.map((p,index) => (
             <tr >
               <td>{p.titre}</td>
               <td>{p.prenom}</td>
@@ -403,8 +473,9 @@ const [nomFormation, setnomFormation] = useState("");
            
 
               <td> 
+              <button onClick={() => updateItemResponsable({p,index})} style={{margin:"20px" , background:"#D0E3FA",border:"none"}}><Update/></button>
 
-              <Link  onClick={() => deleteItem(p.nom)}>   <Delete /></Link>
+              <button  onClick={() => deleteItemResponsable(p.nom)}>   <Delete /></button>
 
 
               </td>
@@ -413,7 +484,7 @@ const [nomFormation, setnomFormation] = useState("");
         </tbody>
         <thead>
           <tr>
-     <td> <select value={new_data.titre}  style={{width:"100px"}}  onChange={e => setNew_dataResponsable({ ...new_dataResponsable, titre: e.target.value })} >
+     <td> <select value={new_dataResponsable.titre}  style={{width:"100px"}}  onChange={e => setNew_dataResponsable({ ...new_dataResponsable, titre: e.target.value })} >
    
                 <option value="M.">M.</option>
                 <option value="Mme">Mme </option>
@@ -425,33 +496,37 @@ const [nomFormation, setnomFormation] = useState("");
             <td>   <input
               type="text"
               className="lebelZonText"
+              value={new_dataResponsable.prenom}
               onChange={e => setNew_dataResponsable({ ...new_dataResponsable, prenom: e.target.value })}
             /></td>
 
    <td>   <input
               type="text"
               className="lebelZonText"
+              value={new_dataResponsable.nom}
               onChange={e => setNew_dataResponsable({ ...new_dataResponsable, nom: e.target.value })}
             /></td>
                <td>   <input
               type="text"
               className="lebelZonText"
+              value={new_dataResponsable.fonction}
               onChange={e => setNew_dataResponsable({ ...new_dataResponsable, fonction: e.target.value })}
             /></td>
                <td>   <input
               type="text"
               className="lebelZonText"
+              value={new_dataResponsable.email}
               onChange={e => setNew_dataResponsable({ ...new_dataResponsable, email: e.target.value })}
             /></td>
            
            
-            <td>       <button onClick={addhandlerResponsable} style={{margin:"20px" , background:"#D0E3FA",border:"none"}}><Add/></button></td>
+            <td>       <button onClick={addhandlerResponsable} style={{margin:"20px" , background:"#D0E3FA",border:"none"}}><Check/></button></td>
           </tr>
         </thead>
       </table>
       </div>
 </div>:null}
-</div>
+</div> 
 </div>
 <div  className='menuPdf' style={{flex:"20%"}}>
        <ul> 

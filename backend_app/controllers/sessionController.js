@@ -1565,7 +1565,7 @@ exports.createPdfConvocation =  ( req,res)=>{
     } }
     exports.sendPdfConvocation =  ( req,res)=>{
   
-        if(req.params.typeSend=="sendConditaure"){
+        if(req.params.typeSend=="sendConditaure"){ 
        
             if(req.body.typeFormation=="En inter-enterprise"){ 
       
@@ -1628,23 +1628,27 @@ exports.createPdfConvocation =  ( req,res)=>{
                   }
                  
               })
-              }else{
-                pathToAttachment1 = path.join(process.cwd(),'documents', 'Convocation.pdf')
+              }
+
+              if(req.body.typeFormation=="En intra-entreprise"||req.body.typeFormation=="En distanciel"){ 
+      
+                pathToAttachment1 = path.join(req.body.filepath, req.body.nomFile+".pdf")
                 
                 attachment1 = fs.readFileSync(pathToAttachment1).toString("base64")
         
+                
             
                 let smtpTransport = nodemailer.createTransport({
-                    host:req.body.host,
-                    port:465,
-                    secure:true,
-                    auth:{ 
-                        user:req.body.EmailUser,
-                        pass:req.body.PassEmail
-                    },
-                    tls:{rejectUnauthorized:false}
-                })
-                
+                  host:req.body.host,
+                  port:465,
+                  secure:true,
+                  auth:{ 
+                      user:req.body.EmailUser,
+                      pass:req.body.PassEmail
+                  },
+                  tls:{rejectUnauthorized:false}
+              })
+              
             
                 smtpTransport.sendMail({
                     from:req.body.EmailUser,
@@ -1671,7 +1675,9 @@ exports.createPdfConvocation =  ( req,res)=>{
                     }
                    
                 })
-              } 
+                }
+              
+           
            } 
            if(req.params.typeSend=="sendResponsable"){
 
@@ -1688,26 +1694,26 @@ exports.createPdfConvocation =  ( req,res)=>{
                 var attachment=[]
                 var attachments=[]
           
-         
-                    for( var i=0;i<listStagaire;i++){
-                         pathToAttachment[i] = path.join(req.body.pathDossier+"/"+nomDossie+ "/Convocations", "Convocation_"+i+".pdf")
-                         
-                         attachment[i] = fs.readFileSync(pathToAttachment[i]).toString("base64")
-                         attachments[i]= {
-                             content:attachment[i],
-                             filename:"Convocation_stagaire_"+[i],
-                             contentType: 'application/pdf',
-                             path:pathToAttachment[i]
-                         }
-                 
+                for( var i=0;i<listStagaire.length;i++){
+                    pathToAttachment[i] = path.join(req.body.pathDossier+"/"+req.body.nomDossie+ "/3_Convocations", "Convocation Formation "+req.body.nomFormation+" - "+listStagaire[i].titre+" "+listStagaire[i].prenom+" "+listStagaire[i].nom+".pdf")
+                    
+                    attachment[i] = fs.readFileSync(pathToAttachment[i]).toString("base64")
+                    attachments[i]= {
+                        content:attachment[i],
+                        filename:"Convocation Formation "+req.body.nomFormation+" - "+listStagaire[i].titre+" "+listStagaire[i].prenom+" "+listStagaire[i].nom,
+                        contentType: 'application/pdf',
+                        path:pathToAttachment[i]
                     }
-                    attachments[listStagaire]= {
+            
+               } 
+                  
+                    attachments[listStagaire.length]= {
                         content:attachmentLivre,
                         filename:"Livret stagiaire",
                         contentType: 'application/pdf',
                         path:pathToAttachmentLivre
                     }
-                    attachments[listStagaire+1]= {
+                    attachments[listStagaire.length+1]= {
                         content:attachmentReglement,
                         filename:"Livret stagiaire",
                         contentType: 'application/pdf',
@@ -1743,25 +1749,29 @@ exports.createPdfConvocation =  ( req,res)=>{
                              }
                             
                          })
-                }else{
-                    var listStagaire=req.body.listStagaire
+                }
+                if(req.body.typeFormation=="En intra-entreprise"||req.body.typeFormation=="En distanciel"){ 
+      
+                        var listStagaire=req.body.listStagaire
                     var pathToAttachment=[]
                     var attachment=[]
                     var attachments=[]
-             
-          
-                        for( var i=0;i<listStagaire;i++){
-                             pathToAttachment[i] = path.join(req.body.pathDossier+"/"+req.body.nomDossie+ "/Convocations", "Convocation_"+i+".pdf")
-                             
-                             attachment[i] = fs.readFileSync(pathToAttachment[i]).toString("base64")
-                             attachments[i]= {
-                                 content:attachment[i],
-                                 filename:"Convocation_stagaire_"+[i],
-                                 contentType: 'application/pdf',
-                                 path:pathToAttachment[i]
-                             }
+              
+                    for( var i=0;i<listStagaire.length;i++){
+                        pathToAttachment[i] = path.join(req.body.pathDossier+"/"+req.body.nomDossie+ "/3_Convocations", "Convocation Formation "+req.body.nomFormation+" - "+listStagaire[i].titre+" "+listStagaire[i].prenom+" "+listStagaire[i].nom+".pdf")
+                        
+                        attachment[i] = fs.readFileSync(pathToAttachment[i]).toString("base64")
+                        attachments[i]= {
+                            content:attachment[i],
+                            filename:"Convocation Formation "+req.body.nomFormation+" - "+listStagaire[i].titre+" "+listStagaire[i].prenom+" "+listStagaire[i].nom,
+                            contentType: 'application/pdf',
+                            path:pathToAttachment[i]
+                        }
+                
+                   } 
+                      
                      
-                        } 
+    
                         let smtpTransport = nodemailer.createTransport({
                             host:req.body.host,
                             port:465,
@@ -1778,10 +1788,9 @@ exports.createPdfConvocation =  ( req,res)=>{
                                  from:req.body.EmailUser,
                                  to:req.body.email,
                                  subject:req.body.subject,
-                                 cc:req.body.ccemail,
-
+                     
                                  html:req.body.linun+"<br/> "+req.body.lindeux+"<br/> "+req.body.lintrois+"<br/> "+req.body.linquatre+"<br/> Bien cordialement.",
-                                  attachments:attachments
+                                 attachments:attachments
                              },function(error,info){
                          
                                  if(error){
@@ -1792,13 +1801,10 @@ exports.createPdfConvocation =  ( req,res)=>{
                                  }
                                 
                              })
-                }
-    
-              
-            
-            }
+                    }
       
         }
+    }
 
  exports.mettreDansZip = (req, res) => {
 
