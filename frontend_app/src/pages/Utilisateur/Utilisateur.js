@@ -21,7 +21,7 @@ const [data, setData] = useState([]);
 const history = useNavigate();
 const user = JSON.parse(localStorage.getItem("user"));
 
-  const addOrEdit = (values, resetForm) => {
+  const addOrEdit = ( resetForm) => {
 
   resetForm()
   setRecordForEdit(null)

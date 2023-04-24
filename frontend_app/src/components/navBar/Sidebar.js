@@ -8,7 +8,8 @@ import {
     FaUser,
     FaShoppingBag,
     FaUserGraduate,
-    FaHome
+    FaHome,
+    FaFileAlt
 }from "react-icons/fa";
 import { Settings} from '@material-ui/icons'
 
@@ -59,6 +60,12 @@ const Sidebar = ({children}) => {
             path:"/location",
             name:"Salle de formation",
             icon:<FaHome/>
+        },
+        {
+            path:"/Bilan",
+            name:"Bilan",
+            icon:<FaFileAlt/>
+           
         },
         {
             path:"/parametre",

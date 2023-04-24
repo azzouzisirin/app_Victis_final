@@ -83,7 +83,7 @@ const [categvalue,setcategvalue]=useState('choisir')
              redirect: 'follow'
            };
            
-           fetch("/upload", requestOptions)
+           fetch(BASE_URL+"/upload", requestOptions)
              .then(response => response.text())
              .catch(error => console.log('error', error));
              

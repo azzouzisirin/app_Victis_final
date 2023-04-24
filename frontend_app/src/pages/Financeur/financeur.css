@@ -22,20 +22,24 @@ font-size: 24px;
     font-family: sans-serif;
     font-size: 20px;
     border: thin solid #231ab4;
+    color: black;
+
     text-align: center;
     }
-    .themeh1 {
-      font-family: sans-serif;
-      font-size: 20px;
-      border: thin solid #231ab4;
-      text-align: center;
-      }
+
     .tabledecore   td a{
       color: black;
     } 
     .tabledecore   tr:hover {
       background-color: papayawhip;
     } 
+    .themeh1 {
+      font-family: sans-serif;
+      font-size: 20px;
+      border: thin solid #231ab4;
+      text-align: center;
+      }
+ 
     
     caption {
     font-family: sans-serif;

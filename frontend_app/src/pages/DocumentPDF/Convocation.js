@@ -17,13 +17,10 @@ const [object, setobject] = useState("");
 const [text0, settext0] = useState("");
 const [Contact, setContact] = useState()
 
-const [RaisonSociale,setRaisonSociale]=useState("")
 const [typeFormation,settypeFormation]=useState("")
 const [nomDossier,setnomDossier]=useState("")
 const [NumSession,setNumSession]=useState("")
-const [nomFormation,setnomFormation]=useState("")
 const [nomClient, setnomClient] = useState()
-const [NumDevis, setNumDevis] = useState()
 const [     heurDebut,setheurDebut] = useState()
 const [  heurFin,setheurFin] = useState()
 const user = JSON.parse(localStorage.getItem("user")); 
@@ -41,10 +38,9 @@ const [adressClient, setadressClient] = useState("");
 const [dureeFormation, setdureeFormation] = useState("");
 const [dateFin, setdateFin] = useState("");
 const [dateDebut, setdateDebut] = useState("");
-const [Module, setModule] = useState("");
 const [emailClient, setemailClient] = useState("");
 const [CodePostalClient , setCodePostalClient]=useState("")
-const [DesignationFomration, setDesignationFomration] = useState("");
+const [nomFormation, setnomFormation] = useState("");
 
 
   const [new_data, setNew_data] = useState({
@@ -58,7 +54,6 @@ const [DesignationFomration, setDesignationFomration] = useState("");
     const fetchData = async () => { 
       const res = await axios.get(`${BASE_URL}/session/getDonneConvocation/`+id+'/'+username);
       setNumSession(res.data.NumSession)
-      setNumDevis(res.data.numDevis)
       setContact(res.data.Contact) 
       setnomClient(res.data.nomClient) 
       setheurDebut(res.data.heurDebut)
@@ -69,15 +64,12 @@ const [DesignationFomration, setDesignationFomration] = useState("");
       setnomFormation(res.data.nomFormation)
        setadressClient(res.data.adressClient)
        setCodePostalClient(res.data.CodePostalClient)
-      setModule(res.data.Module)
-      setDesignationFomration(res.data.designiationFormation)
+       setnomFormation(res.data.nomFormation)
        setemailClient(res.data.emailClient)
       setdureeFormation(res.data.dureeFormation)
       setdateFin(res.data.dateFin) 
       setdateDebut(res.data.dateDebut)
-      setRaisonSociale(res.data.RaisonSociale)
-      setnomDossier(res.data.numDevis+"_"+res.data.RaisonSociale+"_"+res.data.designiationFormation+"_"+res.data.Module+"_"+res.data.typeFormation)
-
+      setnomDossier(res.data.nomDossie)
     };
     fetchData();
     
@@ -100,7 +92,7 @@ const [DesignationFomration, setDesignationFomration] = useState("");
         pathDossier:user.shemaDossie,
         addpath:nomDossier
      
-      },config) 
+      },config)  
 
       for(var i=0 ; i<persos.length; i++){
   
@@ -121,7 +113,7 @@ const [DesignationFomration, setDesignationFomration] = useState("");
            dateDebut:dateDebut,
            typeFormation:typeFormation,
            filePath:"./documents/Convocation.pdf",
-        filecopy:user.shemaDossie+"/"+nomDossier+"/3_Convocations/Convocation Formation "+DesignationFomration+" - "+persos[i].titre+" "+persos[i].prenom+" "+persos[i].nom+".pdf",
+        filecopy:user.shemaDossie+"/"+nomDossier+"/3_Convocations/Convocation Formation "+nomFormation+" - "+persos[i].titre+" "+persos[i].prenom+" "+persos[i].nom+".pdf",
 
        } ,config) 
       }
@@ -211,20 +203,17 @@ const [DesignationFomration, setDesignationFomration] = useState("");
   const addhandlerResponsable = e => {
     e.preventDefault();
     setsousResponsable([...sousResponsable, new_dataResponsable]);
-    setNew_dataResponsable({titre:"M.",prenom:"", nom: "", fonction: "", email:""});
+    setNew_dataResponsable({...new_dataResponsable,titre:"M.",prenom:"", nom: "", fonction: "", email:""});
   };
   useEffect(()=>{
     if(typeFormation=="En intra-entreprise"){
     
-      setobject("Convocation")
       settext0("Bonjour ")
       settext1("Veuillez trouver ci-joint la convocation.")
       settext2("Vous souhaitant une excellente formation.")
-      settext3("")
     
     }
     if(typeFormation=="En inter-enterprise"){
-      setobject("Convocation")
       settext0("Bonjour ")
       settext1("Veuillez trouver ci-joint la convocation ainsi que le livret d'accueil stagiaire.")
       settext2("Vous souhaitant une excellente formation.")
@@ -232,7 +221,6 @@ const [DesignationFomration, setDesignationFomration] = useState("");
     
     }
     if(typeFormation=="En distanciel"){
-      setobject("Convocation")
       settext0("Bonjour ")
       settext1("Veuillez trouver ci-joint la convocation, le lien Teams ainsi que la procédure de formation.")
       settext2("Si vous avez le moindre problème le jour de la formation, n'hésitez pas à contacter directement le formateur.")
@@ -250,20 +238,20 @@ const [DesignationFomration, setDesignationFomration] = useState("");
       
         const res = await axios.post(`${BASE_URL}/session/sendPdfConcocation/sendConditaure`,{
         
-          subject:object,
+          subject:"Convocation Formation "+nomFormation  +"- Perfectionnement_"+persos[i].titre+" "+ persos[i].nom+" " +persos[i].prenom,
       
           linun:text0,
           lindeux:text1 ,
           lintrois: text2,
-          linquatre: text3,
+          linquatre: text3, 
           email:persos[i].email,
           ccemail:emailClient,
           EmailUser:user.email,
           PassEmail:user.PassEmail,
           host:user.host,
           typeFormation:typeFormation,
-          filepath:user.shemaDossie+"/"+nomDossier+"/Convocations",
-          nomFile:"Convocation_"+[i],
+          filepath:user.shemaDossie+"/"+nomDossier+"/3_Convocations",
+          nomFile:"Convocation Formation "+nomFormation+" - "+persos[i].titre+" "+persos[i].prenom+" "+persos[i].nom,
             
            
         })
@@ -293,7 +281,7 @@ const [DesignationFomration, setDesignationFomration] = useState("");
         nomDossie: nomDossier,
         typeFormation:typeFormation,
         pathDossier:user.shemaDossie,
-        nomFile:"Convocation_"+[i],
+        nomFile:"Convocation Formation "+nomFormation+" - "+persos[i].titre+" "+persos[i].prenom+" "+persos[i].nom+".pdf",
           
          
       })

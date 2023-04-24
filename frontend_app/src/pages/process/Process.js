@@ -1,22 +1,18 @@
-import React, { useState, useEffect ,useRef} from 'react'
+import React, { useState, useEffect } from 'react'
 import './add.css'
-import { useReactToPrint } from "react-to-print";
 import { Link } from "react-router-dom";
-import {saveAs } from 'file-saver'
 import Acceuil from '../detailOffre/DetailOffre'
 import { useNavigate,useParams} from 'react-router-dom';
-import ViewPdfOffre from './ViewPdfOffre'
-import ViewPdfConvention from './ViewPdfConvention'
+import ViewPdfOffre from '../DocumentPDF/ViewPdfOffre'
+import ViewPdfConvention from '../DocumentPDF/ViewPdfConvention'
 import Sidebar from '../../components/navBar/Sidebar';
-import axios from 'axios';
-import Convocation from '../Convocation/Convocation';
-import Formateur from '../Convocation/Formateur';
-import Facturation from '../Convocation/Facturation';
-import Attestation from '../Convocation/Attestation';
+import Convocation from '../DocumentPDF/Convocation';
+import Formateur from '../DocumentPDF/Formateur';
+import Facturation from '../DocumentPDF/Facturation';
+import Attestation from '../DocumentPDF/Attestation';
 
-import {BASE_URL} from "../../helper"
 
-import Document from '../Convocation/Document';
+import Document from '../DocumentPDF/Document';
 
 function Process(){
     const { id  } = useParams();
@@ -26,7 +22,6 @@ function Process(){
  
     const [clickEtat,setclickEtat]=useState(1)
 
-    const [idSession,setIdSession]=useState("")
     const [Conventions,setConventions]=useState("")
     const [convocation,setconvocation]=useState("")
 
@@ -35,62 +30,16 @@ function Process(){
     const [facturation,setFacturation]=useState("")
     const [attestation,setattestation]=useState("")
 
-    const [numSession,setnumSession]=useState("")
-    const [numDevis,setnumDevis]=useState("")
-    const [offre, setoffre] = useState({})
-  
- 
 
-    const [email, setemail] = useState()
-    const [filename, setfilename] = useState()
 
     const user = JSON.parse(localStorage.getItem("user"));
 
   var username=user.titre+" "+user.nom+" "+user.prenom
-   
- 
-    const history = useNavigate();
-    const [dataSession, setDataSession] = useState([]);
-
- 
-    useEffect(() => {
-        if (!user) history.push("/");
-    const fetchData = async () => { 
-      const res = await axios.get(`${BASE_URL}/session/`+id);
-      setIdSession(res.data.idSession) 
-      setnumSession(res.data.numSession)
-      setnumDevis(res.data.numDevis)
-  
-      setemail(res.data.email) 
-      setfilename(res.data.filename)
-
-  
-    };
-    fetchData();
- if(dataSession==1){
-    
- }
-
-}, []);
 
 
 
-useEffect(() => {
 
-  const fetchData = async () => {
-  
-      const config = {
-        headers: { 
-          "Content-type": "application/json",
-        },
-      };
-      const res = await axios.post(BASE_URL+"/offre/createPdf", offre  ,
-    
-    config
-  );}
-  fetchData()
-  
-    },[offre])
+
 
 
 useEffect(()=>{

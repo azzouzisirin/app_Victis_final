@@ -30,6 +30,7 @@
     "nodemailer": "^6.9.1",
     "nodemon": "^2.0.19",
     "puppeteer": "^19.8.2",
+    "request-promise-native": "^1.0.9",
     "stripe": "^10.0.0",
     "validator": "^13.7.0"
   }

@@ -14,6 +14,8 @@ import Utilisateur from './pages/Utilisateur/Utilisateur'
 import AuthPage from "./pages/authentification/AuthPage";
 import Location from './pages/location/Location'
 import Test from './pages/Test'
+import Bilan from './pages/Bilan/Bilan'
+
 import Paramettre from './pages/Paramettre/Paramettre'
 const App = () => {
   return (
@@ -23,6 +25,7 @@ const App = () => {
         <Routes>
         <Route path="/" element={<AuthPage />} exact />
         <Route path="/test" element={<Test />}  />
+        <Route path="/Bilan" element={<Bilan />}  />
 
         <Route path="/process/:id" element={<Process />}  />
         <Route path="/financeur" element={<Financeur />}  />

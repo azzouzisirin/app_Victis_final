@@ -12,24 +12,18 @@ import PopUp from '../../components/BoxMessage/PopUp'
     const { id} = props;
     const [bob,setbob]=useState()  
     const [showPdf, setshowPdf] = useState("false")
-    const [EntrepAdherante,setEntrepAdherante]=useState()
-    const [titreFormation,settitreFormation]=useState()
-    const [Reference,setReference]=useState()
-    const [DateFin,setDateFin]=useState()
-    const [RaisonOpco,setRaisonOpco]=useState()
-    const [nomOpco,setnomOpco]=useState()
+    const [nomClient, setnomClient] = useState()
+    const [DateDebut,setDateDebut]=useState()
+
     const [persos, setPersos] = useState([]);
 
-    const [prenomOpco,setprenomOpco]=useState()
-    const [mailOpco,setmailOpco]=useState()
+    const [DateFin,setDateFin]=useState()
+
     const [nomDossier,setnomDossier]=useState("")
     const user = JSON.parse(localStorage.getItem("user"));
-    var username=user.titre+" "+user.nom+" "+user.prenom
 
-    const [nomClient,setnomClient]=useState()
     const [emailClient,setemailClient]=useState()
-    const [DateDebut,setDateDebut]=useState()
-    const [idOpco,setidOpco]=useState()
+   
     const [LieuFormation,setLieuFormation]=useState()
     const [nomFormation,setnomFormation]=useState()
     const [codeVilleFormation,setcodeVilleFormation]=useState()
@@ -42,11 +36,18 @@ import PopUp from '../../components/BoxMessage/PopUp'
       const res = await axios.get(`${BASE_URL}/offre/${id}`);
       setPersos(res.data.listStagaire) 
       setnomFormation(res.data.designiationFormation+" - "+res.data.typeFormation)
+      setDateDebut(res.data.DateDebut) 
+      setDateFin(res.data.DateFin) 
+
       setcodeVilleFormation(res.data.codeVilleFormation)
       setLieuFormation(res.data.lieuFormation)
         const res1 = await axios.get(`${BASE_URL}/session/${id}`);
         setnumSession(res1.data.numSession) 
         setnomDossier(res1.data.nomDossie)
+        setemailClient(res1.data.email)
+        setnomClient(res1.data.titreClient+" "+res1.data.nomClient+" "+res1.data.prenomClient) 
+
+
     }catch(err){
       console.log(err);
     }
@@ -78,7 +79,8 @@ import PopUp from '../../components/BoxMessage/PopUp'
    })})
    const res = await axios.post(BASE_URL+"/session/copeFilePdf", {
     filePath:"./documents/AttestationSatgaire.pdf",
-    filecopy:"./test/Attestation de formation"+titre +" "+nom+" "+prenom+".pdf"
+    filecopy:"./test",
+    nomfile:"/Attestation de formation"+titre +" "+nom+" "+prenom+".pdf"
 }  )
 }
 const SendEmail = async (e) => { 
@@ -105,13 +107,14 @@ const EnregistreFile=async()=>{
    for(var i=0;i<persos.length;i++){
     const res = await axios.post(BASE_URL+"/session/copeFilePdf", {
       filePath:"./test/Attestation de formation"+persos[i].titre +" "+persos[i].nom+" "+persos[i].prenom+".pdf",
-      filecopy:user.shemaDossie+"/"+nomDossier+"/5_Attestations de formation/Attestation de formation"+persos[i].titre +" "+persos[i].nom+" "+persos[i].prenom+".pdf"
+      filecopy:user.shemaDossie+"/"+nomDossier+"/5_Attestations de formation",
+      nomfile:"/Attestation de formation"+persos[i].titre +" "+persos[i].nom+" "+persos[i].prenom+".pdf"
   }  ,
   
   config
 ); 
    }
-    toast.success('Documents bien Enregistre !')
+    toast.success('Attestation bien Enregistre !')
 
 }catch(err){
   console.log(err);
@@ -146,7 +149,7 @@ const EnregistreFile=async()=>{
 
           </ul> 
    </div> 
-   { showPdf=="true"?<PopUp type="sendFormateur" email={nomClient}   setshowPdf={setshowPdf} />:null}
+   { showPdf=="true"?<PopUp type="sendAttestation" email={emailClient} nomClient={nomClient} nomFormation={nomFormation} DateDebut={DateDebut} DateFin={DateFin} LieuFormation={LieuFormation}numSession={numSession}  setshowPdf={setshowPdf} persos={persos} />:null}
    <Toaster   position="bottom-right"  toastOptions={{
        success: {
          style: {

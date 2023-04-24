@@ -32,17 +32,23 @@ const[ indexp,setindexp]= useState();
     const [Adresse_2, setAdresse_2] = useState('');
     const [CodeVille, setCodeVille] = useState('');
     
+    var somme=0
+    var sommeTva=0
+
     const [new_data, setNew_data] = useState({
       burau: " ", nbPost:" ",observation:" ",prixHt:" ",petitDej:" ",totalHt:" ",totalTTC:" "
     }); 
    useEffect(()=>{
-    settotalHt(prixHt+petitdej)
-    setNew_data({ ...new_data, totalHt: totalHt.toString() })
+   
+     somme=prixHt+petitdej
+    settotalHt(somme)
+    setNew_data({ ...new_data, totalHt: somme.toString() })
 
    },[prixHt,petitdej])
    useEffect(()=>{
-    setprixTTC((totalHt*0.2).toFixed(2))
-    setNew_data({ ...new_data, totalTTC: prixTTC.toString() })
+    sommeTva=(totalHt*0.2).toFixed(2)
+    setprixTTC(sommeTva)
+    setNew_data({ ...new_data, totalTTC: sommeTva.toString() })
 
 
    },[totalHt])
@@ -167,9 +173,9 @@ if (RecentTelephone!==Telephone){
       }
  
   const ValuePrixHT =((e)=>{
-    setprixHt(Number(e.target.value))
 
     setNew_data({ ...new_data, prixHt: e.target.value })
+    setprixHt(Number(e.target.value))
 
   })
   const ValuePetitDej =((e)=>{
@@ -180,8 +186,10 @@ setpetitdej(Number(e.target.value))
     
       const addhandler=((e)=>{
         e.preventDefault(); 
-
-       
+        somme=0
+        sommeTva=0
+        setprixHt(0)
+       setpetitdej(0)
 if(updtouNon==0){
   setfrais([...frais, new_data]);
         setNew_data({ burau: "", nbPost:"",observation:"",prixHt:"",petitDej:"",totalHt:"",totalTTC:""});
@@ -198,6 +206,7 @@ if(updtouNon==0){
 
     setfrais(newState);
     setNew_data({ burau: "", nbPost:"",observation:"",prixHt:"",petitDej:"",totalHt:"",totalTTC:""});
+    setupdtouNon(0)
 
 }
        
@@ -211,9 +220,13 @@ if(updtouNon==0){
        setfrais(newList);    }
  
        const updateItem=({p,index})=>{
+   
         setNew_data({ ...new_data, burau: p.burau ,nbPost: p.nbPost,observation: p.observation,prixHt: p.prixHt,petitDej: p.petitDej , totalHt: p.totalHt,totalTTC: p.totalTTC })
+        setprixHt(Number(p.prixHt))
+       
+        setpetitdej(Number(p.petitDej))
         setupdtouNon(1)
-        setindexp(index)
+        setindexp(index) 
 
 
        }

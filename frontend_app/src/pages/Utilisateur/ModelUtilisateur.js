@@ -14,7 +14,7 @@ export default function ModelFormateur(props ) {
     const [Telephone, setTelephone] = useState('');
     const [portable, setportable] = useState('');
     const [password, setpassword] = useState('');
-    const [RecentTelephone] = useState('');
+    const [RecentTelephone,setRecentTelephone] = useState('');
     const [Recentportable, setRecentportable] = useState('');
     const [fonction, setfonction] = useState('');
     const [Mail, setMail] = useState('');
@@ -27,8 +27,9 @@ export default function ModelFormateur(props ) {
           try{
             const res = await axios.get(BASE_URL+"/Utilisateur/"+idutilisateur)
             setportable(res.data.portable);
+            setRecentTelephone(res.data.tel)
             settitre(res.data.titre);
-
+            setRecentportable(res.data.portable)
             setNom(res.data.nom);
             setPrenom(res.data.prenom);
             setTelephone(res.data.tel);
@@ -46,7 +47,7 @@ export default function ModelFormateur(props ) {
         getItemsList()
       }
    
-    },[]) 
+    },[idutilisateur]) 
 
     const addFormateur = async (e) => {
       e.preventDefault();

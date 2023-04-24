@@ -26,7 +26,6 @@ import {  ChevronLeft,ExpandMore } from '@material-ui/icons'
     const [numSession,setnumSession]=useState("")
 const [TypeFormation,setTypeFormation]=useState("")
     const [persos, setPersos] = useState([]);
-    const [DateDebut, setDateDebut] = useState();
 const[nomDossie,setnomDossie]=useState()
     const [bob,setbob]=useState()
     const toggleCertificat = () => setIsOpenCertificat (!isOpenCertificat);
@@ -46,7 +45,6 @@ const[nomDossie,setnomDossie]=useState()
         setnomFormation(res.data.designiationFormation)
         settypeFormation(res.data.typeFormation)
 
-          setDateDebut(res.data.DateDebut)
           const res1 = await axios.get(`${BASE_URL}/session/${id}`);
           setnumSession(res1.data.numSession) 
           setnomDossie(res1.data.nomDossie)
@@ -93,7 +91,8 @@ const VoirCertificat=async(titre,nom,prenom)=>{
   }; 
   const res = await axios.post(BASE_URL+"/session/copeFilePdf", {
     filePath:"./documents/CertificatRealisation.pdf",
-    filecopy:"./test/certificat_"+nomStagaire+".pdf"
+    filecopy:"./test",
+    nomfile:"/certificat_"+nomStagaire+".pdf"
 }  ) 
 } 
 const VoirFeruilEmargSimple=async(titre,nom,prenom)=>{
@@ -125,7 +124,8 @@ const VoirFeruilEmargSimple=async(titre,nom,prenom)=>{
   }; 
   const res = await axios.post(BASE_URL+"/session/copeFilePdf", {
     filePath:"./documents/FeuillEmargment.pdf",
-    filecopy:"./test/Feuille Emargement_"+nomStagaire+".pdf"
+    filecopy:"./test",
+    nomfile:"/Feuille Emargement_"+nomStagaire+".pdf"
 }  ) 
 }  
 const VoirFeuilleEmagement=async()=>{
@@ -163,7 +163,8 @@ const VoirFeuilleEvaluation=async(titre,nom,prenom)=>{
    })})}) 
    const res = await axios.post(BASE_URL+"/session/copeFilePdf", {
     filePath:"./documents/FeuilleEvaluation.pdf",
-    filecopy:"./test/evaluation_"+nomStagaire+".pdf"
+    filecopy:"./test",
+    nomfile:"/evaluation_"+nomStagaire+".pdf"
 }  )
 }
 const SendEmail = async (e) => { 
@@ -272,7 +273,8 @@ if(TypeFormation=="En distanciel"){
 
     const res = await axios.post(BASE_URL+"/session/copeFilePdf", {
       filePath:"./documents/FeuillEmargment.pdf",
-      filecopy:user.shemaDossie+"/"+nomDossie+"/4_Documents de formation/Feuille Emargement "+nomDossie+".pdf"
+      filecopy:user.shemaDossie+"/"+nomDossie+"/4_Documents de formation",
+      nomfile:"/Feuille Emargement "+nomDossie+".pdf"
   }  ,
   
   config_1

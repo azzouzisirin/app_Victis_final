@@ -84,8 +84,8 @@ const deleteItem = async (id) => {
              <td>{item.type}</td>
              <td> {item.DureeJour}</td>
              <td> {item.DureeHeur}</td>
-             <td> {item.Prix}</td>
-             <td> {item.nomFichie?<a href={"http://localhost:4000/fileinfo/"+item.nomFichie }target="_blank"> Voir Fichier</a>:""} </td>
+             <td> {item.Prix}</td> 
+             <td> {item.nomFichie?<a href={BASE_URL+"/fileinfo/"+item.nomFichie }target="_blank"> Voir Fichier</a>:""} </td>
                <td>
 
                <Link  onClick={() => deleteItem(item._id)}>   <Delete /></Link>

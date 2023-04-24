@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from 'react'
 import { Delete , Update,Warning} from '@material-ui/icons'
 import { Link } from "react-router-dom";
+import toast, { Toaster } from 'react-hot-toast';
+
 import { useNavigate} from 'react-router-dom';
 import {BASE_URL} from "../../helper"
 
@@ -39,12 +41,37 @@ useEffect(() => {
 }, [query]);
  
 
-const deleteItem = async (id) => {
+const deleteItem = async (id,nomDossie) => {
   try{ 
     const res = await axios.delete(`${BASE_URL}/session/${id}`)
+    let data = JSON.stringify({
+      "shemaDossie": user.shemaDossie+"/"+nomDossie
+    });
+    
+    let config = {
+      method: 'delete',
+      maxBodyLength: Infinity,
+      url: `${BASE_URL}/deletFile`,
+      headers: { 
+        'Content-Type': 'application/json'
+      },
+      data : data
+    };
+    
+    axios.request(config)
+    .then((response) => {
+      toast.success('Session supprime')
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+ 
  setQuery('')
+ window.location.reload(false);
   }catch(err){
     console.log(err); 
+    toast.error(err)
+
   }
 }
 const addSession= async () => {
@@ -136,7 +163,7 @@ const addSession= async () => {
                 
                 </td>
 
-                 <td key={item.id} onClick={() =>deleteItem(item.id)}>
+                 <td key={item.id} onClick={() =>deleteItem(item.id,item.nomDossie)}>
      
                     <Delete />
     
@@ -150,6 +177,28 @@ const addSession= async () => {
    </table>  
 </div>
             </Sidebar>
+            <Toaster   position="bottom-right"  toastOptions={{
+       success: {
+         style: {
+           width: '700px',
+           height:'70px',
+           border:'green',
+           borderStyle: "solid",
+           fontSize:'25px',
+         },
+       },
+       error: {
+         style: {
+           width: '700px',
+           height:'70px',
+           border:'red',
+           borderStyle: "solid",
+           fontSize:'25px',
+   
+         },
+       },
+     }}
+     reverseOrder={false}/>
      </> 
     );
 };

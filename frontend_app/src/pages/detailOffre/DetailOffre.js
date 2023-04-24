@@ -8,7 +8,6 @@ import {BASE_URL} from "../../helper"
 import { DoneAll, Check,Delete,Update } from '@material-ui/icons'
 
 import axios from 'axios';
-import { red } from '@material-ui/core/colors';
     
 const DetailOffre = (props) => { 
 
@@ -123,7 +122,6 @@ const [typeformation,settypeformation]= useState('');
   const [BaremKilometre, setBaremKilometre] = useState('');
   const [heurDebut, setheurDebut] = useState();
   const [heurFin, setheurFin] = useState();
-  const [nomDossierRecent,setnomDossierRecent]= useState('');
   const [FraisDeplacement, setFraisDeplacement] = useState('');
   const [FraisDeplacementJourParJour, setFraisDeplacementJourParJour] = useState('');
   const [FraisDeplacementParJour, setFraisDeplacementParJour] = useState('');
@@ -156,6 +154,8 @@ const [typeBureau, settypeBureau] = useState([]);
 const [typeBureauFinal, settypeBureauFinal] = useState([]);
 
 const [nomDossier,setnomDossier]=useState()
+const [RecentnomDossier,setRecentnomDossier]=useState()
+
 const [ TitreFormateur, setTitreFormateur ]= useState("");
 const [assujtTvFormateura , setassujtTvFormateura ]= useState("");
 const [ fraisDeplaccementFormateur, setfraisDeplaccementFormateur ]= useState("");
@@ -181,10 +181,9 @@ useEffect(() => {
   if (!user) history.push("/");
 const fetchData = async () => { 
 const res = await axios.get(`${BASE_URL}/session/`+id);
-setnomDossierRecent(res.data.nomDossie)
 setnumSession(res.data.numSession)
 setNumDevis(res.data.numDevis)
-
+setRecentnomDossier(res.data.nomDossie)
 };
 fetchData();
 
@@ -497,6 +496,13 @@ const res3=await  axios.put(BASE_URL+"/session/"+id,   {
   numDevis:NumDevis,
   numSession:numSession,
 })
+if(RecentnomDossier!=nomDossier){
+  const res4=await  axios.post(BASE_URL+"/rename",   {
+    pathDossier:user.shemaDossie,
+    recendfolder:RecentnomDossier,
+    newfolder:nomDossier,
+  })
+}
 var res2
 
 
@@ -560,6 +566,7 @@ if(NumDevis||RaisonSociale||selectedTypeFormation||nomFormation||typeformation){
 
     setnomDossier(NumDevis+"_"+RaisonSociale+"_"+nomFormation+"_"+typeformation+"_"+selectedTypeFormation)
    if(NumDevis) setnumSession("SF"+NumDevis.substring(0,2)+"-"+NumDevis.substring(2,7))
+
 }
    },[NumDevis,RaisonSociale,selectedTypeFormation,nomFormation,typeformation]) 
       useEffect(() => { 
@@ -1697,8 +1704,8 @@ setlieuFormation("8 rue Honoré de Balzac ")
      
       {fraisFormateur? 
       <div className='lebelText'>  <label className='textLabel' >Prix de formation:</label>
-      {fraisFormateur.filter(item => item.intitile ==DesignationFormation).map(filteredPerson => (
-    <p>
+      {fraisFormateur.filter(item => (item.intitile ==DesignationFormation && item.categ==typeFormation)).map(filteredPerson => (
+    <p value={filteredPerson.prix} id="prixFormateur">
       {filteredPerson.prix}
     </p>
   ))}</div>:null}

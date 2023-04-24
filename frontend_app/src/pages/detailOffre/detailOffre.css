@@ -110,8 +110,21 @@
     position:relative;
 }
  
+.ContainerBilan {
+    margin-left: 8px;
+    margin-top: 20px;
+    width:1000px;
+    height:350px; 
+    border:8px solid;
+    color: #231ab4;
+    border-radius: 20px;
+    position:relative;
+}
+.ContainerBilan h4{
+    margin-bottom: 10px;
+    font-size:20px;
 
-
+}
 .Container h2{
     margin-top: 10px;
 }

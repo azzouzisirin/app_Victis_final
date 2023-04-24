@@ -7,6 +7,10 @@ const prospectRoutes = require('./routes/prospectRoutes');
 const fsExtra = require('fs-extra')
 const AdmZip = require('adm-zip');
 const fs = require("fs");
+const path = require("path");
+const { exit } = require("process");
+
+const request = require("request-promise-native");
 const nodemailer = require('nodemailer')
 
 const bodyParser = require('body-parser');
@@ -60,6 +64,26 @@ const storage = new GridFsStorage({
   }
 });
 
+const folder = path.resolve(__dirname);
+
+if (!fs.existsSync(folder)) {
+  fs.mkdirSync(folder);
+}
+
+
+
+
+
+
+app.post("/downloadPdfCour", async(req, res) => {
+
+  const pdfBuffer = await request.get({
+    uri: req.body.url,
+    encoding: null,
+  });
+  fs.writeFileSync(req.body.filename, pdfBuffer);
+  res.json("ok")
+})
 const upload = multer({
   storage
 }); 
@@ -78,12 +102,15 @@ app.get("/fileinfo/:filename", (req, res) => {
       }
       bucket.openDownloadStreamByName(req.params.filename)
         .pipe(res);
+
     });
-});
+
+    console.log(file)
+}); 
 
 app.post("/upload", upload.single("file"), (req, res) => {
   res.status(200)
-    .json("ok");
+    .json(req.file);
     
 });
 app.post('/sendemail',(req,res)=>{
@@ -146,6 +173,11 @@ app.use(bodyParser.json());
 app.post('/newfolder/:nomFolder', async (req, res)=>{
   const path=require('path')
   const fs=require('fs')
+          if (!fs.existsSync(req.body.pathDossier+"/"+req.body.addpath)) {  
+            fs.mkdirSync(req.body.pathDossier+"/"+req.body.addpath);
+
+          }
+
   const desktopPath=path.join(req.body.pathDossier,req.body.addpath)
   const folderName=req.params.nomFolder;
   const folderPath=path.join(desktopPath,folderName);
@@ -161,9 +193,23 @@ app.post('/newfolder/:nomFolder', async (req, res)=>{
 }
 });
 
+app.delete('/deletFile',async(req,res)=>{
+  try {
+    fs.rmdir(req.body.shemaDossie, { recursive: true }, (err) => {
+      if (err) {
+        res.send(err);
+      }
+    });
+    res.send("ok")
+
+  } catch(err) {
+    res.send(err)
+  }
+})
+
 app.post('/rename',async(req,res)=>{
   const fs = require("fs")
-  const path=require('path')
+  const path=require('path') 
 
   const currPath=path.join(req.body.pathDossier,req.body.recendfolder);
 const newPath =path.join(req.body.pathDossier,req.body.newfolder) ;

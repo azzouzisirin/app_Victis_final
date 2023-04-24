@@ -38,7 +38,7 @@ const formateur = require('../models/Formateur');
         const test={ 
             DifferenceDate:etat,
            id:Session._id,
-
+           nomDossie:Session.nomDossie,
             etatSession:Session.etatSession,
             session:Session.numSession, 
             nomFormation:Formation.designation+" - "+Formation.type,
@@ -213,6 +213,8 @@ exports.getSessionById = async (req, res) => {
              typeFormation:Offre.typeFormation,
             designiationFormation :Offre.designiationFormation,
             nomClient:Client.prenom,
+           prenomClient:Client.nom,
+
             titreClient:Client.titre,
             email:Client.email,
             filename:Formation.nomFichie, 
@@ -392,7 +394,7 @@ exports.getDonneFormateur = async (req, res) => {
             emailFormateur:Formateur.email,
             nombStagaire:ParcourCollectif ,
             DateDebut:date1,
-            duree  :Offre.DureeJour+" jours, soit "+ Offre.DureeHeur +" heures",
+           duree  :Offre.DureeJour+" jours, soit "+ Offre.DureeHeur +" heures",
             LieuFormation:Offre.lieuFormation,
             codeVilleFormation:Offre.codeVilleFormation,
              tva:Offre.Tva,
@@ -926,6 +928,7 @@ exports.getDonneConvocation = async (req, res) => {
         const test={ 
             NumSession:Session.numSession,
             numDevis:Session.numDevis ,
+            nomDossie:Session.nomDossie,
             Contact:req.params.nomUtilisateur,
             nomClient:Client.titre+" "+Client.nom+" "+Client.prenom,
             adressFormation:Offre.lieuFormation,
@@ -1097,13 +1100,14 @@ if(req.params.nomPdf=="RapportFormateur"){
 }
 
 exports.copeFilePdf = (req,res)=>{
-    fs.copyFile(req.body.filePath, req.body.filecopy, (error) => {
+    fs.copyFile(req.body.filePath, req.body.filecopy+req.body.nomfile, (error) => {
         if (error) {
-          throw error
+            console.log(error);
         } else {
             res.send('File has been moved to another folder.')
         }
       })
+   
  }
 exports.fetchPdf = (req,res)=>{
     if(req.params.nomFile=="Convention"){
@@ -1187,33 +1191,92 @@ exports.sendPdf = (req,res)=>{
        
     })
     } 
+    if(req.params.typeEnvoye=="Facturation"){
+        var pathToAttachment=[] 
+        var attachments=[]
+        var attachment=[]
+        pathToAttachment[0] = path.join(process.cwd(),'documents', 'FeuilleEvaluation.pdf')
+     
+        attachment[0] = fs.readFileSync(pathToAttachment[0]).toString("base64")
+        attachments[0]={
+            content: attachment[0],
+            filename:"Evaluation à froid_Apprenant ou manager",
+            contentType: 'application/pdf',
+            path:pathToAttachment[0]
+        }
+       if(req.body.idopco!=""){
+        pathToAttachment[1] = path.join(process.cwd(),'documents', 'FeuilleOpco.pdf')
+     
+        attachment[1] = fs.readFileSync(pathToAttachment[1]).toString("base64")
+        attachments[1]={
+            content: attachment[1],
+            filename:"Feuille d'évaluation OPCO",
+            contentType: 'application/pdf',
+            path:pathToAttachment[1]
+        }
+       }
+        let smtpTransport = nodemailer.createTransport({
+            host:req.body.host,
+            port:465,
+            secure:true,
+            auth:{ 
+                user:req.body.EmailUser,
+                pass:req.body.PassEmail
+            },
+            tls:{rejectUnauthorized:false}
+        })
+        
+    
+        smtpTransport.sendMail({
+            from:req.body.EmailUser,
+            to:req.body.email,
+            subject:req.body.subject,
+            html:req.body.linun+"<br/> "+req.body.lindeux+"<br/> "+req.body.lintrois+"<br/> Bien cordialement.",
+            attachments:attachments
+        },function(error,info){
+    
+            if(error){
+                console.log(error);
+            }
+            else{
+                res.send("Mail has been sended to your email. Check your mail")
+            }
+           
+        })
+        } 
     if(req.params.typeEnvoye=="offre"){
         var pathToAttachment=[] 
         var attachments=[]
         var attachment=[]
 
         pathToAttachment[0] = path.join(process.cwd(),'documents', 'offre.pdf')
-        pathToAttachment[1] = path.join(process.cwd(),'documents', 'Questionnaire évaluation avant formation.pdf')
+        pathToAttachment[1] = path.join(process.cwd(),'documents', 'Questionnaire.pdf')
+
      
         attachment[0] = fs.readFileSync(pathToAttachment[0]).toString("base64")
         attachment[1] = fs.readFileSync(pathToAttachment[1]).toString("base64")
-    attachments[0]={
+        attachments[0]={
             content:attachment[0],
             filename:req.body.filenameOffre,
             contentType: 'application/pdf',
             path:pathToAttachment[0]}
-            attachments[1]={
-        content:attachment[1],
-                    filename:'Questionnaire évaluation avant formation.pdf',
-                    contentType: 'application/pdf',
-                    path:pathToAttachment[1] }
-                    if(req.body.filename){
-                        attachments[2]={  content:process.env.fileInfo+req.body.filename, 
-                            filename:req.body.filenameProgramme,
-                            contentType: 'application/pdf',
-                            path:process.env.fileInfo+req.body.filename}
-                      }
+     attachments[1]={
+      content:attachment[1],
+       filename:'Questionnaire .pdf',
+        contentType: 'application/pdf',
+        path:pathToAttachment[1] }
+        if(req.body.filename){
+            pathToAttachment[2] = path.join(req.body.shemaDossie+"/1_Offre", 'programme de formation.pdf')
+            attachment[2] = fs.readFileSync(pathToAttachment[2]).toString("base64")
+            attachments[2]=  {
+                content:attachment[2],
+                 filename:'programme de formation.pdf',
+                  contentType: 'application/pdf',
+                  path:pathToAttachment[2] }
 
+        }
+  
+  
                       let smtpTransport = nodemailer.createTransport({
                         host:req.body.host,
                         port:465,
@@ -1404,7 +1467,54 @@ exports.sendPdf = (req,res)=>{
                                    
                                 })
                                 } 
-                
+             if(req.params.typeEnvoye=="sendAttestation"){
+
+           var listStagaire=req.body.listStagaire
+            var pathToAttachment=[] 
+             var attachments=[]
+           var attachment=[]
+                                
+          for( var i=0;i<listStagaire.length;i++){
+            pathToAttachment[i] = path.join("./test/Attestation de formation"+listStagaire[i].titre +" "+listStagaire[i].nom+" "+listStagaire[i].prenom+".pdf")
+            attachment[i] = fs.readFileSync(pathToAttachment[i]).toString("base64")
+            attachments[i]= {
+                content:attachment[i],
+                filename:"Attestation de formation"+listStagaire[i].titre +" "+listStagaire[i].nom+" "+listStagaire[i].prenom+".pdf",
+                contentType: 'application/pdf',
+                path:pathToAttachment[i]
+            }
+            }
+                                  
+          let smtpTransport = nodemailer.createTransport({
+         host:req.body.host,
+          port:465,
+        secure:true,
+         auth:{ 
+           user:req.body.EmailUser,
+           pass:req.body.PassEmail
+      },
+      tls:{rejectUnauthorized:false}
+          })
+                                
+                                            
+                                                smtpTransport.sendMail({ 
+                                                    from:req.body.EmailUser,
+                                                    to:req.body.email,
+                                                    subject:req.body.subject,
+                                                    html:req.body.linun+"<br/> Bien cordialement.",
+                                                    attachments:attachments
+                                                },function(error,info){
+                                            
+                                                    if(error){
+                                                        console.log(error);
+                                                    }
+                                                    else{
+                                
+                                                        res.send("email send")
+                                                    }
+                                                   
+                                                })
+                                                }         
 
 }
 
@@ -1433,7 +1543,26 @@ exports.createPdfConvocation =  ( req,res)=>{
     
   
     }
+    exports.billonExercice = async ( req,res)=>{ 
+       
+        try {
+            const Offre = await offre.aggregate([
+                { $match: { TypeFinance: ["Mixte","Client" ]} },
 
+                {$group: {_id: null,
+                     qtt_tot: {$sum: "$PrixTotal"}}}
+            ])
+        
+      
+     
+
+        res.status(200).json(Offre);
+    } catch (error) {
+        res.status(400).json({
+            status: 'failed',
+            error
+        });
+    } }
     exports.sendPdfConvocation =  ( req,res)=>{
   
         if(req.params.typeSend=="sendConditaure"){
@@ -1472,7 +1601,7 @@ exports.createPdfConvocation =  ( req,res)=>{
                   attachments:[
                       {
                           content:attachment1,
-                          filename:"Convocation",
+                          filename:req.body.nomFile,
                           contentType: 'application/pdf',
                           path:pathToAttachment1
                       },
@@ -1527,7 +1656,7 @@ exports.createPdfConvocation =  ( req,res)=>{
                     attachments:[
                         {
                             content:attachment1,
-                            filename:"Convocation",
+                            filename:req.body.nomFile,
                             contentType: 'application/pdf',
                             path:pathToAttachment1
                         }

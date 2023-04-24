@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { mettreDansZip,viderDossier,getDonneFacturation,createPdf,getDonneFeuilEmagement,getDonneFormateur,createPdfConvocation,sendPdfConvocation,copeFilePdf, fetchPdf, sendPdf, getSessionById,getDonneOffre,getDonneDocument,getDonneConvocation,getDonneConvention, updateSession, deleteSession,search, Register } = require('../controllers/sessionController');
+const { mettreDansZip,viderDossier,billonExercice,getDonneFacturation,createPdf,getDonneFeuilEmagement,getDonneFormateur,createPdfConvocation,sendPdfConvocation,copeFilePdf, fetchPdf, sendPdf, getSessionById,getDonneOffre,getDonneDocument,getDonneConvocation,getDonneConvention, updateSession, deleteSession,search, Register } = require('../controllers/sessionController');
   
 router.route('/search').get(search);
 router.route('/:id').get(getSessionById);
@@ -24,7 +24,8 @@ router.get('/vider/dossie',viderDossier)
 
       
 router.get('/showPdf/:nomFile',fetchPdf) 
- 
+router.get('/billon/Exercie',billonExercice) 
+
 router.post('/createPdfConcocation/:typeSend',createPdfConvocation) 
 router.post('/sendPdfConcocation/:typeSend',sendPdfConvocation) 
 

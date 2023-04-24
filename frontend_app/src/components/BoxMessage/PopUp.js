@@ -5,7 +5,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import axios from 'axios';
   
   function PopUp(props){
-    const { type,email,numSession,nomFormation,nomDossier,typeFormation,TitreClient,nomClient,setshowPdf,filename,persos} = props; 
+    const { type,email,DateDebut,LieuFormation,DateFin,idOpco,numSession,nomFormation,nomDossier,typeFormation,TitreClient,nomClient,setshowPdf,filename,persos} = props; 
   const [show, setShow] = useState("true");
   const [object, setobject] = useState("");
   const [text0, settext0] = useState("");
@@ -34,12 +34,26 @@ if(type=="sendConvention"){
   settext3("")
 
 }
+if(type=="sendAttestation"){
+  setobject("les attestations de formation "+nomFormation)
+  settext0("Bonjour "+ nomClient+", ")
+  settext1("Veuillez trouver ci-joint la/les attestation(s) de formation session "+numSession+" Désignation de la formation "+nomFormation+" qui s’est déroulée du "+DateDebut+" au "+DateFin+" au "+LieuFormation+".")
+
+
+}
 if(type=="sendOffreAddConvention"){
   setobject("Offre et Convention de formation "+nomFormation+" - "+typeFormation)
   settext0("Bonjour "+TitreClient+" "+ nomClient+", ")
   settext1("Veuillez trouver ci-joint une offre, la convention ainsi que le programme de formation "+nomFormation+" - "+typeFormation)
   settext2("Si cette offre vous convient, et dès réception de votre confirmation, je vous enverrai la convention. Dans le cas échéant, je vous laisserez revenir vers moi afin de reprendre le dossier.")
   settext3("Je me tiens à votre entière disposition pour tout complément d'information.")
+
+}
+if(type=="sendFacturation"){
+  setobject("Formation "+nomFormation+" Facture")
+  settext0("Bonjour "+ nomClient+", ")
+  settext1("A l'issue de la formation "+nomFormation+" , Je me permets de vous envoyer la facture ainsi qu'un questionnaire de satisfaction à froid.")
+  settext2("Espérant que notre prestation a retenu votre satisfaction et restant à votre écoute pour tout projet de formation.")
 
 }
 if(type=="sendDocument"){
@@ -49,12 +63,20 @@ settext2("Veuillez au respect de la signature de la feuille d'émargement par de
 
 
 }
+if(type=="sendFormateur"){
+  setobject("Session "+numSession+" - contrat de formation")
+  settext1("Veuillez trouver ci-joint votre contrat de formation pour la session "+nomFormation+" qui se déroulera du "+DateDebut+" au "+DateFin+" au "+LieuFormation+".")
+  settext2("Dès votre retour, je vous enverrai les documents pédagogiques.")
+  
+  
+  }
 },[type])
 const SendEmail = async (e) => { 
     e.preventDefault()
     toast.success('email envoye !')
 
   if(type=="sendConvention"){
+    setshowPdf("false")
       const res = await axios.post(`${BASE_URL}/session/send/pdf/Convention`,{
       
         subject:object,
@@ -75,10 +97,31 @@ const SendEmail = async (e) => {
    
         console.log(response);
       })
-      setshowPdf("false")
+     
   }
+  if(type=="sendFacturation"){
+    setshowPdf("false")
+    const res = await axios.post(`${BASE_URL}/session/send/pdf/Facturation`,{
+    
+      subject:object,
+      EmailUser:user.email,
+      PassEmail:user.PassEmail,
+       email:email, 
+        host:user.host,
+      linun:text0,
+      idOpco:idOpco,
+      lindeux:text1 ,
+      lintrois: text2,
+       
+        
+       
+    }) .then(response=>{
+ 
+      console.log(response);
+    })
+}
   if(type=="sendOffreAddConvention"){
-
+    setshowPdf("false")
     const res = await axios.post(`${BASE_URL}/session/send/pdf/OffreplusConvention`,{
       
       subject:object,
@@ -96,10 +139,10 @@ const SendEmail = async (e) => {
 
       console.log(response);
     })
-    setshowPdf("false")
 
   }
   if(type=="sendOffre"){ 
+    setshowPdf("false")
 
     const res = await axios.post(`${BASE_URL}/session/send/pdf/offre`,{
     
@@ -113,6 +156,7 @@ const SendEmail = async (e) => {
         lindeux:text1 ,
         lintrois: text2,
         linquatre: text3,
+        shemaDossie:user.shemaDossie+"/"+nomDossier ,
           filenameProgramme:"Programme_"+nomFormation+"_"+  typeFormation,
           filenameOffre:"Devis "+nomFormation+" - "+typeFormation+".pdf",
         filename:filename
@@ -122,11 +166,11 @@ const SendEmail = async (e) => {
  
       console.log(response);
     })
-    setshowPdf("false")
 
   
   }
   if(type=="sendFormateur"){
+    setshowPdf("false")
     const res = await axios.post(`${BASE_URL}/session/send/pdf/sendFormateur`,{
     
     
@@ -148,21 +192,42 @@ const SendEmail = async (e) => {
 
       console.log(response);
     })
-    setshowPdf("false")
 
   
   }
   if(type=="sendDocument"){
     toast.success('email envoye !')
-
+    setshowPdf("false")
  
   
     const res = await axios.post(`${BASE_URL}/session/send/pdf/sendDocument`,{
     
-      subject:"object",
+      subject:object,
   
       linun:text1,
       lindeux:text2 ,
+      numSession: numSession,
+      listStagaire:persos,
+      email:email, 
+          host:user.host,
+       pathDossie: user.shemaDossie+"/"+nomDossier+"/4_Documents de formation",
+       EmailUser:user.email,
+      PassEmail:user.PassEmail
+        
+    })
+
+
+  }
+  if(type=="sendAttestation"){
+    toast.success('email envoye !')
+    setshowPdf("false")
+ 
+  
+    const res = await axios.post(`${BASE_URL}/session/send/pdf/sendAttestation`,{
+    
+      subject:object,
+  
+      linun:text1,
       numSession: numSession,
       listStagaire:persos,
       email:email, 

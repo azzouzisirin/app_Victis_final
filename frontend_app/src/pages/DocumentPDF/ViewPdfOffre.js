@@ -18,15 +18,8 @@ const idSession=localStorage.getItem("idSession")
 
   const [filename, setfilename] = useState()
   const [DesignationFormation,setDesignationFormation]=useState("")
-  const [RaisonSociale,setRaisonSociale]=useState("")
   const [typeFormation,settypeFormation]=useState("")
-  const [selectedTypeFormation,setselectedTypeFormation]=useState("")
-  const [subject,setsubject]=useState("")
-  const [numDevis,setnumDevis]=useState("")
-  const [linun,setlinun]=useState("")
-  const [lindeux,setlindeux]=useState("")
-  const [lintrois,setlintrois]=useState("")
-  const [linquatre,setlinquatre]=useState("")
+
   const [TypeEmail, setTypeEmail] = useState("");
 const[NomDossie,setNomDossie]= useState("");
   const [nomClient, setnomClient] = useState()
@@ -35,15 +28,13 @@ const[NomDossie,setNomDossie]= useState("");
   
     const fetchData = async () => { 
       const res = await axios.get(`${BASE_URL}/session/`+id);
-      setnumDevis(res.data.numDevis)
       settypeFormation(res.data.typeFormation)
       setnomClient(res.data.nomClient)
       settitreClient(res.data.titreClient) 
       setemail(res.data.email) 
       setfilename(res.data.filename)
-      setRaisonSociale(res.data.RaisonSociale)
+      setNomDossie(res.data.nomDossie)
       setDesignationFormation(res.data.designiationFormation)
-      setselectedTypeFormation(res.data.selectedTypeFormation)
     };
     fetchData();
     
@@ -68,17 +59,7 @@ const[NomDossie,setNomDossie]= useState("");
   
   },[]) 
 
-  useEffect(() => {
-  const fetchData = async () => { 
-  const res = await axios.get(`${BASE_URL}/session/`+id);
-  
-  setNomDossie(res.data.nomDossie)
-  
-  
-  };
-  fetchData();
-  
-  }, [idSession]);
+
 const EnregsteOffre= async (e) => {
   e.preventDefault();
  try{ 
@@ -96,17 +77,44 @@ const EnregsteOffre= async (e) => {
         },
       }; 
 
-
+   
       const res = await axios.post(BASE_URL+"/session/copeFilePdf", {
         filePath:"./documents/offre.pdf",
-        filecopy:user.shemaDossie+"/"+NomDossie+"/1_Offre/Devis "+NomDossie+".pdf"
+        filecopy:user.shemaDossie+"/"+NomDossie+"/1_Offre",
+        nomfile:"/Devis "+NomDossie+".pdf"
     }  ,
     
     config
-  ); 
+  )
+  if(filename){
+    let data = JSON.stringify({
+      "url": BASE_URL+"/fileinfo/"+filename,
+      "filename": user.shemaDossie+"/"+NomDossie+"/1_Offre/programme de formation.pdf"
+    });
+    
+    let config_1 = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: 'http://localhost:9000/downloadPdfCour',
+      headers: { 
+        'Content-Type': 'application/json'
+      },
+      data : data
+    };
+    
+    axios.request(config_1)
+    .then((response) => {
+      console.log(JSON.stringify(response.data));
+  
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
+ 
+
   toast.success('Offre bien Enregistre !')
 
- 
 
   }catch(err){
     toast.error(err)
@@ -114,13 +122,7 @@ const EnregsteOffre= async (e) => {
     console.log(err);
   }
 }
-useEffect(() => {
-  setsubject("Offre de formation "+DesignationFormation+" - "+typeFormation)
-setlinun("Bonjour "+titreClient+" "+nomClient+",")
-setlindeux("Veuillez trouver ci-joint une offre de formation "+DesignationFormation+" - "+typeFormation+" ainsi que le programme correspondant. ")
-setlintrois("Si cette offre vous convient, et dès réception de votre confirmation, je vous enverrai la convention. Dans le cas échéant, je vous laisserez revenir vers moi afin de reprendre le dossier.")
-setlinquatre("Je me tiens à votre entière disposition pour tout complément d'information.")
-  }, [titreClient,nomClient,DesignationFormation,typeFormation]);
+
 
 
 const SendEmailOffre = async (e) => { 
@@ -171,7 +173,7 @@ return(
     }, 
   }}
   reverseOrder={false}/>
-  { showPdf=="true"?<PopUp type={TypeEmail} email={email}  nomClient={nomClient} TitreClient={titreClient} nomFormation={DesignationFormation} typeFormation={typeFormation} setshowPdf={setshowPdf} filename={filename}/>:null}
+  { showPdf=="true"?<PopUp type={TypeEmail} email={email}  nomClient={nomClient} nomDossier={NomDossie} TitreClient={titreClient} nomFormation={DesignationFormation} typeFormation={typeFormation} setshowPdf={setshowPdf} filename={filename}/>:null}
 
   </div>
 

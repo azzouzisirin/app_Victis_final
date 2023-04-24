@@ -14,19 +14,12 @@ function ViewPdfConvention(props){
 
   const [titreClient, settitreClient] = useState()
   const [email, setemail] = useState()
-  const [subject,setsubject]=useState("")
   const [showPdf, setshowPdf] = useState("false")
  
-  const [filename, setfilename] = useState()
   const [DesignationFormation,setDesignationFormation]=useState("")
-  const [RaisonSociale,setRaisonSociale]=useState("")
   const [typeFormation,settypeFormation]=useState("")
-  const [selectedTypeFormation,setselectedTypeFormation]=useState("")
-  const [numSession,setnumSession]=useState("")
   const [numDevis,setnumDevis]=useState("")
-  const [linun,setlinun]=useState("")
-  const [lindeux,setlindeux]=useState("")
-  const [lintrois,setlintrois]=useState("")
+ 
   const [nomDossie,setnomDossie]=useState("")
 
   const [nomClient, setnomClient] = useState()
@@ -34,17 +27,13 @@ function ViewPdfConvention(props){
   
 const fetchData = async () => { 
   const res = await axios.get(`${BASE_URL}/session/`+id);
-  setnumSession(res.data.numSession)
   setnomDossie(res.data.nomDossie)
   setnumDevis(res.data.numDevis)
   settypeFormation(res.data.typeFormation)
   setnomClient(res.data.nomClient)
   settitreClient(res.data.titreClient) 
   setemail(res.data.email) 
-  setfilename(res.data.filename)
-  setRaisonSociale(res.data.RaisonSociale)
   setDesignationFormation(res.data.designiationFormation)
-  setselectedTypeFormation(res.data.selectedTypeFormation)
 };
 fetchData();
 
@@ -91,7 +80,8 @@ const EnregsteOffre= async (e) => {
 
       const res = await axios.post(BASE_URL+"/session/copeFilePdf", {
         filePath:"./documents/Convention.pdf", 
-        filecopy:user.shemaDossie+"/"+nomDossie+"/2_Convention/Convention de formation professionnelle_"+numDevis+".pdf"
+        filecopy:user.shemaDossie+"/"+nomDossie+"/2_Convention",
+        nomfile:"/Convention de formation professionnelle_"+numDevis+".pdf"
     }  ,
     
     config
@@ -106,12 +96,7 @@ const EnregsteOffre= async (e) => {
     console.log(err);
   }
 }
-useEffect(() => {
-  setsubject("Convention de formation "+DesignationFormation+" - "+typeFormation)
-setlinun("Bonjour "+DesignationFormation+" - "+typeFormation+",")
-setlindeux("Veuillez trouver ci-joint la convention de formation CATIA-initiation")
-setlintrois("Dès réception de votre retour, je vous enverrai la convocation ainsi que le reste des documents pédagogiques.")
-  }, []);
+
 
 
 const SendEmailConvention = async (e) => {

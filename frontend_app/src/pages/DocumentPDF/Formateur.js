@@ -62,6 +62,39 @@ import PopUp from '../../components/BoxMessage/PopUp'
         setprixNet(res.data.prixNet)
         setprixGlobal(res.data.prixGlobal)
           setTypeFormation(res.data.TypeFormation)
+          await  axios.post(BASE_URL+"/session/createPdf/RapportFormateur", 
+          {
+            numSession: res.data.numSession,
+            nomFormateur: res.data.nomFormateur,
+            raisonClient: res.data.raisonClient,
+            nomFormation: res.data.nomFormation,
+            DateFin: res.data.DateFin,
+            adress_1Formateur: res.data.adress_1Formateur,
+            adress_2Formateur:res.data.adress_2Formateur,
+            CodePostalFormateur: res.data.CodePostalFormateur,
+            numTel: res.data.numTel,
+            emailFormateur: res.data.emailFormateur,
+            nombStagaire: res.data.nombStagaire,
+            DateDebut: res.data.DateDebut,
+            duree: res.data.duree,
+            LieuFormation: res.data.LieuFormation,
+            HeureFormation: res.data.HeureFormation,
+            tva: res.data.tva,
+            prixTva:res.data.prixTva,
+            codeVilleFormation:res.data.codeVilleFormation,
+            prixNet:res.data.prixNet,
+            prixGlobal:res.data.prixGlobal,
+            TypeFormation:res.data.TypeFormation,
+        }  )
+       
+         .then(()=>{    
+      
+        axios.get(`${BASE_URL}/session/showPdf/RapportFormateur`,{responseType:'blob'}).then((res2)=>{
+      
+      
+          const pdfBlob = new Blob([res2.data],{type:'application/pdf'}) 
+        setbob(URL.createObjectURL(pdfBlob))
+      })})
       }catch(err){
         console.log(err);
       }
@@ -181,7 +214,8 @@ const res1=  await axios.post(BASE_URL+"/newfolder/8_Formateur",{
 
     const res = await axios.post(BASE_URL+"/session/copeFilePdf", {
       filePath:"./documents/RapportFormateur.pdf",
-      filecopy:user.shemaDossie+"/"+nomDossier+"/8_Formateur/RapportFormateur_"+nomDossier+".pdf"
+      filecopy:user.shemaDossie+"/"+nomDossier+"/8_Formateur",
+      nomfile:"/RapportFormateur_"+nomDossier+".pdf"
   }  ,
   
   config
@@ -189,7 +223,8 @@ const res1=  await axios.post(BASE_URL+"/newfolder/8_Formateur",{
  
 const res2 = await axios.post(BASE_URL+"/session/copeFilePdf", {
   filePath:"./documents/ContratFormation.pdf",
-  filecopy:user.shemaDossie+"/"+nomDossier+"/8_Formateur/ContratFormation_"+nomDossier+".pdf"
+  filecopy:user.shemaDossie+"/"+nomDossier+"/8_Formateur",
+  nomfile:"/ContratFormation_"+nomDossier+".pdf"
 }  ,
 
 config
@@ -219,7 +254,7 @@ config
  
   </ul> 
 </div> 
-{ showPdf=="true"?<PopUp type="sendFormateur" email={emailFormateur}   setshowPdf={setshowPdf} />:null}
+{ showPdf=="true"?<PopUp type="sendFormateur" email={emailFormateur} nomFormation={nomFormation} DateDebut={DateDebut} DateFin={DateFin}numSession={numSession} LieuFormation={LieuFormation} setshowPdf={setshowPdf} />:null}
 <Toaster   position="bottom-right"  toastOptions={{
     success: {
       style: {

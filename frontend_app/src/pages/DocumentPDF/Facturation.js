@@ -21,6 +21,8 @@ import PopUp from '../../components/BoxMessage/PopUp'
     const [prenomOpco,setprenomOpco]=useState()
     const [mailOpco,setmailOpco]=useState()
     const [nomDossier,setnomDossier]=useState("")
+    const [nomFormation,setnomFormation]=useState("")
+    const [typeFormation,settypeFormation]=useState("")
     const user = JSON.parse(localStorage.getItem("user"));
     var username=user.titre+" "+user.nom+" "+user.prenom
 
@@ -28,9 +30,7 @@ import PopUp from '../../components/BoxMessage/PopUp'
     const [emailClient,setemailClient]=useState()
     const [DateDebut,setDateDebut]=useState()
     const [idOpco,setidOpco]=useState()
-    const [LieuFormation,setLieuFormation]=useState()
-    const [HeureFormation,setHeureFormation]=useState()
-    const [Prixtva,setPrixtva]=useState()
+ 
   const [visibleOpco,setvisibleOpco]=useState("none")
     useEffect(() => {
       const fetchData = async () => {
@@ -48,8 +48,6 @@ import PopUp from '../../components/BoxMessage/PopUp'
         setnomClient(res.data.nomClient) 
         setemailClient(res.data.emailClient) 
         setidOpco(res.data.idOpco) 
-     
-  
           
       }catch(err){
         console.log(err);
@@ -154,7 +152,8 @@ const res1=  await axios.post(BASE_URL+"/newfolder/7_Facturation",{
 
     const res = await axios.post(BASE_URL+"/session/copeFilePdf", {
       filePath:"./documents/APPRECIATION.pdf",
-      filecopy:user.shemaDossie+"/"+nomDossier+"/7_Facturation/Evaluation à froid_Apprenant ou manager.pdf"
+      filecopy:user.shemaDossie+"/"+nomDossier+"/7_Facturation",
+      nomfile:"/Evaluation à froid_Apprenant ou manager.pdf"
   }  ,
   
   config
@@ -163,14 +162,15 @@ const res1=  await axios.post(BASE_URL+"/newfolder/7_Facturation",{
  else{
   const res2 = await axios.post(BASE_URL+"/session/copeFilePdf", {
     filePath:"./documents/FeuilleOpco.pdf",
-    filecopy:user.shemaDossie+"/"+nomDossier+"/7_Facturation/Feuille d'évaluation OPCO.pdf"
+    filecopy:user.shemaDossie+"/"+nomDossier+"/7_Facturation",
+    nomfile:"/Feuille d'évaluation OPCO.pdf"
   }  ,
   
   config
   ); 
  }
 
-  toast.success('Formateur bien Enregistre !')
+  toast.success('Facturation bien Enregistre !')
 
  
 
@@ -195,7 +195,7 @@ const res1=  await axios.post(BASE_URL+"/newfolder/7_Facturation",{
  
   </ul> 
 </div> 
-{ showPdf=="true"?<PopUp type="sendFormateur" email={nomClient}   setshowPdf={setshowPdf} />:null}
+{ showPdf=="true"?<PopUp type="sendFacturation" email={emailClient} idOpco={idOpco} nomFormation={titreFormation} nomClient={nomClient} setshowPdf={setshowPdf} />:null}
 <Toaster   position="bottom-right"  toastOptions={{
     success: {
       style: {

@@ -109,7 +109,7 @@ const deleteItem = async (id) => {
              <p style={{fontSize:'20px',fontFamily:"sans-serif"}}> {s.prix}  </p> 
              </>
               ))}</td>
-             <td> {item.nomFichie?<a href={"http://localhost:4000/fileinfo/"+item.nomFichie }target="_blank"> Voir Fichier</a>:""} </td>
+             <td> {item.nomFichie?<a href={BASE_URL+"/fileinfo/"+item.nomFichie }target="_blank"> Voir Fichier</a>:""} </td>
 
              <td>
 

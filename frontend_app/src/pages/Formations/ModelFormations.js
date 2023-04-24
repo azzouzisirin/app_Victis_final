@@ -15,7 +15,6 @@ export default function ModelFormations(props ) {
     const [DureeHeur, setDureeHeur] = useState('');
  
     const [Prix, setPrix] = useState('');
-    const [NomFichie, setNomFichie] = useState('');
      useEffect(()=>{
       if(idforma){
         const getItemsList = async () => {
@@ -27,7 +26,6 @@ export default function ModelFormations(props ) {
             setDureeHeur(res.data.DureeHeur);
 
             setPrix(res.data.Prix);
-            setNomFichie(res.data.nomFichie);
            
           }catch(err){
             console.log(err);
@@ -55,7 +53,7 @@ export default function ModelFormations(props ) {
             redirect: 'follow'
           };
           
-          fetch("/upload", requestOptions)
+          fetch(BASE_URL+"/upload", requestOptions)
             .then(response => response.text())
             .catch(error => console.log('error', error));
             
