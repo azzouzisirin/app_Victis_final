@@ -99,8 +99,8 @@ const [nomFormation, setnomFormation] = useState("");
       },config)  
 
       for(var i=0 ; i<persos.length; i++){
-  
-      const res2=     axios.post(BASE_URL+"/session/createPdfConcocation/sendConditaure", {
+ 
+        const res2=     axios.post(BASE_URL+"/session/createPdfConcocation/sendConditaure", {
             NumSession:NumSession,
             nomStagaire:persos[i].titre+" "+persos[i].prenom+" "+persos[i].nom,
            Contact:Contact, 
@@ -121,7 +121,7 @@ const [nomFormation, setnomFormation] = useState("");
 
        } ,config) 
       }
-  
+   
       
       
     
@@ -253,8 +253,8 @@ const [nomFormation, setnomFormation] = useState("");
     setNew_dataResponsable({...new_dataResponsable,titre:"M.",prenom:"", nom: "", fonction: "", email:""});
     }else{
 
-      const newState = sousResponsable.map((obj,index) => {
-         if (index === indexp) {
+      const newState = sousResponsable.map((obj,index) => { 
+         if (index === indexpResponsable) {
            return {...obj, titre: new_dataResponsable.titre, prenom:new_dataResponsable.prenom,nom:new_dataResponsable.nom,fonction:new_dataResponsable.fonction,email:new_dataResponsable.email,envoye:new_dataResponsable.envoye};
          }
    
@@ -297,7 +297,7 @@ const [nomFormation, setnomFormation] = useState("");
  
   if(chekResponsable==false){
           for(var i=0 ; i<persos.length; i++){
-
+            if(persos[i].envoye==true){
         const res = await axios.post(`${BASE_URL}/session/sendPdfConcocation/sendConditaure`,{
         
           subject:"Convocation Formation "+nomFormation  +"- Perfectionnement_"+persos[i].titre+" "+ persos[i].nom+" " +persos[i].prenom,
@@ -318,7 +318,7 @@ const [nomFormation, setnomFormation] = useState("");
         })
    
       }
-    }
+    }}
     if(chekResponsable==true){
       var ccemail=[""]
       if(chekAutres==true){
