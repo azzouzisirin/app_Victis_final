@@ -299,6 +299,79 @@ exports.getDonneOffre = async (req, res) => {
         });
     }
 };
+exports.affichePDF = async (req, res) => { 
+    try {
+        const Offre = await offre.findById(req.params.id);
+        const Session = await session.findById(req.params.id);
+        var Client={}
+        const nomUtilisateur=req.params.nomUtilisateur
+        Offre.IdClient?   Client = await client.findById(Offre.IdClient): Client = {}
+        var ParcourCollectif=''
+        if(Offre.ParcourCollectif==true){
+            ParcourCollectif="Parcours collectif"
+        } else{
+           if(Offre.NbStage==1){
+            ParcourCollectif="1 personne"
+           }else{
+            ParcourCollectif=Offre.NbStage+" personnes"
+           }
+           
+
+        }        var prixtva=Offre.PrixTVA.toString()
+        prixtva.length>3 ? prixtva=prixtva.substring(0,prixtva.length-3)+" "+prixtva.substr(-3):null
+        
+        var prixNet=Offre.prixNet.toString()
+        prixNet.length>3 ? prixNet=prixNet.substring(0,prixNet.length-3)+" "+prixNet.substr(-3):null
+      
+        var PrixTotal=Offre.PrixTotal.toString()
+        PrixTotal.length>3 ? PrixTotal=PrixTotal.substring(0,PrixTotal.length-3)+" "+PrixTotal.substr(-3):null
+      
+        var date1=Offre.DateDebut.substring(8, 10)+"/"+Offre.DateDebut.substring(5, 7)+'/'+Offre.DateDebut.substring(0, 4)
+        var date2=Offre.DateFin.substring(8, 10)+"/"+Offre.DateFin.substring(5, 7)+'/'+Offre.DateFin.substring(0, 4)
+    
+     
+    
+        pdf.create(pdfTemplateOffre({  
+            numSession: Session.numSession,
+            NumDevis: Session.numDevis,
+            nomUtilisateur:nomUtilisateur,
+            RaisonClient: Client.raisonSociale,
+            adress_1Client: Client.adresse_1,
+            adress_2Client: Client.adresse_2,
+            CodePostalClient:Client.codeVille,
+            emailClient: Client.email,
+            numClient:Client.tel,
+            nomClient:Client.titre+" "+Client.nom+" "+Client.prenom,
+            portableClient:Client.portable,
+            rythme:Offre.rythme,
+            typeFormation :Offre.TypeFormation,
+            DateDebut:date1,
+            duree  :Offre.DureeJour+" jours, soit "+ Offre.DureeHeur +" heures",
+            lieuFormation:Offre.lieuFormation,
+            nomFormation :Offre.designiationFormation,
+            categFormation:Offre.typeFormation,
+            DateFinFormation :date2,
+            numbstage :ParcourCollectif,
+            tva:Offre.Tva,
+            prixTva:prixtva ,
+            codeVilleFormation:Offre.codeVilleFormation,
+            prixNet:prixNet,
+            prixGlobal:PrixTotal,
+          
+          
+        }),{}).toFile('./documents/offre.pdf',(err)=>{
+            if(err){
+                console.log(err);
+            }
+            res.sendFile(path.join(process.cwd(),'documents', 'offre.pdf'))
+        }) 
+    } catch (error) {
+        res.status(400).json({
+            status: 'failed',
+            error
+        });
+    }
+};
 exports.getDonneFacturation = async (req, res) => { 
     try {
         const Offre = await offre.findById(req.params.id);

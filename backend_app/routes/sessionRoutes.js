@@ -1,10 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const { mettreDansZip,viderDossier,billonExercice,getDonneFacturation,createPdf,getDonneFeuilEmagement,getDonneFormateur,createPdfConvocation,sendPdfConvocation,copeFilePdf, fetchPdf, sendPdf, getSessionById,getDonneOffre,getDonneDocument,getDonneConvocation,getDonneConvention, updateSession, deleteSession,search, Register } = require('../controllers/sessionController');
+const { mettreDansZip,viderDossier,billonExercice,affichePDF,getDonneFacturation,createPdf,getDonneFeuilEmagement,getDonneFormateur,createPdfConvocation,sendPdfConvocation,copeFilePdf, fetchPdf, sendPdf, getSessionById,getDonneOffre,getDonneDocument,getDonneConvocation,getDonneConvention, updateSession, deleteSession,search, Register } = require('../controllers/sessionController');
   
 router.route('/search').get(search);
 router.route('/:id').get(getSessionById);
 router.route('/getDonneOffre/:id/:nomUtilisateur').get(getDonneOffre);
+router.route('/affichePDF/:id/:nomUtilisateur').get(affichePDF);
+
 router.route('/getDonneDocument/:id/:nomStagaire').get(getDonneDocument);
 router.route('/getDonneFormateur/:id').get(getDonneFormateur);
 
