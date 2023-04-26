@@ -66,7 +66,7 @@ return(
         <div className='modelRight'> 
     
           <label> schéma Document :</label><br/>
-      <input type="text" title="sous forme C:/User" value={shemaDossie} onChange={e => {setshemaDossie(e.target.value)} }/> <br/>
+      <input type="text" title=" C:/User..." value={shemaDossie} onChange={e => {setshemaDossie(e.target.value)} }/> <br/>
       <label> mot de passe :</label><br/>
       <input type="text"  value={password} onChange={e => {setpassword(e.target.value)} }/> <br/>
   </div>

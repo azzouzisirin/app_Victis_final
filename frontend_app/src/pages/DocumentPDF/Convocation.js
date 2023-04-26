@@ -328,7 +328,6 @@ const [nomFormation, setnomFormation] = useState("");
       var ccemail=[""]
       if(chekAutres==true){
         for(var i=0; i<sousResponsable.length;i++){
-          alert(sousResponsable[i].email)
         ccemail[i]=sousResponsable[i].email
         }
       }

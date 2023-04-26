@@ -2150,17 +2150,24 @@ exports.createPdfConvocation =  ( req,res)=>{
     exports.billonExercice = async ( req,res)=>{ 
        
         try {
-            const Offre = await offre.aggregate([
-                { $match: { TypeFinance: ["Mixte","Client" ]} },
+            var varfinanceGroup = { $group : {"_id" : "$TypeFinance", "total" : {$sum : "$PrixTotal"} } };
+            const financeGroup = await offre.aggregate([
 
-                {$group: {_id: null,
-                     qtt_tot: {$sum: "$PrixTotal"}}}
+                varfinanceGroup
             ])
-        
+            const varfinancesomme = await offre.aggregate([ {
+                $group: {
+                   _id: null,
+                   "PrixTotal": {
+                      $sum:"$PrixTotal"
+                   }
+                }
+             } ] )
+
       
      
 
-        res.status(200).json(Offre);
+        res.status(200).json({financeGroup:financeGroup,varfinancesomme:varfinancesomme});
     } catch (error) {
         res.status(400).json({
             status: 'failed',

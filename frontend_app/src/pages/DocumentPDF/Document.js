@@ -16,11 +16,12 @@ import {  ChevronLeft,ExpandMore } from '@material-ui/icons'
     const[isOpenFeuilEmarg ,setisOpenFeuilEmarg] = useState(false);
     const [nomFormation,setnomFormation]=useState("")
     const [typeFormation,settypeFormation]=useState("")
-
+    const[DureeJour,setDureeJour]=useState()
+    const[CalendrieFormation,setCalendrieFormation]=useState()
     const[isOpenFeuilleEvaluation ,setIsOpenFeuilleEvaluation] = useState(false);
     const user = JSON.parse(localStorage.getItem("user"));
     const [showPdf, setshowPdf] = useState("false")
-
+const[rythme,setrythme]=useState()
     const [emailFormateur, setemailFormateur] = useState("");
 
     const [numSession,setnumSession]=useState("")
@@ -44,7 +45,9 @@ const[nomDossie,setnomDossie]=useState()
         setTypeFormation(res.data.TypeFormation)
         setnomFormation(res.data.designiationFormation)
         settypeFormation(res.data.typeFormation)
-
+        setDureeJour(res.data.DureeJour)
+        setCalendrieFormation(res.data.CalendrieFormation)
+   setrythme(res.data.rythme)
           const res1 = await axios.get(`${BASE_URL}/session/${id}`);
           setnumSession(res1.data.numSession) 
           setnomDossie(res1.data.nomDossie)
@@ -126,7 +129,9 @@ const VoirFeruilEmargSimple=async(titre,nom,prenom)=>{
 const VoirFeuilleEmagement=async()=>{
 
      
-
+if(rythme=="En discontinu"&& CalendrieFormation.length!=DureeJour){
+  toast.error("remplir le tableau de date correctement")
+}
       axios.post(`${BASE_URL}/session/afficheFeuillEmargment/${id}/n`,{},{responseType:'blob'}).then((res2)=>{
 
         const pdfBlob = new Blob([res2.data],{type:'application/pdf'}) 

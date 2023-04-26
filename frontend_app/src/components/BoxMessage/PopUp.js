@@ -199,7 +199,6 @@ const SendEmail = async (e) => {
     toast.success('email envoye !')
     setshowPdf("false")
  
-  alert(typeFormation)
     const res = await axios.post(`${BASE_URL}/session/send/pdf/sendDocument`,{
     
       subject:object,

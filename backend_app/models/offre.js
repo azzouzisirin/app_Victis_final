@@ -105,7 +105,7 @@ prixNet: {
  
   TypeFinance: {
         type: String,
-        default:"0",
+        default:"Client",
     },
   TranspDistance: {
         type: String,

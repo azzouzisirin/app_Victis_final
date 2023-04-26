@@ -15,7 +15,8 @@ titre: {
     },
     host: { 
       type: String, 
-      unique: true,
+      default:""
+
   },
     password: {
         type: String,

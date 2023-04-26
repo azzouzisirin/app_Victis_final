@@ -1,10 +1,22 @@
 
 import React, { useState, useEffect ,useRef} from 'react'
 import './bilan.css'
+import axios from 'axios';
+import {BASE_URL} from "../../helper"
 
 import Sidebar from '../../components/navBar/Sidebar';
 function Bilan(){
-
+  const [financeGroup, setfinanceGroup] = useState([]);
+const[varfinancesomme,setvarfinancesomme]= useState([]);
+  useEffect(() => {
+  const fetchData = async () => { 
+  const res = await axios.get(`${BASE_URL}/session/billon/Exercie`);
+  setfinanceGroup(res.data.financeGroup)
+  setvarfinancesomme(res.data.varfinancesomme)
+  };
+  fetchData();
+  
+  }, []);
 return(
   
     <Sidebar>
@@ -24,23 +36,37 @@ return(
   </tr>
   <tr>
     <td style={{width:"80%",textAlign:"left",paddingLeft:"15px"}}>Des entreprises pour la formation de leurs salariés :   </td>
-    <td style={{width:"20%"}}>€ </td>
+    {financeGroup.filter(person => person._id =="Client").map(filteredPerson => (
+      <td style={{width:"20%"}}>
+          {filteredPerson.total} € </td>
+      ))}
   </tr>
   <tr>
     <td style={{textAlign:"left",paddingLeft:"15px"}}>Des organismes gestionnaires des fonds de la formation professionnelle pour des actions dispensées dans le cadre : du plan de développement des compétences ou d’autres dispositifs : </td>
-    <td>€ </td>
+    {financeGroup.filter(person => person._id =="Opco").map(filteredPerson => (
+      <td style={{width:"20%"}}>
+          {filteredPerson.total} € </td>
+      ))}
+
+    
   </tr>
   <tr>
     <td style={{textAlign:"left",paddingLeft:"15px"}}> De contrats conclus avec des personnes à titre individuel et à leurs frais :</td>
-    <td>€ </td>
+    {financeGroup.filter(person => person._id =="Mixte").map(filteredPerson => (
+      <td style={{width:"20%"}}>
+          {filteredPerson.total} € </td>
+      ))}
   </tr>
   <tr>
     <td style={{textAlign:"left",paddingLeft:"15px"}}>De contrats conclus avec d’autres organismes de formation (y compris CFA) :</td>
-    <td>€ </td>
+    <td style={{width:"20%"}}>
+          € </td>
   </tr>
   <tr>
     <td style={{fontWeight:"800"}}> Total des produits réalisés au titre de la formation professionnelle (total des lignes 1 à 11)</td>
-    <td>€ </td>
+   
+        <td>  {varfinancesomme[0].PrixTotal} € </td>
+   
   </tr>
 </table>
 </div>
