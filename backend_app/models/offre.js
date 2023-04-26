@@ -30,6 +30,18 @@ const UserSchema = new mongoose.Schema({
    DateFin: {
         type: String,
 
+
+    },
+    chekAutres: {
+        type: Boolean,
+        default:false
+
+    },
+    chekResponsable: {
+        type: Boolean,
+        default:false
+
+
     },
    rythme: {
         type: String,

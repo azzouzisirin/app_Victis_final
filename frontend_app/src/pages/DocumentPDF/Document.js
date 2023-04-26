@@ -12,7 +12,7 @@ import {  ChevronLeft,ExpandMore } from '@material-ui/icons'
   function Document(props){
     const { id} = props;
 
-    const[isOpenCertificat ,setIsOpenCertificat] = useState(false);
+    const[isOpenCertificat ,setIsOpenCertificat] = useState(true);
     const[isOpenFeuilEmarg ,setisOpenFeuilEmarg] = useState(false);
     const [nomFormation,setnomFormation]=useState("")
     const [typeFormation,settypeFormation]=useState("")
@@ -49,7 +49,18 @@ const[nomDossie,setnomDossie]=useState()
           setnumSession(res1.data.numSession) 
           setnomDossie(res1.data.nomDossie)
           setNomDossie(res1.data.nomDossie)
+          axios.get(`${BASE_URL}/session/affichePDFCertificReal/${id}/0`,{responseType:'blob'}).then((res2)=>{
 
+
+            const pdfBlob = new Blob([res2.data],{type:'application/pdf'}) 
+          setbob(URL.createObjectURL(pdfBlob))
+          
+          })
+          const res2 = await axios.post(BASE_URL+"/session/copeFilePdf", {
+            filePath:"./documents/CertificatRealisation.pdf",
+            filecopy:"./test",
+            nomfile:"/certificat_"+res.data.listStagaire[0].titre+" "+res.data.listStagaire[0].nom+" "+res.data.listStagaire[0].prenom+".pdf"})
+        
       }catch(err){
         console.log(err);
       }
@@ -69,26 +80,17 @@ const[nomDossie,setnomDossie]=useState()
       
     },[])
 
-const VoirCertificat=async(titre,nom,prenom)=>{
+const VoirCertificat=async(titre,nom,prenom,index)=>{
   var nomStagaire=titre+" "+nom+" "+prenom
-      await axios.get(`${BASE_URL}/session/getDonneDocument/${id}/${nomStagaire}`)
-      .then((res)=>{   
-        axios.post(BASE_URL+"/session/createPdf/CertificatRealisation", res.data  )
+  
      
-       .then(()=>{   
-     
-      axios.get(`${BASE_URL}/session/showPdf/CertificatRealisation`,{responseType:'blob'}).then((res2)=>{
+      axios.get(`${BASE_URL}/session/affichePDFCertificReal/${id}/${index}`,{responseType:'blob'}).then((res2)=>{
 
 
         const pdfBlob = new Blob([res2.data],{type:'application/pdf'}) 
-        console.log("2"+pdfBlob)
       setbob(URL.createObjectURL(pdfBlob))
-   })})})
-   const config = {  
-    headers: { 
-      "Content-type": "application/json",
-    },
-  }; 
+   })
+
   const res = await axios.post(BASE_URL+"/session/copeFilePdf", {
     filePath:"./documents/CertificatRealisation.pdf",
     filecopy:"./test",
@@ -102,21 +104,14 @@ const VoirFeruilEmargSimple=async(titre,nom,prenom)=>{
       "Content-type": "application/json",
     },
   };
-      await axios.post(`${BASE_URL}/session/getDonneFeuilEmagement/${id}/${TypeFormation}`,
-      {nomStagaire:nomStagaire},
-        
-      config2)
-      .then((res)=>{   
-        axios.post(BASE_URL+"/session/createPdf/FeuilleEmargement", res.data  )
+    
      
-       .then(()=>{   
-     
-      axios.get(`${BASE_URL}/session/showPdf/FeuilleEmargement`,{responseType:'blob'}).then((res2)=>{
+      axios.post(`${BASE_URL}/session/afficheFeuillEmargment/${id}/${TypeFormation}`,{nomStagaire:nomStagaire},{responseType:'blob'}).then((res2)=>{
 
 
         const pdfBlob = new Blob([res2.data],{type:'application/pdf'}) 
       setbob(URL.createObjectURL(pdfBlob))
-   })})})
+   })
    const config = {  
     headers: { 
       "Content-type": "application/json",
@@ -130,17 +125,13 @@ const VoirFeruilEmargSimple=async(titre,nom,prenom)=>{
 }  
 const VoirFeuilleEmagement=async()=>{
 
-      await axios.post(`${BASE_URL}/session/getDonneFeuilEmagement/${id}/n`)
-      .then((res)=>{    
-        axios.post(BASE_URL+"/session/createPdf/FeuillEmargment", res.data  )
      
-       .then(()=>{    
 
-      axios.get(`${BASE_URL}/session/showPdf/FeuilleEmargement`,{responseType:'blob'}).then((res2)=>{
+      axios.post(`${BASE_URL}/session/afficheFeuillEmargment/${id}/n`,{},{responseType:'blob'}).then((res2)=>{
 
         const pdfBlob = new Blob([res2.data],{type:'application/pdf'}) 
       setbob(URL.createObjectURL(pdfBlob))
-   })})})
+   })
    
 }
 
@@ -309,8 +300,8 @@ toast.success('Documents bien Enregistre !')
           {isOpenCertificat ?  
           <div className='souList'> 
           <ul className='souList'>
-          {persos.map((p) => (
-           <li > <a onClick={()=>VoirCertificat(p.titre,p.nom,p.prenom)}> {p.nom} {p.prenom}</a></li>  
+          {persos.map((p,index) => (
+           <li > <a onClick={()=>VoirCertificat(p.titre,p.nom,p.prenom,index)}> {p.nom} {p.prenom}</a></li>  
             ))}
           </ul></div>:null}
           {TypeFormation=="En distanciel" ? <>
@@ -336,7 +327,7 @@ toast.success('Documents bien Enregistre !')
 
           </ul> 
         </div> 
-        { showPdf=="true"?<PopUp type="sendDocument" email={emailFormateur} nomFormation={nomFormation} typeFormation={typeFormation} persos={persos} setshowPdf={setshowPdf} nomDossier={nomDossie} numSession={numSession}/>:null}
+        { showPdf=="true"?<PopUp type="sendDocument" email={emailFormateur} nomFormation={nomFormation} typeFormation={TypeFormation} persos={persos} setshowPdf={setshowPdf} nomDossier={nomDossie} numSession={numSession}/>:null}
         <Toaster   position="bottom-right"  toastOptions={{
     success: {
       style: {

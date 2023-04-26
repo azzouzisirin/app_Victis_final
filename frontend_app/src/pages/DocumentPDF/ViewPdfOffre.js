@@ -41,19 +41,17 @@ const[NomDossie,setNomDossie]= useState("");
     
     }, []);
   useEffect (()=>{  
+
     const checkoffre =async()=>{ 
-      await axios.get(BASE_URL+"/session/getDonneOffre/"+id+"/"+username)
-      .then((res)=>{ 
-        axios.post(BASE_URL+"/session/createPdf/offre", res.data  )
-     
-       .then(()=>{   
-     
-      axios.get(`${BASE_URL}/session/showPdf/offre`,{responseType:'blob'}).then((res2)=>{
+  
+    axios.get(BASE_URL+"/session/affichePDFOffre/"+id+"/"+username,{responseType:'blob'}).then((res2)=>{
 
 
-        const pdfBlob = new Blob([res2.data],{type:'application/pdf'}) 
-      setbob(URL.createObjectURL(pdfBlob))
-   })})})}
+      const pdfBlob = new Blob([res2.data],{type:'application/pdf'}) 
+    setbob(URL.createObjectURL(pdfBlob))
+ })
+   
+    }
     
     checkoffre()
   

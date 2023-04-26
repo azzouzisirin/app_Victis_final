@@ -299,7 +299,7 @@ exports.getDonneOffre = async (req, res) => {
         });
     }
 };
-exports.affichePDF = async (req, res) => { 
+exports.affichePDFOffre = async (req, res) => { 
     try {
         const Offre = await offre.findById(req.params.id);
         const Session = await session.findById(req.params.id);
@@ -364,6 +364,72 @@ exports.affichePDF = async (req, res) => {
                 console.log(err);
             }
             res.sendFile(path.join(process.cwd(),'documents', 'offre.pdf'))
+        }) 
+    } catch (error) {
+        res.status(400).json({
+            status: 'failed',
+            error
+        });
+    }
+};
+
+exports.affichePDFConvention = async (req, res) => { 
+    try {
+        const Offre = await offre.findById(req.params.id);
+        var Client={}
+         Offre.IdClient?   Client = await client.findById(Offre.IdClient): Client = {}
+         var ParcourCollectif=''
+         if(Offre.ParcourCollectif==true){
+             ParcourCollectif="Parcours collectif"
+         } else{
+            if(Offre.NbStage==1){
+             ParcourCollectif="1 personne"
+            }else{
+             ParcourCollectif=Offre.NbStage+" personnes"
+            }
+            
+ 
+         }        var date1=Offre.DateDebut.substring(8, 10)+"/"+Offre.DateDebut.substring(5, 7)+'/'+Offre.DateDebut.substring(0, 4)
+         var date2=Offre.DateFin.substring(8, 10)+"/"+Offre.DateFin.substring(5, 7)+'/'+Offre.DateFin.substring(0, 4)
+         var PrixTotal=Offre.PrixTotal.toString()
+         PrixTotal.length>3 ? PrixTotal=PrixTotal.substring(0,PrixTotal.length-3)+" "+PrixTotal.substr(-3):null
+         
+         var PrixTVA=Offre.PrixTVA.toString()
+         PrixTVA.length>3 ? PrixTVA=PrixTVA.substring(0,PrixTVA.length-3)+" "+PrixTVA.substr(-3):null
+       
+         var prixNet=Offre.prixNet.toString()
+         prixNet.length>3 ? prixNet=prixNet.substring(0,prixNet.length-3)+" "+prixNet.substr(-3):null
+       
+        
+     
+    
+        pdf.create(pdfTemplateConvention({  
+            RaisonClient:Client.raisonSociale,
+            adress_1Client: Client.adresse_1,
+            adress_2Client: Client.adresse_2,
+            CodePostalClient:Client.codeVille,
+            nomFormation:Offre.designiationFormation,
+            moduleFormation:Offre.typeFormation,
+            codeVilleFormation:Offre.codeVilleFormation,
+            typeFormation:Offre.TypeFormation,
+            module:Offre.typeFormation,
+            nombStagaire:ParcourCollectif,  
+            DateDebut:date1,
+            DateFin:date2,
+            tva:Offre.Tva,
+            duree  :Offre.DureeJour+" jours, soit "+ Offre.DureeHeur +" heures",
+            LieuFormation:Offre.lieuFormation,
+            selectedHeure:Offre.HeureFormation,
+            prixHt:PrixTotal,
+            intertva:PrixTVA,
+            prixAvecTVA:prixNet,
+          
+          
+        }),{}).toFile('./documents/Convention.pdf',(err)=>{
+            if(err){
+                console.log(err);
+            }
+            res.sendFile(path.join(process.cwd(),'documents', 'Convention.pdf'))
         }) 
     } catch (error) {
         res.status(400).json({
@@ -488,7 +554,7 @@ exports.getDonneFormateur = async (req, res) => {
     }
 };
 exports.getDonneDocument = async (req, res) => { 
-    try {
+    try { 
         const Offre = await offre.findById(req.params.id);
         const Session = await session.findById(req.params.id);
         var Client={}
@@ -522,6 +588,438 @@ exports.getDonneDocument = async (req, res) => {
         });
     }
 };
+exports.affichePDFCertificReal = async (req, res) => { 
+    try { 
+        const Offre = await offre.findById(req.params.id);
+        const Session = await session.findById(req.params.id);
+        var Client={}
+        var Formateur={}
+        var num=req.params.numb
+        Offre.IdClient?   Client = await client.findById(Offre.IdClient): Client = {}
+        Offre.idFormateur?   Formateur = await formateur.findById(Offre.idFormateur): Formateur = {}
+
+       
+        var date1=Offre.DateDebut.substring(8, 10)+"/"+Offre.DateDebut.substring(5, 7)+'/'+Offre.DateDebut.substring(0, 4)
+        var date2=Offre.DateFin.substring(8, 10)+"/"+Offre.DateFin.substring(5, 7)+'/'+Offre.DateFin.substring(0, 4)
+      
+        pdf.create(pdfCertificatRealisation({ 
+         nomFormation :Offre.designiationFormation +" - "+Offre.typeFormation,
+        salarieStagaire:Client.raisonSociale,
+        dateDebut:date1, 
+        dateFin :date2,
+        dureeFormation  :Offre.DureeJour+" jours, soit "+ Offre.DureeHeur +" heures",
+        numSession:Session.numSession,
+        nomFormateur:Formateur.titre+ " "+Formateur.nom +" "+Formateur.prenom,
+        nomSociete: Client.titre+ " "+Client.nom +" "+Client.prenom,
+        nomStagaire  :Offre.listStagaire[num].titre+" "+Offre.listStagaire[num].nom+" "+Offre.listStagaire[num].prenom ,
+       }),{}).toFile('./documents/CertificatRealisation.pdf',(err)=>{
+            if(err){
+                console.log(err);
+            }
+            res.sendFile(path.join(process.cwd(),'documents', 'CertificatRealisation.pdf'))
+        }) 
+    } catch (error) {
+        res.status(400).json({
+            status: 'failed',
+            error
+        });
+    }
+};
+
+exports.afficheFeuillEmargment = async (req, res) => { 
+    if(req.params.typeformation=="En distanciel"){
+        try {
+            const Offre = await offre.findById(req.params.id);
+            const Session = await session.findById(req.params.id);
+            var Client={}
+            var Formateur={}
+            Offre.IdClient?   Client = await client.findById(Offre.IdClient): Client = {}
+            Offre.idFormateur?   Formateur = await formateur.findById(Offre.idFormateur): Formateur = {}
+            var varDisplay=""
+            var date1=Offre.DateDebut.substring(8, 10)+"/"+Offre.DateDebut.substring(5, 7)+'/'+Offre.DateDebut.substring(0, 4)
+            var date2=Offre.DateFin.substring(8, 10)+"/"+Offre.DateFin.substring(5, 7)+'/'+Offre.DateFin.substring(0, 4)
+            var displaySig=["none","none","none","none","none","none","none","none","none","none"]
+             var dateFormation=["","","","","","","","","",""]
+             var stagaire=["","","","","","","","","",""]
+             var dureeMatin=["","","","","","","","","",""]
+             var dureeApreMidi=["","","","","","","","","",""]  
+             var titreMatin=["","","","","","","","","",""]
+             var titreApresMidi=["","","","","","","","","",""]
+             Date.prototype.addDays = function(noOfDays){
+                var tmpDate = new Date(this.valueOf());
+                tmpDate.setDate(tmpDate.getDate() + noOfDays);
+                return tmpDate;
+            } 
+            var myDate = new Date(Offre.DateDebut);  
+           
+    
+       if(Number(Offre.DureeJour)>5 ){
+      
+        varDisplay="flex"
+        if(Offre.rythme=="En continu" ){ 
+         
+            stagaire[0]=req.body.nomStagaire
+    
+            for(var i=0;i<Number(Offre.DureeJour);i++ ){
+             displaySig[i]="flex"
+    
+            dateFormation[i]=  myDate.addDays(i).getDate().toString().padStart(2, '0')+"/"+myDate.addDays(i).getMonth().toString().padStart(2, '0')+'/'+myDate.addDays(i).getFullYear()
+    
+         
+            dureeMatin[i]="9h00 - 12h00"
+            dureeApreMidi[i]="13h00 - 17h00"
+            titreMatin[i]="Matin"
+            titreApresMidi[i]="Après-midi"
+      
+           }             }
+               
+            if(Offre.rythme=="En discontinu" ){
+                stagaire[0]=req.body.nomStagaire
+    
+                for(var i=0;i<Number(Offre.DureeJour);i++ ){ 
+                    var myDateFormation = new Date(Offre.CalendrieFormation[i].date);
+                    displaySig[i]="flex"
+                   dateFormation[i]=  myDateFormation.addDays(i).getDate().toString().padStart(2, '0')+"/"+myDateFormation.addDays(i).getMonth().toString().padStart(2, '0')+'/'+myDateFormation.addDays(i).getFullYear()
+    
+               
+                   dureeMatin[i]="9h00 - 12h00"
+                   dureeApreMidi[i]="13h00 - 17h00"
+                   titreMatin[i]="Matin"
+                   titreApresMidi[i]="Après-midi"
+               
+                  }         
+            }
+       }
+         
+     
+    
+    
+     if(Number(Offre.DureeJour)<=5 ){
+        varDisplay="none"
+        if(Offre.rythme=="En continu" ){ 
+            stagaire[0]=req.body.nomStagaire
+            stagaire[5]=req.body.nomStagaire
+    
+            for(var i=0;i<Number(Offre.DureeJour);i++ ){
+             displaySig[i]="flex"
+    
+            dateFormation[i]=  myDate.addDays(i).getDate().toString().padStart(2, '0')+"/"+myDate.addDays(i).getMonth().toString().padStart(2, '0')+'/'+myDate.addDays(i).getFullYear()
+    
+            displaySig[i+5]="flex"
+    
+            dateFormation[i+5]=  myDate.addDays(i).getDate().toString().padStart(2, '0')+"/"+myDate.addDays(i).getMonth().toString().padStart(2, '0')+'/'+myDate.addDays(i).getFullYear()
+    
+            dureeMatin[i]="9h00 - 12h00"
+            dureeApreMidi[i]="13h00 - 17h00"
+            titreMatin[i]="Matin"
+            titreApresMidi[i]="Après-midi"
+            dureeMatin[i+5]="9h00 - 12h00"
+            dureeApreMidi[i+5]="13h00 - 17h00"
+            titreMatin[i+5]="Matin"
+            titreApresMidi[i+5]="Après-midi"
+           }             }
+               
+            if(Offre.rythme=="En discontinu" ){
+                stagaire[0]=req.body.nomStagaire
+    
+                for(var i=0;i<Number(Offre.DureeJour);i++ ){ 
+                    var myDateFormation = new Date(Offre.CalendrieFormation[i].date);
+                    displaySig[i]="flex"
+                    displaySig[i+5]="flex"
+                   dateFormation[i]=  myDateFormation.addDays(i).getDate().toString().padStart(2, '0')+"/"+myDateFormation.addDays(i).getMonth().toString().padStart(2, '0')+'/'+myDateFormation.addDays(i).getFullYear()
+                   dateFormation[i+5]=  myDateFormation.addDays(i).getDate().toString().padStart(2, '0')+"/"+myDateFormation.addDays(i).getMonth().toString().padStart(2, '0')+'/'+myDateFormation.addDays(i).getFullYear()
+    
+               
+                   dureeMatin[i]="9h00 - 12h00"
+                   dureeApreMidi[i]="13h00 - 17h00"
+                   titreMatin[i]="Matin"
+                   titreApresMidi[i]="Après-midi"
+                   dureeMatin[i+5]="9h00 - 12h00"
+                   dureeApreMidi[i+5]="13h00 - 17h00"
+                   titreMatin[i+5]="Matin"
+                   titreApresMidi[i+5]="Après-midi"
+                  }         
+            }
+        }
+         
+     
+    
+    
+    
+        let options = {
+            width: '12in',
+            height: '8in'
+         } 
+    
+    
+        pdf.create(pdfTemplateFeuillEmargment({ 
+                numSession:Session.numSession,
+                nomFormation :Offre.designiationFormation +" - "+Offre.typeFormation,
+                dateDebut:date1,
+                displaySig:displaySig,
+                dateFormation:dateFormation,
+                stagaire:stagaire,
+                dureeMatin:dureeMatin,
+                varDisplay:varDisplay,
+                dureeApreMidi:dureeApreMidi,
+                titreMatin:titreMatin,
+                titreApresMidi:titreApresMidi,
+                dateFin :date2,
+                dureFormation  :Offre.DureeJour+" jours, soit "+ Offre.DureeHeur +" heures",
+                LieuFormation:Offre.lieuFormation ,
+                codeVilleFormation:Offre.codeVilleFormation,
+                 }),options).toFile('./documents/FeuillEmargment.pdf',(err)=>{
+                    if(err){
+                        console.log(err);
+                    }
+                    res.sendFile(path.join(process.cwd(),'documents', 'FeuillEmargment.pdf'))
+                })
+            } catch (error) {
+                res.status(400).json({
+                    status: 'failed',
+                    error
+                });
+            }
+
+            }else if(req.params.typeformation=="n"){
+    try { 
+       
+            const Offre = await offre.findById(req.params.id);
+            const Session = await session.findById(req.params.id);
+            var Client={}
+            var Formateur={}
+            Offre.IdClient?   Client = await client.findById(Offre.IdClient): Client = {}
+            Offre.idFormateur?   Formateur = await formateur.findById(Offre.idFormateur): Formateur = {}
+            var varDisplay=""
+            var date1=Offre.DateDebut.substring(8, 10)+"/"+Offre.DateDebut.substring(5, 7)+'/'+Offre.DateDebut.substring(0, 4)
+            var date2=Offre.DateFin.substring(8, 10)+"/"+Offre.DateFin.substring(5, 7)+'/'+Offre.DateFin.substring(0, 4)
+            var displaySig=["none","none","none","none","none","none","none","none","none","none"]
+             var dateFormation=["","","","","","","","","",""] 
+             var stagaire=["","","","","","","","","",""]
+             var dureeMatin=["","","","","","","","","",""]
+             var dureeApreMidi=["","","","","","","","","",""]  
+             var titreMatin=["","","","","","","","","",""]
+             var titreApresMidi=["","","","","","","","","",""]
+             Date.prototype.addDays = function(noOfDays){
+                var tmpDate = new Date(this.valueOf());
+                tmpDate.setDate(tmpDate.getDate() + noOfDays);
+                return tmpDate;
+            } 
+            var myDate = new Date(Offre.DateDebut);  
+            var liststa=Offre.listStagaire
+           
+    
+       if(Number(Offre.DureeJour)>5 && liststa.length>5){
+      
+        varDisplay="flex"
+        if(Offre.rythme=="En continu" ){ 
+            for(var j=0;j<liststa.length;j++){
+                stagaire[j]=liststa[j].titre + " "+liststa[j].nom+" "+liststa[j].prenom
+    
+            }
+            for(var i=0;i<Number(Offre.DureeJour);i++ ){
+             displaySig[i]="flex"
+    
+            dateFormation[i]=  myDate.addDays(i).getDate().toString().padStart(2, '0')+"/"+myDate.addDays(i).getMonth().toString().padStart(2, '0')+'/'+myDate.addDays(i).getFullYear()
+    
+         
+            dureeMatin[i]="9h00 - 12h00"
+            dureeApreMidi[i]="13h00 - 17h00"
+            titreMatin[i]="Matin"
+            titreApresMidi[i]="Après-midi"
+      
+           }             }
+               
+            if(Offre.rythme=="En discontinu" ){
+                for(var j=0;j<liststa.length;j++){
+                    stagaire[j]=liststa[j].titre + " "+liststa[j].nom+" "+liststa[j].prenom
+    
+                }
+                for(var i=0;i<Number(Offre.DureeJour);i++ ){ 
+                    var myDateFormation = new Date(Offre.CalendrieFormation[i].date);
+                    displaySig[i]="flex"
+                   dateFormation[i]=  myDateFormation.addDays(i).getDate().toString().padStart(2, '0')+"/"+myDateFormation.addDays(i).getMonth().toString().padStart(2, '0')+'/'+myDateFormation.addDays(i).getFullYear()
+    
+               
+                   dureeMatin[i]="9h00 - 12h00"
+                   dureeApreMidi[i]="13h00 - 17h00"
+                   titreMatin[i]="Matin"
+                   titreApresMidi[i]="Après-midi"
+               
+                  }         
+            }
+       }
+         
+        if(Number(Offre.DureeJour)>5 && liststa.length<5){
+            varDisplay="flex"
+        if(Offre.rythme=="En continu" ){ 
+            for(var j=0;j<liststa.length;j++){
+                stagaire[j]=liststa[j].titre + " "+liststa[j].nom+" "+liststa[j].prenom
+    
+            }
+            for(var i=0;i<Number(Offre.DureeJour);i++ ){
+             displaySig[i]="flex"
+    
+            dateFormation[i]=  myDate.addDays(i).getDate().toString().padStart(2, '0')+"/"+myDate.addDays(i).getMonth().toString().padStart(2, '0')+'/'+myDate.addDays(i).getFullYear()
+    
+          
+            dureeMatin[i]="9h00 - 12h00"
+            dureeApreMidi[i]="13h00 - 17h00"
+            titreMatin[i]="Matin"
+            titreApresMidi[i]="Après-midi"
+              }             }
+               
+            if(Offre.rythme=="En discontinu" ){
+                for(var j=0;j<liststa.length;j++){
+                    stagaire[j]=liststa[j].titre + " "+liststa[j].nom+" "+liststa[j].prenom
+                     stagaire[j+5]= stagaire[j]
+                }
+                for(var i=0;i<Number(Offre.DureeJour);i++ ){ 
+                    var myDateFormation = new Date(Offre.CalendrieFormation[i].date);
+                    displaySig[i]="flex"
+                    displaySig[i+5]="flex"
+                   dateFormation[i]=  myDateFormation.addDays(i).getDate().toString().padStart(2, '0')+"/"+myDateFormation.addDays(i).getMonth().toString().padStart(2, '0')+'/'+myDateFormation.addDays(i).getFullYear()
+    
+               
+                   dureeMatin[i]="9h00 - 12h00"
+                   dureeApreMidi[i]="13h00 - 17h00"
+                   titreMatin[i]="Matin"
+                   titreApresMidi[i]="Après-midi"
+               
+                  }         
+            }
+        }
+    
+    
+    
+     if(Number(Offre.DureeJour)<=5 && liststa.length>5){
+        varDisplay="flex"
+        if(Offre.rythme=="En continu" ){ 
+            for(var j=0;j<liststa.length;j++){
+                stagaire[j]=liststa[j].titre + " "+liststa[j].nom+" "+liststa[j].prenom
+    
+            }
+            for(var i=0;i<Number(Offre.DureeJour);i++ ){
+             displaySig[i]="flex"
+    
+            dateFormation[i]=  myDate.addDays(i).getDate().toString().padStart(2, '0')+"/"+myDate.addDays(i).getMonth().toString().padStart(2, '0')+'/'+myDate.addDays(i).getFullYear()
+            stagaire[i]=liststa[i].titre + " "+liststa[i].nom+" "+liststa[i].prenom
+    
+            displaySig[i+5]="flex"
+    
+            dateFormation[i+5]=  myDate.addDays(i).getDate().toString().padStart(2, '0')+"/"+myDate.addDays(i).getMonth().toString().padStart(2, '0')+'/'+myDate.addDays(i).getFullYear()
+            stagaire[i+5]=liststa[i].titre + " "+liststa[i].nom+" "+liststa[i].prenom
+    
+            dureeMatin[i]="9h00 - 12h00"
+            dureeApreMidi[i]="13h00 - 17h00"
+            titreMatin[i]="Matin"
+            titreApresMidi[i]="Après-midi"
+            dureeMatin[i+5]="9h00 - 12h00"
+            dureeApreMidi[i+5]="13h00 - 17h00"
+            titreMatin[i+5]="Matin"
+            titreApresMidi[i+5]="Après-midi"
+           }             }
+               
+            if(Offre.rythme=="En discontinu" ){
+                for(var j=0;j<liststa.length;j++){
+                    stagaire[j]=liststa[j].titre + " "+liststa[j].nom+" "+liststa[j].prenom
+    
+                }
+                for(var i=0;i<Number(Offre.DureeJour);i++ ){ 
+                    var myDateFormation = new Date(Offre.CalendrieFormation[i].date);
+                    displaySig[i]="flex"
+                    displaySig[i+5]="flex"
+                   dateFormation[i]=  myDateFormation.addDays(i).getDate().toString().padStart(2, '0')+"/"+myDateFormation.addDays(i).getMonth().toString().padStart(2, '0')+'/'+myDateFormation.addDays(i).getFullYear()
+                   dateFormation[i+5]=  myDateFormation.addDays(i).getDate().toString().padStart(2, '0')+"/"+myDateFormation.addDays(i).getMonth().toString().padStart(2, '0')+'/'+myDateFormation.addDays(i).getFullYear()
+    
+               
+                   dureeMatin[i]="9h00 - 12h00"
+                   dureeApreMidi[i]="13h00 - 17h00"
+                   titreMatin[i]="Matin"
+                   titreApresMidi[i]="Après-midi"
+                   dureeMatin[i+5]="9h00 - 12h00"
+                   dureeApreMidi[i+5]="13h00 - 17h00"
+                   titreMatin[i+5]="Matin"
+                   titreApresMidi[i+5]="Après-midi"
+                  }         
+            }
+        }
+         
+        if( Number(Offre.DureeJour)<=5 && liststa.length<=5){
+            varDisplay="none"
+    
+            if(Offre.rythme=="En continu" ){ 
+                for(var j=0;j<liststa.length;j++){
+                    stagaire[j]=liststa[j].titre + " "+liststa[j].nom+" "+liststa[j].prenom
+                    stagaire[5+j]=stagaire[j]
+                }
+                for(var i=0;i<Number(Offre.DureeJour);i++ ){
+                 displaySig[i]="flex"
+    
+                dateFormation[i]=  myDate.addDays(i).getDate().toString().padStart(2, '0')+"/"+myDate.addDays(i).getMonth().toString().padStart(2, '0')+'/'+myDate.addDays(i).getFullYear()
+    
+            
+                dureeMatin[i]="9h00 - 12h00"
+                dureeApreMidi[i]="13h00 - 17h00"
+                titreMatin[i]="Matin"
+                titreApresMidi[i]="Après-midi"
+               }             }
+                   
+                if(Offre.rythme=="En discontinu" ){
+                    for(var j=0;j<liststa.length;j++){ 
+                        stagaire[j]=liststa[j].titre + " "+liststa[j].nom+" "+liststa[j].prenom
+        
+                    }
+                    for(var i=0;i<Number(Offre.DureeJour);i++ ){ 
+                        var myDateFormation = new Date(Offre.CalendrieFormation[i].date);
+                        displaySig[i]="flex"
+                       dateFormation[i]=  myDateFormation.addDays(i).getDate().toString().padStart(2, '0')+"/"+myDateFormation.addDays(i).getMonth().toString().padStart(2, '0')+'/'+myDateFormation.addDays(i).getFullYear()
+                      
+                   
+                       dureeMatin[i]="9h00 - 12h00"
+                       dureeApreMidi[i]="13h00 - 17h00"
+                       titreMatin[i]="Matin"
+                       titreApresMidi[i]="Après-midi"
+                      }         
+                }
+        
+        
+     }
+     let options = {
+        width: '12in',
+        height: '8in'
+     } 
+     pdf.create(pdfTemplateFeuillEmargment({
+        numSession:Session.numSession,
+        nomFormation :Offre.designiationFormation +" - "+Offre.typeFormation,
+        dateDebut:date1,
+        displaySig:displaySig,
+        dateFormation:dateFormation,
+        stagaire:stagaire,
+        dureeMatin:dureeMatin,
+        varDisplay:varDisplay,
+        dureeApreMidi:dureeApreMidi,
+        titreMatin:titreMatin,
+        titreApresMidi:titreApresMidi,
+        dateFin :date2,
+        dureFormation  :Offre.DureeJour+" jours, soit "+ Offre.DureeHeur +" heures",
+        LieuFormation:Offre.lieuFormation ,
+        codeVilleFormation:Offre.codeVilleFormation,
+     }),options).toFile('./documents/FeuillEmargment.pdf',(err)=>{
+        if(err){
+            console.log(err);
+        }
+        res.sendFile(path.join(process.cwd(),'documents', 'FeuillEmargment.pdf'))
+    })  
+
+    } catch (error) {
+        res.status(400).json({
+            status: 'failed',
+            error
+        });
+    }}
+};
+
 exports.getDonneFeuilEmagement = async (req, res) => { 
    if(req.params.typeformation=="En distanciel"){
     try {
@@ -1002,6 +1500,8 @@ exports.getDonneConvocation = async (req, res) => {
             NumSession:Session.numSession,
             numDevis:Session.numDevis ,
             nomDossie:Session.nomDossie,
+            chekAutres:Offre.chekAutres,
+            chekResponsable:Offre.chekResponsable,
             Contact:req.params.nomUtilisateur,
             nomClient:Client.titre+" "+Client.nom+" "+Client.prenom,
             adressFormation:Offre.lieuFormation,
@@ -1063,7 +1563,34 @@ exports.deleteSession = async (req, res) => {
 };
 
 // FAVORITE SYSTEM 
+exports.showAttestation =async (req,res)=>{ 
+    try {
+    const Offre = await offre.findById(req.params.id);
+    const Session = await session.findById(req.params.id);
+   var i=req.params.numb
+    pdf.create(pdfTemplateAttestation( {
+        numSession: Session.numSession,
+        codeVilleFormation: Offre.codeVilleFormation,
+        LieuFormation: Offre.lieuFormation,
+        nomFormation:Offre.designiationFormation+" - "+Offre.typeFormation,
+        nomstagaire: Offre.listStagaire[i].titre +" "+Offre.listStagaire[i].nom+" "+Offre.listStagaire[i].prenom,
+    
+      
+    }),{}).toFile('./documents/AttestationSatgaire.pdf',(err)=>{
+        if(err){
+            console.log(err);
+        }
+        res.sendFile(path.join(process.cwd(),'documents', 'AttestationSatgaire.pdf'))
 
+    })
+} catch (error) {
+    res.status(400).json({
+        status: 'failed',
+        error
+    });
+}
+
+}
 exports.createPdf = (req,res)=>{ 
   if(req.params.nomPdf=="Convention"){
     pdf.create(pdfTemplateConvention(req.body),{}).toFile('./documents/Convention.pdf',(err)=>{
@@ -1498,16 +2025,20 @@ exports.sendPdf = (req,res)=>{
                              }
                 
                    }
-                   pathToAttachment[listStagaire.length] =  path.join(process.cwd(),'documents', 'FeuillEmargment.pdf')
 
-                   attachment[listStagaire.length] = fs.readFileSync(pathToAttachment[listStagaire.length]).toString("base64")
-                   attachments[listStagaire.length]= {
-                       content:attachment[listStagaire.length], 
-                       filename:"FeuilleEmargement",
-                       contentType: 'application/pdf',
-                       path:pathToAttachment[listStagaire.length]
+                   if(req.body.typeFormation=="En intra-entreprise"||req.body.typeFormation=="En inter-enterprise"){
+                    pathToAttachment[listStagaire.length] =  path.join(process.cwd(),'documents', 'FeuillEmargment.pdf')
+
+                    attachment[listStagaire.length] = fs.readFileSync(pathToAttachment[listStagaire.length]).toString("base64")
+                    attachments[listStagaire.length]= {
+                        content:attachment[listStagaire.length], 
+                        filename:"FeuilleEmargement",
+                        contentType: 'application/pdf',
+                        path:pathToAttachment[listStagaire.length]
+                    }
+                 
                    }
-                
+                 
                       
                      
                    let smtpTransport = nodemailer.createTransport({

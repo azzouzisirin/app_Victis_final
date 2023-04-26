@@ -59,9 +59,12 @@ const [nomFormation, setnomFormation] = useState("");
       const res = await axios.get(`${BASE_URL}/session/getDonneConvocation/`+id+'/'+username);
       setNumSession(res.data.NumSession)
       setContact(res.data.Contact) 
-      setnomClient(res.data.nomClient) 
+      setnomClient(res.data.nomClient)  
       setheurDebut(res.data.heurDebut)
        setheurFin(res.data.heurFin)
+       setchekAutres(res.data.chekAutres)
+       setchekResponsable(res.data.chekResponsable)
+
       settypeFormation(res.data.typeFormation)
        setadressFormation(res.data.adressFormation)
       setCodePostalFormation(res.data.CodePostalFormation)
@@ -129,6 +132,8 @@ const [nomFormation, setnomFormation] = useState("");
         const res = await axios.put(`${BASE_URL}/offre/${id}`, {
           listStagaire: persos,
           listSousResponsable:sousResponsable,
+          chekAutres:chekAutres,
+          chekResponsable:chekResponsable,
       
       }  ,
        
@@ -323,6 +328,7 @@ const [nomFormation, setnomFormation] = useState("");
       var ccemail=[""]
       if(chekAutres==true){
         for(var i=0; i<sousResponsable.length;i++){
+          alert(sousResponsable[i].email)
         ccemail[i]=sousResponsable[i].email
         }
       }

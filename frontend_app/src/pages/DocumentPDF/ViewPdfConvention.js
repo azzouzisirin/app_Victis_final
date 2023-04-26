@@ -39,21 +39,17 @@ fetchData();
 
 
 }, []); 
-
+ 
   useEffect (()=>{  
     const checkoffre =async()=>{ 
-      await axios.get(`${BASE_URL}/session/getDonneConvention/${id}`)
-      .then((res)=>{ 
-        axios.post(BASE_URL+"/session/createPdf/Convention", res.data  )
+  
      
-       .then(()=>{   
-     
-      axios.get(`${BASE_URL}/session/showPdf/Convention`,{responseType:'blob'}).then((res2)=>{
+      axios.get(`${BASE_URL}/session/affichePDFConvention/${id}`,{responseType:'blob'}).then((res2)=>{
 
 
         const pdfBlob = new Blob([res2.data],{type:'application/pdf'}) 
       setbob(URL.createObjectURL(pdfBlob))
-   })})})}
+   })}
     
     checkoffre()
   

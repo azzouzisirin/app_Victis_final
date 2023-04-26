@@ -74,7 +74,7 @@ return(
       <label>Nom d'hôte :</label><br/>
       <input type="text" placeholder="Nom d'hôte :"  value={host} onChange={e => {sethost(e.target.value)} }/> <br/>
       <label>mot de passe Email :</label><br/>
-      <input type="text" placeholder='Mail'  value="{passEmail}" onChange={e => {setpassEmail(e.target.value)} }/> <br/>
+      <input type="text" placeholder='Mail'  value={passEmail} onChange={e => {setpassEmail(e.target.value)} }/> <br/>
 
       </div>
        

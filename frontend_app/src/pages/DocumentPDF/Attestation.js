@@ -46,7 +46,17 @@ import PopUp from '../../components/BoxMessage/PopUp'
         setnomDossier(res1.data.nomDossie)
         setemailClient(res1.data.email)
         setnomClient(res1.data.titreClient+" "+res1.data.nomClient+" "+res1.data.prenomClient) 
+        axios.get(`${BASE_URL}/session/affichePDFAttestation/${id}/0`,{responseType:'blob'}).then((res2)=>{
 
+
+          const pdfBlob = new Blob([res2.data],{type:'application/pdf'}) 
+        setbob(URL.createObjectURL(pdfBlob))
+     })
+     const res3 = await axios.post(BASE_URL+"/session/copeFilePdf", {
+      filePath:"./documents/AttestationSatgaire.pdf",
+      filecopy:"./test",
+      nomfile:"/Attestation de formation"+res.data.listStagaire[0].titre +" "+res.data.listStagaire[0].nom+" "+res.data.listStagaire[0].prenom+".pdf"
+  }  )
 
     }catch(err){
       console.log(err);
@@ -55,28 +65,13 @@ import PopUp from '../../components/BoxMessage/PopUp'
   fetchData();
 
   }, []);
-    const VoirAttestation=async(titre,nom ,prenom)=>{
-     
-
-        await  axios.post(BASE_URL+"/session/createPdf/AttestationSatgaire", 
-        {
-          numSession: numSession,
-          codeVilleFormation: codeVilleFormation,
-          LieuFormation: LieuFormation,
-          nomFormation: nomFormation,
-          nomstagaire: titre +" "+nom+" "+prenom,
-      
-        
-      }  )
-     
-       .then(()=>{    
-
-      axios.get(`${BASE_URL}/session/showPdf/AttestationSatgaire`,{responseType:'blob'}).then((res2)=>{
+    const VoirAttestation=async(titre,nom,prenom,index)=>{
+   axios.get(`${BASE_URL}/session/affichePDFAttestation/${id}/${index}`,{responseType:'blob'}).then((res2)=>{
 
 
         const pdfBlob = new Blob([res2.data],{type:'application/pdf'}) 
       setbob(URL.createObjectURL(pdfBlob))
-   })})
+   })
    const res = await axios.post(BASE_URL+"/session/copeFilePdf", {
     filePath:"./documents/AttestationSatgaire.pdf",
     filecopy:"./test",
@@ -140,8 +135,8 @@ const EnregistreFile=async()=>{
     
    <div  className='menuPdf' style={{flex:"30%"}}>
    <ul className='souList'>
-   {persos.map(p => (
-   <Link  onClick={() => VoirAttestation(p.titre,p.nom,p.prenom)} >   <li> Attestation de {p.titre} {p.nom} {p.prenom} </li></Link>
+   {persos.map((p,index) => (
+   <Link  onClick={() => VoirAttestation(p.titre,p.nom,p.prenom,index)} >   <li> Attestation de {p.titre} {p.nom} {p.prenom} </li></Link>
    
                  ))}
      <Link onClick={EnregistreFile}  >       <li> Enregistrer </li></Link>

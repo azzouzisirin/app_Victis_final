@@ -48,7 +48,27 @@ import PopUp from '../../components/BoxMessage/PopUp'
         setnomClient(res.data.nomClient) 
         setemailClient(res.data.emailClient) 
         setidOpco(res.data.idOpco) 
-          
+        await  axios.post(BASE_URL+"/session/createPdf/APPRECIATION", 
+        {
+          Reference: res.data.Reference,
+          titreFormation: res.data.titreFormation,
+          DateDebut: res.data.DateDebut,
+          DateFin: res.data.DateFin,
+          nomClient: res.data.nomClient,
+          emailClient: res.data.emailClient,
+
+          RaisonOpco: res.data.RaisonOpco,
+        
+      }  )
+     
+       .then(()=>{    
+
+      axios.get(`${BASE_URL}/session/showPdf/APPRECIATION`,{responseType:'blob'}).then((res2)=>{
+
+
+        const pdfBlob = new Blob([res2.data],{type:'application/pdf'}) 
+      setbob(URL.createObjectURL(pdfBlob))
+   })})
       }catch(err){
         console.log(err);
       }

@@ -1,11 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const { mettreDansZip,viderDossier,billonExercice,affichePDF,getDonneFacturation,createPdf,getDonneFeuilEmagement,getDonneFormateur,createPdfConvocation,sendPdfConvocation,copeFilePdf, fetchPdf, sendPdf, getSessionById,getDonneOffre,getDonneDocument,getDonneConvocation,getDonneConvention, updateSession, deleteSession,search, Register } = require('../controllers/sessionController');
+const { mettreDansZip,viderDossier,afficheFeuillEmargment,showAttestation,affichePDFCertificReal,billonExercice,affichePDFOffre,affichePDFConvention,getDonneFacturation,createPdf,getDonneFeuilEmagement,getDonneFormateur,createPdfConvocation,sendPdfConvocation,copeFilePdf, fetchPdf, sendPdf, getSessionById,getDonneOffre,getDonneDocument,getDonneConvocation,getDonneConvention, updateSession, deleteSession,search, Register } = require('../controllers/sessionController');
   
 router.route('/search').get(search);
 router.route('/:id').get(getSessionById);
 router.route('/getDonneOffre/:id/:nomUtilisateur').get(getDonneOffre);
-router.route('/affichePDF/:id/:nomUtilisateur').get(affichePDF);
+router.route('/affichePDFOffre/:id/:nomUtilisateur').get(affichePDFOffre);
+router.route('/affichePDFAttestation/:id/:numb').get(showAttestation);
+
+router.route('/affichePDFConvention/:id').get(affichePDFConvention);
+router.route('/affichePDFCertificReal/:id/:numb').get(affichePDFCertificReal);
+router.route('/afficheFeuillEmargment/:id/:typeformation').post(afficheFeuillEmargment);
 
 router.route('/getDonneDocument/:id/:nomStagaire').get(getDonneDocument);
 router.route('/getDonneFormateur/:id').get(getDonneFormateur);
